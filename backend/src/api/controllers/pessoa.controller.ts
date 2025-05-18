@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { PessoaService } from './pessoa.service';
-import { Pessoa } from './pessoa.entity';
-import { CreatePessoaRequestDTO } from './dto/createUserRequest.dto';
-import { CreatePessoaResponseDTO } from './dto/createPessoaResponse.dto';
+import { Body, Controller, Get, Post, HttpCode } from '@nestjs/common';
+import { PessoaService } from '../../modules/pessoa/pessoa.service';
+import { Pessoa } from '../../modules/pessoa/pessoa.entity';
+import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createUserRequest.dto';
+import { CreatePessoaResponseDTO } from '../../modules/pessoa/dto/createPessoaResponse.dto';
 
 @Controller('pessoa')
 export class PessoaController {
@@ -14,6 +14,7 @@ export class PessoaController {
   }
 
   @Post()
+  @HttpCode(200)
   async createPessoa(
     @Body() request: CreatePessoaRequestDTO,
   ): Promise<CreatePessoaResponseDTO> {
