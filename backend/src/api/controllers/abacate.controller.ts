@@ -1,5 +1,9 @@
 import { Body, Controller, Post, HttpCode } from '@nestjs/common';
-import { AbacateService, BillingData } from 'src/infra/service/abacate.service';
+import {
+  CreateBillingResponse,
+  CreateCustomerResponse,
+} from 'abacatepay-nodejs-sdk/dist/types';
+import { AbacateService } from 'src/infra/service/abacate.service';
 
 /**
  * Controller apenas para testes do service do AbacatePay - NÃO DEVE SER UTILIZADO
@@ -10,19 +14,19 @@ export class AbacateController {
 
   @Post('pessoa')
   @HttpCode(200)
-  createPessoa(): Promise<void> {
-    return this.abacateService.createCustomer(
-      'João Lucas de Brito Ramalho Silva',
-      '(11) 4002-8922',
-      'lucasteste@gmail.com',
-      '220.002.720-61',
-    );
+  createPessoa(): Promise<CreateCustomerResponse> {
+    return this.abacateService.getClient().customer.create({
+      name: 'João da Silva',
+      cellphone: '11999999999',
+      email: 'joaodasilva@email.com',
+      taxId: '66025361096',
+    });
   }
 
   @Post('cobranca')
   @HttpCode(200)
-  createCobranca(): Promise<BillingData | undefined> {
-    return this.abacateService.createBilling({
+  createCobranca(): Promise<CreateBillingResponse> {
+    return this.abacateService.getClient().billing.create({
       frequency: 'ONE_TIME',
       methods: ['PIX'],
       products: [
