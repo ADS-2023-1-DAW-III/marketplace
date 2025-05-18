@@ -1,6 +1,9 @@
 import { Body, Controller, Post, HttpCode } from '@nestjs/common';
 import { AbacateService, BillingData } from 'src/infra/service/abacate.service';
 
+/**
+ * Controller apenas para testes do service do AbacatePay - NÃO DEVE SER UTILIZADO
+ */
 @Controller('abacate')
 export class AbacateController {
   constructor(private readonly abacateService: AbacateService) {}
