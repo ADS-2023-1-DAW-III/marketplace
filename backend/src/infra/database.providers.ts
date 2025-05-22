@@ -9,7 +9,7 @@ export const databaseProviders = [
         host: 'ep-tiny-bread-a5a31wdy-pooler.us-east-2.aws.neon.tech',
         port: 5432,
         username: 'neondb_owner',
-        password: 'npg_DhH50jrwgsRz',
+        password: 'SENHA_AQUI',
         database: 'neondb',
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: true,

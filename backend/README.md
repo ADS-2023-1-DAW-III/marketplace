@@ -30,10 +30,9 @@ Este é um projeto backend desenvolvido com [NestJS](https://nestjs.com/), utili
 
 3. **Configure o banco de dados**
 
-   O projeto usa PostgreSQL com Docker. Suba com:
-
-   ```bash
-   docker-compose up -d
+   No arquivo [text](src/infra/database.providers.ts) adicione a senha do Neon disponibilizada no discord
+   ```TS
+   password: 'SENHA_AQUI', // ALTERE AQUI
    ```
 
 4. **Rode a aplicação**
