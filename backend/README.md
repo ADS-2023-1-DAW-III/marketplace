@@ -30,7 +30,7 @@ Este é um projeto backend desenvolvido com [NestJS](https://nestjs.com/), utili
 
 3. **Configure o banco de dados**
 
-   No arquivo [text](src/infra/database.providers.ts) adicione a senha do Neon disponibilizada no discord
+   No arquivo [database.providers.ts](src/infra/database.providers.ts) adicione a senha do Neon disponibilizada no discord
    ```TS
    password: 'SENHA_AQUI', // ALTERE AQUI
    ```
