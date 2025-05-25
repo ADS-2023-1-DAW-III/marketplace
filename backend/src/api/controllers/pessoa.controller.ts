@@ -4,7 +4,7 @@ import { Pessoa } from '../../modules/pessoa/pessoa.entity';
 import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createUserRequest.dto';
 import { CreatePessoaResponseDTO } from '../../modules/pessoa/dto/createPessoaResponse.dto';
 
-@Controller('pessoa')
+@Controller('pessoas')
 export class PessoaController {
   constructor(private readonly pessoaService: PessoaService) {}
 
