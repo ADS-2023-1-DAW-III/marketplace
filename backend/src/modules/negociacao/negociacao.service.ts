@@ -22,7 +22,7 @@ export class NegociacaoService {
         return this.negociacaoRepository.find();
     }
 
-    async findOne(id: number): Promise<Negociacao> {
+    async findOne(id: string): Promise<Negociacao> {
         const negociacao = await this.negociacaoRepository.findOne({ where: { id } });
         if (!negociacao) {
             throw new NotFoundException('Negociação não encontrada');
@@ -32,7 +32,6 @@ export class NegociacaoService {
 
     async create(request: CreateNegociacaoDto): Promise<CreateNegociacaoResponseDto> {
         const pessoa = await this.pessoaService.findById(request.pessoa);
-        // TODO: Implementar o findById no ServicoService
         const servico = await this.servicoService.findById(request.servico);
 
         if (!pessoa) {
@@ -51,13 +50,13 @@ export class NegociacaoService {
         return new CreateNegociacaoResponseDto(saved);
     }
 
-    async update(id: number, updateDto: updateNegociacaoRequestDto): Promise<Negociacao> {
+    async update(id: string, updateDto: updateNegociacaoRequestDto): Promise<Negociacao> {
         const negociacao = await this.findOne(id);
         Object.assign(negociacao, updateDto);
         return this.negociacaoRepository.save(negociacao);
     }
 
-    async remove(id: number): Promise<void> {
+    async remove(id: string): Promise<void> {
         const negociacao = await this.findOne(id);
         await this.negociacaoRepository.remove(negociacao);
     }

@@ -19,16 +19,16 @@ export class NegociacaoController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.negociacaoService.findOne(+id);
+    return this.negociacaoService.findOne(id);
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() dto: updateNegociacaoRequestDto) {
-    return this.negociacaoService.update(+id, dto);
+    return this.negociacaoService.update(id, dto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.negociacaoService.remove(+id);
+    return this.negociacaoService.remove(id);
   }
 }

@@ -4,8 +4,8 @@ import { Servico } from '../servico/servico.entity';
 
 @Entity('negociacao')
 export class Negociacao {
-    @PrimaryColumn({ type: 'number'})
-    id: number
+    @PrimaryColumn({ type: 'varchar', length: 50})
+    id: string
 
     @Column({ default: false})
     houve_negociacao: boolean
