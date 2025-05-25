@@ -22,6 +22,9 @@ export class Servico {
     @Column({ type: 'decimal', precision: 10, scale: 2})
     preco: number
 
+    @Column({type: 'int'})
+    duracao: number
+
     @ManyToOne(() => Pessoa, (pessoa) => pessoa.username)
     pessoa: Pessoa
 
