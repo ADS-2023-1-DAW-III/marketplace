@@ -10,10 +10,12 @@ import { PagamentoController } from './api/controllers/pagamento.controller';
 import { NegociacaoController } from './api/controllers/negociacao.controller';
 import { CategoriaController } from './api/controllers/categoria.controller';
 import { ServicoModule } from './modules/servico/servico.module';
-import { ServicoController } from './api/controllers/servico.controllers';
+import { HistoricoModule } from './modules/historico/historico.module';
+import { ServicoController } from './api/controllers/servico.controller';
+import { HistoricoController } from './api/controllers/historico.controller';
 
 @Module({
-  imports: [PessoaModule, AbacateModule, PagamentoModule, NegociacaoModule, CategoriaModule, ServicoModule],
-  controllers: [AbacateController, PessoaController, PagamentoController, NegociacaoController, CategoriaController, ServicoController],
+  imports: [PessoaModule, AbacateModule, PagamentoModule, NegociacaoModule, CategoriaModule, ServicoModule, HistoricoModule],
+  controllers: [AbacateController, PessoaController, PagamentoController, NegociacaoController, CategoriaController, ServicoController, HistoricoController],
 })
 export class AppModule {}
