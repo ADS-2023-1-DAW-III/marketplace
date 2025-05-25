@@ -2,9 +2,18 @@ import { Module } from '@nestjs/common';
 import { PessoaModule } from './modules/pessoa/pessoa.module';
 import { AbacateController } from './api/controllers/abacate.controller';
 import { AbacateModule } from './infra/service/abacate.module';
+import { PagamentoModule } from './modules/pagamento/pagamento.module';
+import { NegociacaoModule } from './modules/negociacao/negociacao.module';
+import { CategoriaModule } from './modules/categoria/categoria.module';
+import { PessoaController } from './api/controllers/pessoa.controller';
+import { PagamentoController } from './api/controllers/pagamento.controller';
+import { NegociacaoController } from './api/controllers/negociacao.controller';
+import { CategoriaController } from './api/controllers/categoria.controller';
+import { ServicoModule } from './modules/servico/servico.module';
+import { ServicoController } from './api/controllers/servico.controllers';
 
 @Module({
-  imports: [PessoaModule, AbacateModule],
-  controllers: [AbacateController],
+  imports: [PessoaModule, AbacateModule, PagamentoModule, NegociacaoModule, CategoriaModule, ServicoModule],
+  controllers: [AbacateController, PessoaController, PagamentoController, NegociacaoController, CategoriaController, ServicoController],
 })
 export class AppModule {}
