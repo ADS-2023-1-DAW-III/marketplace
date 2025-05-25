@@ -3,8 +3,8 @@ import { Pessoa } from '../pessoa/pessoa.entity';
 
 @Entity('servico')
 export class Servico {
-    @PrimaryColumn({ type: 'number'})
-    id: number
+    @PrimaryColumn({ type: 'varchar', length: 50})
+    id: string
 
     @Column({nullable: false})
     caminhoImagem: string
