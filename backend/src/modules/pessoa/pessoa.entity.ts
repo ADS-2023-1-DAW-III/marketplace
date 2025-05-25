@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
+import { Historico } from '../historico/historico.entity';
 
 @Entity('pessoa')
 export class Pessoa {
@@ -19,4 +20,7 @@ export class Pessoa {
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   contato: string;
+
+  @OneToMany(() => Historico, (historico) => historico.pessoa)
+  historico: Historico[];
 }
