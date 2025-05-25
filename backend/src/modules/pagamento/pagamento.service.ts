@@ -21,19 +21,19 @@ export class PagamentoService {
     return await this.pagamentoRepository.find();
   }
 
-  async findOne(id: number): Promise<PagamentoResponseDto> {
+  async findOne(id: string): Promise<PagamentoResponseDto> {
     const pagamento = await this.pagamentoRepository.findOne({ where: { id } });
     if (!pagamento) throw new NotFoundException(`Pagamento ${id} não encontrado`);
     return pagamento;
   }
 
-  async update(id: number, dto: UpdatePagamentoDto): Promise<PagamentoResponseDto> {
+  async update(id: string, dto: UpdatePagamentoDto): Promise<PagamentoResponseDto> {
     const pagamento = await this.findOne(id);
     Object.assign(pagamento, dto);
     return await this.pagamentoRepository.save(pagamento);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
     const pagamento = await this.findOne(id);
     await this.pagamentoRepository.remove(pagamento);
   }

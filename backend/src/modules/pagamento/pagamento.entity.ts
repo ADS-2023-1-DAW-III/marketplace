@@ -2,8 +2,8 @@ import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity('pagamento')
 export class Pagamento {
-    @PrimaryColumn({ type: 'number'})
-    id: number
+    @PrimaryColumn({ type: 'varchar', length: 50})
+    id: string
 
     @Column()
     id_abacte: string

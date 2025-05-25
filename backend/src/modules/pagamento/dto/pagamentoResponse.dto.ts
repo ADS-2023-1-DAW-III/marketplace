@@ -1,7 +1,7 @@
 import { Pagamento } from "../pagamento.entity";
 
 export class PagamentoResponseDto {
-  id: number;
+  id: string;
   id_abacte: string;
   data: Date;
   status: boolean;
