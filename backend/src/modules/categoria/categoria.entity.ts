@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryColumn, ManyToMany } from 'typeorm';
-import { Servico } from '../../servico/servico.entity';
+import { Servico } from '../servico/servico.entity';
 
 @Entity('categorias')
 export class Categoria {
@@ -7,8 +7,9 @@ export class Categoria {
     nome: string;
 
     @Column({ type: 'text', nullable: true })
-    descricao?: string;
+    descricao: string;
 
-    @ManyToMany(() => Servico, servico => servico.categorias)
+    /*@ManyToMany(() => Servico, servico => servico.categorias)
     servicos: Servico[];
+    */
 }

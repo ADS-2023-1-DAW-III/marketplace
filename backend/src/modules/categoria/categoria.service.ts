@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Categoria } from './categoria.entity';
 import { CreateCategoriaDto } from './dto/createCategoriaRequest.dto';
@@ -9,7 +8,7 @@ import { CreateCategoriaResponseDto } from './dto/createCategoriaResponse.dto';
 @Injectable()
 export class CategoriaService {
     constructor(
-        @InjectRepository(Categoria)
+        @Inject('CATEGORIA_REPOSITORY')
         private categoriaRepository: Repository<Categoria>,
     ) {}
 
