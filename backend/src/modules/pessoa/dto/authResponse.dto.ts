@@ -1,7 +1,4 @@
-export class AuthResponseDTO {
+export interface AuthResponseDTO {
   token: string;
-
-  constructor(token: string) {
-    this.token = token;
-  }
+  userId: string;
 }
