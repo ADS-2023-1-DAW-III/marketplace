@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, ManyToMany } from 'typeorm';
+import { Entity, Column, PrimaryColumn, ManyToMany, JoinTable } from 'typeorm';
 import { Servico } from '../servico/servico.entity';
 
 @Entity('categorias')
@@ -9,7 +9,18 @@ export class Categoria {
     @Column({ type: 'text', nullable: true })
     descricao: string;
 
-    /*@ManyToMany(() => Servico, servico => servico.categorias)
+    @ManyToMany(() => Servico, servico => servico.categorias)
+    @JoinTable({
+        name: 'categoria_servico',
+        joinColumn: {
+        name: 'categoria_nome',
+        referencedColumnName: 'nome',
+    },
+        inverseJoinColumn: {
+        name: 'servico_id',
+        referencedColumnName: 'id',
+    },
+    })
     servicos: Servico[];
-    */
+    
 }

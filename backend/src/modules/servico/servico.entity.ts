@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryColumn, ManyToOne, OneToMany, ManyToMany } from 'typeorm';
 import { Pessoa } from '../pessoa/pessoa.entity';
 import { Historico } from '../historico/historico.entity';
+import { Categoria } from '../categoria/categoria.entity';
 
 @Entity('servico')
 export class Servico {
@@ -29,5 +30,8 @@ export class Servico {
     pessoa: Pessoa
 
     @OneToMany(() => Historico, (historico) => historico.pessoa)
-      historico: Historico[];
+    historico: Historico[];
+    
+    @ManyToMany(() => Categoria, (categoria) => categoria.servicos)
+    categorias: Categoria[];
 }
