@@ -28,4 +28,8 @@ export class PessoaService {
 
     return pessoaResponse;
   }
+
+  async findById(username: string): Promise<Pessoa | null> {
+    return this.pessoaRepository.findOne({ where: { username } });
+  }
 }

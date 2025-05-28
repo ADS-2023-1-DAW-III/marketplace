@@ -17,5 +17,6 @@ import { PessoaController } from '../../api/controllers/pessoa.controller';
   imports: [DatabaseModule],
   providers: [...PessoaProviders, PessoaService],
   controllers: [PessoaController],
+  exports: [PessoaService], 
 })
 export class PessoaModule {}
