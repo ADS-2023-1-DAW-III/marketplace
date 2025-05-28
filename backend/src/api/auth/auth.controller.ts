@@ -1,6 +1,7 @@
 import { Body, Controller, Post, HttpCode } from '@nestjs/common';
 import { AuthService } from '../../modules/auth/auth.service';
 import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createPessoaRequest.dto';
+import { LoginRequestDTO } from 'src/modules/pessoa/dto/authRequest.dto';
 import { AuthResponseDTO } from '../../modules/pessoa/dto/authResponse.dto';
 
 @Controller('auth')
@@ -17,7 +18,7 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(200)
-  async login(@Body() request: CreatePessoaRequestDTO): Promise<AuthResponseDTO> {
+  async login(@Body() request: LoginRequestDTO): Promise<AuthResponseDTO> {
     return this.authService.login(request);
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PessoaService } from '../pessoa/pessoa.service';
 import { CreatePessoaRequestDTO } from '../pessoa/dto/createPessoaRequest.dto';
+import { LoginRequestDTO } from '../pessoa/dto/authRequest.dto';
 import { AuthResponseDTO } from '../pessoa/dto/authResponse.dto';
 import { generateJWT } from '../../lib/auth/auth';
 import * as bcrypt from 'bcrypt';
@@ -25,7 +26,7 @@ export class AuthService {
     };
   }
 
-  async login(dto: CreatePessoaRequestDTO): Promise<AuthResponseDTO> {
+  async login(dto: LoginRequestDTO): Promise<AuthResponseDTO> {
     const pessoas = await this.pessoaService.findAll();
     const pessoa = pessoas.find(p => p.email === dto.email);
 
