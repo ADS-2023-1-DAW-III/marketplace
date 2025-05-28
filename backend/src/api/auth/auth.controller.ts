@@ -1,5 +1,5 @@
 import { Body, Controller, Post, HttpCode } from '@nestjs/common';
-import { AuthService } from '../../services/auth/auth.service';
+import { AuthService } from '../../modules/auth/auth.service';
 import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createPessoaRequest.dto';
 import { AuthResponseDTO } from '../../modules/pessoa/dto/authResponse.dto';
 
