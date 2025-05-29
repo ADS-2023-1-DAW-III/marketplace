@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PessoaService } from '../pessoa/pessoa.service';
 import { CreatePessoaRequestDTO } from '../pessoa/dto/createPessoaRequest.dto';
-import { LoginRequestDTO } from '../pessoa/dto/authRequest.dto';
-import { AuthResponseDTO } from '../pessoa/dto/authResponse.dto';
+import { LoginRequestDTO } from './dto/authRequest.dto';
+import { AuthResponseDTO } from './authResponse.dto';
 import { generateJWT } from '../../lib/auth/auth';
 import * as bcrypt from 'bcrypt';
 

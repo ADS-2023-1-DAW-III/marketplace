@@ -1,8 +1,8 @@
 import { Body, Controller, Post, HttpCode } from '@nestjs/common';
 import { AuthService } from '../../modules/auth/auth.service';
 import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createPessoaRequest.dto';
-import { LoginRequestDTO } from 'src/modules/pessoa/dto/authRequest.dto';
-import { AuthResponseDTO } from '../../modules/pessoa/dto/authResponse.dto';
+import { LoginRequestDTO } from 'src/modules/auth/dto/authRequest.dto';
+import { AuthResponseDTO } from '../../modules/auth/authResponse.dto';
 
 @Controller('auth')
 export class AuthController {

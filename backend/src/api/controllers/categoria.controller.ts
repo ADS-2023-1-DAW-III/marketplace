@@ -1,10 +1,12 @@
-import { Controller, Post, Body, Get, Put, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Put, Param, Patch, Delete, UseGuards } from '@nestjs/common';
 import { CategoriaService } from '../../modules/categoria/categoria.service';
 import { CreateCategoriaDto } from '../../modules/categoria/dto/createCategoriaRequest.dto';
 import { CreateCategoriaResponseDto } from '../../modules/categoria/dto/createCategoriaResponse.dto';
 import { UpdateCategoriaRequestDto } from '../../modules/categoria/dto/updateCategoriaRequest.dto';
 import { Categoria } from '../../modules/categoria/categoria.entity';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('categorias')
 export class CategoriaController {
     constructor(private readonly categoriaService: CategoriaService) {}

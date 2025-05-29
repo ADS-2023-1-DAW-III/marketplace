@@ -18,6 +18,7 @@ export class PessoaService {
   async create(
     request: CreatePessoaRequestDTO,
   ): Promise<CreatePessoaResponseDTO> {
+    
     const newPessoa: Pessoa = this.pessoaRepository.create(request);
 
     await this.pessoaRepository.save(newPessoa);
