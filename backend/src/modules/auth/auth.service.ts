@@ -28,7 +28,11 @@ export class AuthService {
 
   async login(dto: LoginRequestDTO): Promise<AuthResponseDTO> {
     const pessoas = await this.pessoaService.findAll();
-    const pessoa = pessoas.find(p => p.email === dto.email);
+    let pessoa = pessoas.find(p => p.email === dto.login);
+
+    if (pessoa === undefined) {
+      pessoa = pessoas.find(p => p.username === dto.login);
+    }
 
     if (!pessoa) {
       throw new UnauthorizedException('Usuário ou senha inválidos');
