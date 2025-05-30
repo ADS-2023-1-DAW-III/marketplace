@@ -1,6 +1,6 @@
 import { Pessoa } from '../pessoa.entity';
 
-export class CreatePessoaResponseDTO {
+export class PessoaResponseDTO {
   username: string;
   abacate_id: string;
   nome: string;

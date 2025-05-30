@@ -1,11 +1,21 @@
-import { Body, Controller, Get, Post, HttpCode, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  HttpCode,
+  UseGuards,
+  NotFoundException,
+  Param,
+} from '@nestjs/common';
 import { PessoaService } from '../../modules/pessoa/pessoa.service';
 import { Pessoa } from '../../modules/pessoa/pessoa.entity';
 import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createPessoaRequest.dto';
-import { CreatePessoaResponseDTO } from '../../modules/pessoa/dto/createPessoaResponse.dto';
+import { PessoaResponseDTO } from '../../modules/pessoa/dto/pessoaResponse.dto';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard('jwt'))
+// Descomente a linha abaixo assim que terminar a issue
+///@UseGuards(AuthGuard('jwt'))
 @Controller('pessoas')
 export class PessoaController {
   constructor(private readonly pessoaService: PessoaService) {}
@@ -19,10 +29,25 @@ export class PessoaController {
   @HttpCode(200)
   async createPessoa(
     @Body() request: CreatePessoaRequestDTO,
-  ): Promise<CreatePessoaResponseDTO> {
-    const response: CreatePessoaResponseDTO =
+  ): Promise<PessoaResponseDTO> {
+    const response: PessoaResponseDTO =
       await this.pessoaService.create(request);
-
     return response;
+  }
+
+  @Get('id/:username')
+  @HttpCode(200)
+  async findById(
+    @Param('username') username: string,
+  ): Promise<PessoaResponseDTO> {
+    const response: PessoaResponseDTO | null =
+      await this.pessoaService.findById(username);
+    if (response != null) {
+      return response;
+    }
+
+    throw new NotFoundException(
+      `Pessoa não encontrado com o username: ${username}`,
+    );
   }
 }
