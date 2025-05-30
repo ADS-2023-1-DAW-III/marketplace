@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete, UseGuards } from '@nestjs/common';
 import { HistoricoService } from 'src/modules/historico/historico.service';
 import { CreateHistoricoRequestDto } from 'src/modules/historico/dto/createHistoricoRequest.dto';
 import { UpdateHistoricoRequestDto } from 'src/modules/historico/dto/updateHistoricoRequest.dto';
 import { HistoricoResponseDto } from 'src/modules/historico/dto/createHistoricoResponse.dto';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('historico')
 export class HistoricoController {
     constructor(private readonly historicoService: HistoricoService) {}

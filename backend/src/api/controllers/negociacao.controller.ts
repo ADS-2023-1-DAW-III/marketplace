@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { NegociacaoService } from '../../modules/negociacao/negociacao.service';
 import { CreateNegociacaoDto } from '../../modules/negociacao/dto/createNegociacaoRequest.dto';
 import { updateNegociacaoRequestDto } from '../../modules/negociacao/dto/updateNegociacaoRequest.dto';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('negociacoes')
 export class NegociacaoController {
   constructor(private readonly negociacaoService: NegociacaoService) {}

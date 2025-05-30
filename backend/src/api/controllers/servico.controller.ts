@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete, UseGuards } from '@nestjs/common';
 import { ServicoService } from '../../modules/servico/servico.service';
 import { CreateServicoRequestDto } from '../../modules/servico/dto/createServicoRequest.dto';
 import { UpdateServicoRequestDto } from '../../modules/servico/dto/updateServicoRequest.dto';
 import { ServicoResponseDto } from '../../modules/servico/dto/createServicoResponse.dto';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('servico')
 export class ServicoController {
     constructor(private readonly servicoService: ServicoService) {}

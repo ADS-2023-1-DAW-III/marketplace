@@ -1,13 +1,15 @@
-import { Body, Controller, Post, HttpCode } from '@nestjs/common';
+import { Body, Controller, Post, HttpCode, UseGuards } from '@nestjs/common';
 import {
   CreateBillingResponse,
   CreateCustomerResponse,
 } from 'abacatepay-nodejs-sdk/dist/types';
 import { AbacateService } from 'src/infra/service/abacate.service';
+import { AuthGuard } from '@nestjs/passport';
 
 /**
  * Controller apenas para testes do service do AbacatePay - NÃO DEVE SER UTILIZADO
  */
+@UseGuards(AuthGuard('jwt'))
 @Controller('abacate')
 export class AbacateController {
   constructor(private readonly abacateService: AbacateService) {}

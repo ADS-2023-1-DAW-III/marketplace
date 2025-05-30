@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Post, HttpCode } from '@nestjs/common';
+import { Body, Controller, Get, Post, HttpCode, UseGuards } from '@nestjs/common';
 import { PessoaService } from '../../modules/pessoa/pessoa.service';
 import { Pessoa } from '../../modules/pessoa/pessoa.entity';
-import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createUserRequest.dto';
+import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createPessoaRequest.dto';
 import { CreatePessoaResponseDTO } from '../../modules/pessoa/dto/createPessoaResponse.dto';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('pessoas')
 export class PessoaController {
   constructor(private readonly pessoaService: PessoaService) {}
