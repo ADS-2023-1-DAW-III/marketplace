@@ -5,29 +5,30 @@ import {
   Post,
   HttpCode,
   UseGuards,
-  NotFoundException,
   Param,
   Request,
+  HttpStatus,
+  Put,
+  Delete,
 } from '@nestjs/common';
 import { PessoaService } from '../../modules/pessoa/pessoa.service';
-import { Pessoa } from '../../modules/pessoa/pessoa.entity';
 import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createPessoaRequest.dto';
 import { PessoaResponseDTO } from '../../modules/pessoa/dto/pessoaResponse.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { DeleteResult } from 'typeorm';
 
-// Descomente a linha abaixo assim que terminar a issue
-// @UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'))
 @Controller('pessoas')
 export class PessoaController {
   constructor(private readonly pessoaService: PessoaService) {}
 
   @Get()
-  async findAll(): Promise<Pessoa[]> {
+  async findAll(): Promise<PessoaResponseDTO[]> {
     return this.pessoaService.findAll();
   }
 
   @Post()
-  @HttpCode(200)
+  @HttpCode(HttpStatus.CREATED)
   async createPessoa(
     @Body() request: CreatePessoaRequestDTO,
   ): Promise<PessoaResponseDTO> {
@@ -36,59 +37,40 @@ export class PessoaController {
     return response;
   }
 
-  @Get('id/:username')
-  @HttpCode(200)
+  @Get('username/:username')
+  @HttpCode(HttpStatus.OK)
   async findById(
     @Param('username') username: string,
   ): Promise<PessoaResponseDTO> {
-    const response: PessoaResponseDTO | null =
-      await this.pessoaService.findById(username);
-    if (response != null) {
-      return response;
-    }
-
-    throw new NotFoundException(
-      `Pessoa não encontrado com o username: ${username}`,
-    );
+    return this.pessoaService.findById(username);
   }
 
   @Get('email/:email')
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   async findByEmail(@Param('email') email: string): Promise<PessoaResponseDTO> {
-    const pessoa = await this.pessoaService.findByEmail(email);
-
-    if (!pessoa) {
-      throw new NotFoundException(
-        `Pessoa não encontrada com o email: ${email}`,
-      );
-    }
-
-    return new PessoaResponseDTO(pessoa);
+    return this.findByEmail(email);
   }
 
-  @Get(':username')
-  @HttpCode(200)
-  async findByUsername(@Param('username') username: string): Promise<PessoaResponseDTO> {
-    const pessoa = await this.pessoaService.findByUsername(username);
-
-    if (!pessoa) {
-      throw new NotFoundException(
-        `Pessoa não encontrada com o username: ${username}`,
-      );
-    }
-    return new PessoaResponseDTO(pessoa);
+  @Put(':username')
+  @HttpCode(HttpStatus.OK)
+  async updatePessoa(
+    @Param('username') username: string,
+    @Body() pessoa: Partial<CreatePessoaRequestDTO>,
+  ): Promise<PessoaResponseDTO> {
+    return this.pessoaService.update(username, pessoa);
   }
 
-  @Get(':profile')
+  @Delete(':username')
+  @HttpCode(HttpStatus.OK)
+  async deletePessoa(
+    @Param('username') username: string,
+  ): Promise<DeleteResult> {
+    return this.pessoaService.delete(username);
+  }
+
+  @Get('profile')
+  @HttpCode(HttpStatus.OK)
   async getProfile(@Request() req: any): Promise<PessoaResponseDTO> {
-    const user = req.user; 
-    const pessoa = await this.pessoaService.findById(user.username);
-    if (!pessoa) {
-      throw new NotFoundException(
-        `Pessoa não encontrada com o username: ${user.username}`,
-      );
-    }
-    return new PessoaResponseDTO(pessoa);
+    return await this.pessoaService.findById(String(req.user.username));
   }
-
 }
