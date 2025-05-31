@@ -1,10 +1,4 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
 import { IsCpfFormat } from '../decorators/is-cpf-format.decorator';
 
 export class CreatePessoaRequestDTO {
@@ -37,7 +31,6 @@ export class CreatePessoaRequestDTO {
     message:
       'O número de telefone está em um formato inválido para o Brasil. Certifique-se de incluir o DDD e 9 dígitos (ex: (XX) 9XXXX-XXXX ou XX9XXXX-XXXX).',
   })
-  @IsOptional()
   @IsString()
   contato?: string;
 }
