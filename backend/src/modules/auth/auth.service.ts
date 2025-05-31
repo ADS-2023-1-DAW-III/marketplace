@@ -27,12 +27,9 @@ export class AuthService {
   }
 
   async login(dto: LoginRequestDTO): Promise<AuthResponseDTO> {
-    const pessoas = await this.pessoaService.findAll();
-    let pessoa = pessoas.find(p => p.email === dto.login);
-
-    if (pessoa === undefined) {
-      pessoa = pessoas.find(p => p.username === dto.login);
-    }
+    const pessoa = await this.pessoaService.findInternalPessoaByLogin(
+      dto.login,
+    );
 
     if (!pessoa) {
       throw new UnauthorizedException('Usuário ou senha inválidos');
@@ -43,7 +40,10 @@ export class AuthService {
       throw new UnauthorizedException('Usuário ou senha inválidos');
     }
 
-    const token = generateJWT({ userId: pessoa.abacate_id });
+    const token = generateJWT({
+      userId: pessoa.abacate_id,
+      username: pessoa.username,
+    });
 
     return {
       token,
