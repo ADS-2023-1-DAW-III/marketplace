@@ -59,9 +59,6 @@ export class PessoaService {
   }
 
   async findByUsername(username: string) {
-    return this.pessoaRepository.findOne({where: { username}});
+    return this.pessoaRepository.findOne({ where: { username } });
   }
-
 }
-
-
