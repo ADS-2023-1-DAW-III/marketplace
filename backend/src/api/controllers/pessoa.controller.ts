@@ -50,4 +50,19 @@ export class PessoaController {
       `Pessoa não encontrado com o username: ${username}`,
     );
   }
+
+  @Get('email/:email')
+  @HttpCode(200)
+  async findByEmail(@Param('email') email: string): Promise<PessoaResponseDTO> {
+    const pessoa = await this.pessoaService.findByEmail(email);
+
+    if (!pessoa) {
+      throw new NotFoundException(
+        `Pessoa não encontrada com o email: ${email}`,
+      );
+    }
+
+    return new PessoaResponseDTO(pessoa);
+  }
+
 }

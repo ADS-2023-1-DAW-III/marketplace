@@ -53,4 +53,11 @@ export class PessoaService {
   async findById(username: string): Promise<Pessoa | null> {
     return this.pessoaRepository.findOne({ where: { username } });
   }
+
+  async findByEmail(email: string): Promise<Pessoa | null> {
+    return this.pessoaRepository.findOne({ where: { email } });
+  }
+
 }
+
+
