@@ -7,6 +7,7 @@ import {
   UseGuards,
   NotFoundException,
   Param,
+  Request,
 } from '@nestjs/common';
 import { PessoaService } from '../../modules/pessoa/pessoa.service';
 import { Pessoa } from '../../modules/pessoa/pessoa.entity';
@@ -15,7 +16,7 @@ import { PessoaResponseDTO } from '../../modules/pessoa/dto/pessoaResponse.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 // Descomente a linha abaixo assim que terminar a issue
-///@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 @Controller('pessoas')
 export class PessoaController {
   constructor(private readonly pessoaService: PessoaService) {}
@@ -62,6 +63,31 @@ export class PessoaController {
       );
     }
 
+    return new PessoaResponseDTO(pessoa);
+  }
+
+  @Get(':username')
+  @HttpCode(200)
+  async findByUsername(@Param('username') username: string): Promise<PessoaResponseDTO> {
+    const pessoa = await this.pessoaService.findByUsername(username);
+
+    if (!pessoa) {
+      throw new NotFoundException(
+        `Pessoa não encontrada com o username: ${username}`,
+      );
+    }
+    return new PessoaResponseDTO(pessoa);
+  }
+
+  @Get(':profile')
+  async getProfile(@Request() req: any): Promise<PessoaResponseDTO> {
+    const user = req.user; 
+    const pessoa = await this.pessoaService.findById(user.username);
+    if (!pessoa) {
+      throw new NotFoundException(
+        `Pessoa não encontrada com o username: ${user.username}`,
+      );
+    }
     return new PessoaResponseDTO(pessoa);
   }
 

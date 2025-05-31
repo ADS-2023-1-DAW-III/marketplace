@@ -58,6 +58,10 @@ export class PessoaService {
     return this.pessoaRepository.findOne({ where: { email } });
   }
 
+  async findByUsername(username: string) {
+    return this.pessoaRepository.findOne({where: { username}});
+  }
+
 }
 
 
