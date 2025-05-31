@@ -43,7 +43,10 @@ export class AuthService {
       throw new UnauthorizedException('Usuário ou senha inválidos');
     }
 
-    const token = generateJWT({ userId: pessoa.abacate_id });
+    const token = generateJWT({
+      userId: pessoa.abacate_id,
+      username: pessoa.username,
+    });
 
     return {
       token,
