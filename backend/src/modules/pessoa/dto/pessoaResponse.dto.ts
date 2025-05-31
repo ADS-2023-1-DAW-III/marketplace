@@ -12,5 +12,6 @@ export class PessoaResponseDTO {
     this.abacate_id = pessoa.abacate_id;
     this.nome = pessoa.nome;
     this.contato = pessoa.contato;
+    this.email = pessoa.email;
   }
 }

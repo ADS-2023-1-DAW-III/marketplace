@@ -32,5 +32,5 @@ export class CreatePessoaRequestDTO {
       'O número de telefone está em um formato inválido para o Brasil. Certifique-se de incluir o DDD e 9 dígitos (ex: (XX) 9XXXX-XXXX ou XX9XXXX-XXXX).',
   })
   @IsString()
-  contato?: string;
+  contato: string;
 }
