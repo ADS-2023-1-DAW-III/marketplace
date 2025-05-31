@@ -1,5 +1,10 @@
-import { Injectable, Inject, BadRequestException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import {
+  Injectable,
+  Inject,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
+import { DeleteResult, Repository } from 'typeorm';
 import { Pessoa } from './pessoa.entity';
 import { CreatePessoaRequestDTO } from './dto/createPessoaRequest.dto';
 import { PessoaResponseDTO } from './dto/pessoaResponse.dto';
@@ -13,8 +18,9 @@ export class PessoaService {
     private readonly abacateService: AbacateService,
   ) {}
 
-  async findAll(): Promise<Pessoa[]> {
-    return this.pessoaRepository.find();
+  async findAll(): Promise<PessoaResponseDTO[]> {
+    const pessoas = await this.pessoaRepository.find();
+    return pessoas.map((pessoa) => new PessoaResponseDTO(pessoa));
   }
 
   async create(request: CreatePessoaRequestDTO): Promise<PessoaResponseDTO> {
@@ -30,6 +36,7 @@ export class PessoaService {
       );
     }
 
+    // o codigo será descomentado para os teste de integração com a api do AbacatePay
     // const response = await this.abacateService.getClient().customer.create({
     //   name: newPessoa.nome,
     //   email: newPessoa.email,
@@ -37,11 +44,11 @@ export class PessoaService {
     //   taxId: newPessoa.cpf,
     // });
 
-    // // const abacate_id = response.data?.id;
+    // const abacate_id = response.data?.id;
 
-    // // if (abacate_id) {
-    // //   newPessoa.abacate_id = abacate_id;
-    // // }
+    //  if (abacate_id) {
+    //    newPessoa.abacate_id = abacate_id;
+    //  }
     newPessoa.abacate_id = '1223';
     await this.pessoaRepository.save(newPessoa);
 
@@ -50,15 +57,55 @@ export class PessoaService {
     return pessoaResponse;
   }
 
-  async findById(username: string): Promise<Pessoa | null> {
-    return this.pessoaRepository.findOne({ where: { username } });
+  async update(
+    username: string,
+    pessoa: Partial<CreatePessoaRequestDTO>,
+  ): Promise<PessoaResponseDTO> {
+    const persistPessoa = await this.pessoaRepository.findOne({
+      where: { username },
+    });
+
+    if (!persistPessoa) {
+      throw new NotFoundException(
+        `Pessoa não encontrada com o username: ${username}`,
+      );
+    }
+
+    Object.assign(persistPessoa, pessoa);
+
+    await this.pessoaRepository.save(persistPessoa);
+
+    return new PessoaResponseDTO(persistPessoa);
   }
 
-  async findByEmail(email: string): Promise<Pessoa | null> {
-    return this.pessoaRepository.findOne({ where: { email } });
+  async findById(username: string): Promise<PessoaResponseDTO> {
+    const pessoa = await this.pessoaRepository.findOne({ where: { username } });
+    if (!pessoa) {
+      throw new NotFoundException(
+        `Pessoa não encontrada com o username: ${username}`,
+      );
+    }
+    return new PessoaResponseDTO(pessoa);
   }
 
-  async findByUsername(username: string) {
-    return this.pessoaRepository.findOne({ where: { username } });
+  async findByEmail(email: string): Promise<PessoaResponseDTO> {
+    const pessoa = await this.pessoaRepository.findOne({ where: { email } });
+    if (!pessoa) {
+      throw new NotFoundException(
+        `Pessoa não encontrada com o username: ${email}`,
+      );
+    }
+    return new PessoaResponseDTO(pessoa);
+  }
+
+  async findInternalPessoaByLogin(login: string): Promise<Pessoa | null> {
+    const pessoa = await this.pessoaRepository.findOne({
+      where: [{ username: login }, { email: login }],
+    });
+    return pessoa;
+  }
+
+  async delete(username: string): Promise<DeleteResult> {
+    return await this.pessoaRepository.delete({ username });
   }
 }
