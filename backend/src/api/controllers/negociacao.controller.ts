@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, Req, UseGuards, HttpCode, HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { NegociacaoService } from '../../modules/negociacao/negociacao.service';
 import { CreateNegociacaoDto } from '../../modules/negociacao/dto/createNegociacaoRequest.dto';
 import { updateNegociacaoRequestDto } from '../../modules/negociacao/dto/updateNegociacaoRequest.dto';
@@ -33,4 +33,15 @@ export class NegociacaoController {
   remove(@Param('id') id: string) {
     return this.negociacaoService.remove(id);
   }
+
+  @Put(':id/accept')
+  @HttpCode(HttpStatus.OK)
+  acceptNegotiation(@Param('id') id: string, @Req() req: any) {
+    const userId = req.user?.username;
+    if (!userId){
+      throw new UnauthorizedException('Usuário não autenticado');
+    }
+    return this.negociacaoService.acceptNegotiation(id, userId);
+  }
+
 }

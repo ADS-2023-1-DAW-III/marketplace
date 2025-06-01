@@ -1,4 +1,6 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException,  BadRequestException,
+  InternalServerErrorException,
+  UnauthorizedException,} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Negociacao } from './negociacao.entity';
 import { CreateNegociacaoDto } from './dto/createNegociacaoRequest.dto';
@@ -59,5 +61,29 @@ export class NegociacaoService {
     async remove(id: string): Promise<void> {
         const negociacao = await this.findOne(id);
         await this.negociacaoRepository.remove(negociacao);
+    }
+
+    async acceptNegotiation(id: string, userId: string): Promise<Negociacao> {
+        const negociacao = await this.findOne({where: {id}, relations: ['servico']});
+
+        if (!negociacao) {
+            throw new NotFoundException('Negociação não encontrada');
+        }
+
+        if(!negociacao.servico || !negociacao.servico.id){
+            throw new BadRequestException('Serviço inválido ou sem criador');
+        }
+
+        if(negociacao.servico.id !== userId){
+            throw new UnauthorizedException('Você não tem permissão para aceitar esta negociação');
+        }
+
+        try {
+            negociacao.status = 'ACEITA';
+            return await this.negociacaoRepository.save(negociacao);
+        } catch (error){
+            console.error('Erro ao aceitar a negociação:', error);
+            throw new InternalServerErrorException('Erro ao aceitar a negociação');
+        }
     }
 }
