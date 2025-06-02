@@ -1,20 +1,28 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete, UseGuards, HttpCode } from '@nestjs/common';
 import { ServicoService } from '../../modules/servico/servico.service';
 import { CreateServicoRequestDto } from '../../modules/servico/dto/createServicoRequest.dto';
 import { UpdateServicoRequestDto } from '../../modules/servico/dto/updateServicoRequest.dto';
 import { ServicoResponseDto } from '../../modules/servico/dto/createServicoResponse.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { ServicoDetailedResponseDto } from 'src/modules/servico/dto/servicoDetailedResponse.dto';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('servico')
+@Controller('servicos')
 export class ServicoController {
     constructor(private readonly servicoService: ServicoService) {}
 
     @Post()
+    @HttpCode(201)
     async create(
         @Body() dto: CreateServicoRequestDto,
-    ): Promise<ServicoResponseDto> {
+    ): Promise<ServicoDetailedResponseDto> {
         return this.servicoService.create(dto);
+    }
+
+    @Get('prestados/:userId')
+    @HttpCode(200)
+    async findServicesProvidedByUser(@Param('userId') userId: string): Promise<ServicoDetailedResponseDto> {
+        return this.servicoService.findServicesProvidedByUser(userId);
     }
 
     @Get()
