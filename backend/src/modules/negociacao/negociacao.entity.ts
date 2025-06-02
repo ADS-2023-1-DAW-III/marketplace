@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 import { Pessoa } from '../pessoa/pessoa.entity';
 import { Servico } from '../servico/servico.entity';
+import { Pagamento } from '../pagamento/pagamento.entity';
 
 @Entity('negociacao')
 export class Negociacao {
@@ -20,5 +21,10 @@ export class Negociacao {
     pessoa: Pessoa
 
     @ManyToOne(() => Servico, (servico) => servico.id)
+    @JoinColumn({ name: 'servico_id' })
     servico: Servico
+
+    @OneToOne(() => Pagamento, (pagamento) => pagamento.negociacao)
+    @JoinColumn({ name: 'pagamento_id' })
+    pagamento: Pagamento;
 }

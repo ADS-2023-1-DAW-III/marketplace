@@ -1,8 +1,10 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn, Generated } from 'typeorm';
+import { Negociacao } from '../negociacao/negociacao.entity';
 
 @Entity('pagamento')
 export class Pagamento {
-    @PrimaryColumn({ type: 'varchar', length: 50})
+    @PrimaryColumn({ type: 'uuid'})
+    @Generated('uuid')
     id: string
 
     @Column()
@@ -16,5 +18,8 @@ export class Pagamento {
 
     @Column({ type: 'decimal', precision: 10, scale: 2})
     valor: number
+
+    @OneToOne(() => Negociacao, (negociacao) => negociacao.pagamento)
+    negociacao: Negociacao;
 
 }
