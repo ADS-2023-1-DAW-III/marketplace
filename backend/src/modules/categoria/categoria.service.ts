@@ -25,7 +25,7 @@ export class CategoriaService {
     async findOne(nome: string): Promise<CreateCategoriaResponseDto> {
         const categoria = await this.categoriaRepository.findOne({ where: { nome } });
         if (!categoria) {
-            throw new NotFoundException(`Categoria com nome "${nome}" não encontrada.`);
+            throw new NotFoundException(`Categoria com nome '${nome}' não encontrada.`);
         }
         return new CreateCategoriaResponseDto(categoria);
     }
