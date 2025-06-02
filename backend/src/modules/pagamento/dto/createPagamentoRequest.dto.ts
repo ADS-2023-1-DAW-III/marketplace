@@ -3,4 +3,5 @@ export interface CreatePagamentoDto {
   data: Date;
   status: boolean;
   valor: number;
+  negociacao_id: string;
 }
