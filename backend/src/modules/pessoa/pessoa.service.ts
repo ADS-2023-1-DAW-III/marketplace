@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Pessoa } from './pessoa.entity';
 import { CreatePessoaRequestDTO } from './dto/createPessoaRequest.dto';
@@ -30,7 +30,14 @@ export class PessoaService {
     return pessoaResponse;
   }
 
-  async findById(username: string): Promise<Pessoa | null> {
-    return this.pessoaRepository.findOne({ where: { username } });
+  async findById(username: string): Promise<Pessoa> {
+    const pessoa = await this.pessoaRepository.findOne({
+      where: { username },
+    });
+
+    if (!pessoa) {
+      throw new NotFoundException(`Pessoa com username ${username} não encontrada.`);
+    }
+    return pessoa;
   }
 }
