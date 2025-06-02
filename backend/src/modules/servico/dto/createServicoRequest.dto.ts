@@ -3,12 +3,18 @@ import { IsNotEmpty, IsString, IsBoolean, IsNumber } from 'class-validator';
 export class CreateServicoRequestDto {
     @IsString()
     @IsNotEmpty()
-    caminhoImagem: string;
+    titulo: string;
+    
+    @IsNumber()
+    preco: number;
+    
+    @IsNumber()
+    duracao: number;
 
     @IsString()
     @IsNotEmpty()
-    titulo: string;
-
+    caminhoImagem: string;
+    
     @IsBoolean()
     eh_negociavel: boolean;
 
@@ -16,9 +22,8 @@ export class CreateServicoRequestDto {
     @IsNotEmpty()
     descricao: string;
 
-    @IsNumber()
-    preco: number;
+    @IsString()
+    @IsNotEmpty()
+    categoria_id: string;
 
-    @IsNumber()
-    duracao: number;
 }

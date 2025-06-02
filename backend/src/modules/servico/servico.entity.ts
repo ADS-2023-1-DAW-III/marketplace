@@ -1,11 +1,13 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, OneToMany, ManyToMany } from 'typeorm';
+import { Entity, Column, PrimaryColumn, ManyToOne, OneToMany, ManyToMany, Generated, JoinColumn } from 'typeorm';
 import { Pessoa } from '../pessoa/pessoa.entity';
 import { Historico } from '../historico/historico.entity';
 import { Categoria } from '../categoria/categoria.entity';
+import { Negociacao } from '../negociacao/negociacao.entity';
 
 @Entity('servico')
 export class Servico {
-    @PrimaryColumn({ type: 'varchar', length: 50})
+    @PrimaryColumn({ type: 'uuid'})
+    @Generated('uuid')
     id: string
 
     @Column({nullable: false})
@@ -34,4 +36,7 @@ export class Servico {
     
     @ManyToMany(() => Categoria, (categoria) => categoria.servicos)
     categorias: Categoria[];
+
+    @OneToMany(() => Negociacao, (negociacao) => negociacao.servico)
+    negociacoes: Negociacao[];
 }

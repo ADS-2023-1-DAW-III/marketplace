@@ -1,21 +1,53 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Servico } from './servico.entity';
 import { CreateServicoRequestDto } from './dto/createServicoRequest.dto';
 import { UpdateServicoRequestDto } from './dto/updateServicoRequest.dto';
 import { ServicoResponseDto } from './dto/createServicoResponse.dto';
+import { ServicoDetailedResponseDto } from './dto/servicoDetailedResponse.dto';
+import { CategoriaService } from '../categoria/categoria.service';
+import { PessoaService } from '../pessoa/pessoa.service';
 
 @Injectable()
 export class ServicoService {
     constructor(
         @Inject('SERVICO_REPOSITORY')
         private servicoRepository: Repository<Servico>,
+        private readonly categoriaService: CategoriaService,
+        private readonly pessoaService: PessoaService,
     ) {}
 
-    async create(createDto: CreateServicoRequestDto): Promise<ServicoResponseDto> {
-        const novoServico = this.servicoRepository.create(createDto);
-        const servicoSalvo = await this.servicoRepository.save(novoServico);
-        return new ServicoResponseDto(servicoSalvo);
+    async create(createDto: CreateServicoRequestDto): Promise<ServicoDetailedResponseDto> {
+        await this.categoriaService.findOne(createDto.categoria_id);
+
+        const novoServico: Servico = this.servicoRepository.create(createDto);
+        const servicoSalvo: Servico = await this.servicoRepository.save(novoServico);
+
+        const response: ServicoDetailedResponseDto = new ServicoDetailedResponseDto();
+        response.message = "Serviço criado com sucesso";
+        response.servicos = [new ServicoResponseDto(servicoSalvo)];
+        return response;
+    }
+
+    async findServicesProvidedByUser(userId: string): Promise<ServicoDetailedResponseDto> {
+        const pessoa = await this.pessoaService.findById(userId);
+
+        const servicosPorUsuario: Servico[] = await this.servicoRepository.find({
+            where: { 
+                pessoa: { username: pessoa.username } 
+            },
+            relations: {
+                pessoa: true,
+                categorias: true,
+                negociacoes: {
+                    pagamento: true,
+                }
+            }
+        });
+        const response: ServicoDetailedResponseDto = new ServicoDetailedResponseDto();
+        response.message = "Serviços prestados retornados com sucesso";
+        response.servicos = servicosPorUsuario.map(servico => new ServicoResponseDto(servico));
+        return response;
     }
 
     async findAll(): Promise<ServicoResponseDto[]> {
