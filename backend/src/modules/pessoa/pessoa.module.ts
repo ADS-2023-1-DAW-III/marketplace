@@ -3,6 +3,7 @@ import { DatabaseModule } from '../../infra/database.module';
 import { PessoaProviders } from '../../infra/repositories/pessoa.providers';
 import { PessoaService } from './pessoa.service';
 import { PessoaController } from '../../api/controllers/pessoa.controller';
+import { AbacateModule } from 'src/infra/service/abacate.module';
 
 /**
  * O módulo Pessoa agrupa os componentes relacionados à entidade Pessoa:
@@ -14,7 +15,7 @@ import { PessoaController } from '../../api/controllers/pessoa.controller';
  * encapsulando funcionalidades específicas de um domínio.
  */
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, AbacateModule],
   providers: [...PessoaProviders, PessoaService],
   controllers: [PessoaController],
   exports: [PessoaService],

@@ -1,6 +1,6 @@
 import { Pessoa } from '../pessoa.entity';
 
-export class CreatePessoaResponseDTO {
+export class PessoaResponseDTO {
   username: string;
   abacate_id: string;
   nome: string;
@@ -12,5 +12,6 @@ export class CreatePessoaResponseDTO {
     this.abacate_id = pessoa.abacate_id;
     this.nome = pessoa.nome;
     this.contato = pessoa.contato;
+    this.email = pessoa.email;
   }
 }
