@@ -11,6 +11,7 @@ import {
   Put,
   Delete,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { PessoaService } from '../../modules/pessoa/pessoa.service';
 import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createPessoaRequest.dto';
@@ -38,7 +39,7 @@ export class PessoaController {
     return response;
   }
 
-  @Get(':username')
+  @Get('username/:username')
   @HttpCode(HttpStatus.OK)
   async findById(
     @Param('username') username: string,
@@ -51,6 +52,11 @@ export class PessoaController {
     @Query('username') username: string,
     @Query('email') email: string,
   ) {
+    if (username == undefined && email == undefined) {
+      throw new BadRequestException(
+        'É necessário username ou email para fazer o filtro',
+      );
+    }
     return this.pessoaService.findByUsernameOrEmail(username, email);
   }
 

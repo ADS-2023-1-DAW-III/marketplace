@@ -1,7 +1,6 @@
 import {
   Injectable,
   Inject,
-  BadRequestException,
   NotFoundException,
   ConflictException,
 } from '@nestjs/common';
@@ -95,9 +94,7 @@ export class PessoaService {
     });
 
     if (!pessoa) {
-      throw new NotFoundException(
-        `Pessoa não encontrada com o username "${username}" ou email "${email}".`,
-      );
+      throw new NotFoundException(`Pessoa não encontrada.`);
     }
     return new PessoaResponseDTO(pessoa);
   }
