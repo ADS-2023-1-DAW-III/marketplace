@@ -3,6 +3,7 @@ import {
   Inject,
   BadRequestException,
   NotFoundException,
+  ConflictException,
 } from '@nestjs/common';
 import { DeleteResult, Repository } from 'typeorm';
 import { Pessoa } from './pessoa.entity';
@@ -31,7 +32,7 @@ export class PessoaService {
     });
 
     if (existingUser) {
-      throw new BadRequestException(
+      throw new ConflictException(
         'Já existe uma pessoa com esse username cadastrado',
       );
     }

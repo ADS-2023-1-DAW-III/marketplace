@@ -3,8 +3,8 @@ import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import {
   ArgumentsHost,
-  BadRequestException,
   Catch,
+  ConflictException,
   ValidationPipe,
 } from '@nestjs/common';
 import { QueryFailedError } from 'typeorm';
@@ -17,7 +17,7 @@ export class QueryErrorFilter extends BaseExceptionFilter {
     const detail = exception.detail;
     if (typeof detail === 'string' && detail.includes('already exists')) {
       const messageStart = exception.table.split('_').join(' ') + ' with';
-      throw new BadRequestException(
+      throw new ConflictException(
         exception.detail.replace('Key', messageStart),
       );
     }
