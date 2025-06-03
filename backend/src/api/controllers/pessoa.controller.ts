@@ -10,6 +10,7 @@ import {
   HttpStatus,
   Put,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { PessoaService } from '../../modules/pessoa/pessoa.service';
 import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createPessoaRequest.dto';
@@ -37,7 +38,7 @@ export class PessoaController {
     return response;
   }
 
-  @Get('username/:username')
+  @Get(':username')
   @HttpCode(HttpStatus.OK)
   async findById(
     @Param('username') username: string,
@@ -45,10 +46,12 @@ export class PessoaController {
     return this.pessoaService.findById(username);
   }
 
-  @Get('email/:email')
-  @HttpCode(HttpStatus.OK)
-  async findByEmail(@Param('email') email: string): Promise<PessoaResponseDTO> {
-    return this.findByEmail(email);
+  @Get('filter')
+  async findbyIdOrEmail(
+    @Query('username') username: string,
+    @Query('email') email: string,
+  ) {
+    return this.pessoaService.findByUsernameOrEmail(username, email);
   }
 
   @Put(':username')

@@ -88,11 +88,14 @@ export class PessoaService {
     return new PessoaResponseDTO(pessoa);
   }
 
-  async findByEmail(email: string): Promise<PessoaResponseDTO> {
-    const pessoa = await this.pessoaRepository.findOne({ where: { email } });
+  async findByUsernameOrEmail(username: string, email: string) {
+    const pessoa = await this.pessoaRepository.findOne({
+      where: [{ username, email }],
+    });
+
     if (!pessoa) {
       throw new NotFoundException(
-        `Pessoa não encontrada com o username: ${email}`,
+        `Pessoa não encontrada com o username "${username}" ou email "${email}".`,
       );
     }
     return new PessoaResponseDTO(pessoa);
