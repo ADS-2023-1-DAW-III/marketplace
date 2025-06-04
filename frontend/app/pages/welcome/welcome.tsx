@@ -100,7 +100,7 @@ export function Welcome() {
                         <button
                           style={{ backgroundColor: "#004C4C" }}
                           type="submit"
-                          className="w-[150px] hover:bg-blue-600 text-white font-semibold py-3 px-5 rounded-md shadow-md transition duration-300 ease-in-out"
+                          className="w-[150px] text-white font-semibold py-3 px-5 rounded-md shadow-md transition duration-300 ease-in-out"
                         >
                           Criar Conta
                         </button>
