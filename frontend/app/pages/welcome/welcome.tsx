@@ -27,15 +27,15 @@ export function Welcome() {
   return (
     <main className="flex min-h-screen">
       <div className="w-1/2 bg-white flex items-center justify-center">
-        <div className="flex gap-4 items-center">
-          <span className="text-blue-500 text-7xl font-bold">M A R K E T</span>
-          <span className="bg-blue-400 text-white text-7xl font-bold px-1 py-0">
+        <div  style={{ color: "#004C4C" }} className="flex gap-4 items-center">
+          <span className="text-7xl font-bold">M A R K E T</span>
+          <span style={{ backgroundColor: "#004C4C" }} className="text-white text-7xl font-bold px-1 py-0">
             PLACE
           </span>
         </div>
-      </div>
+      </div>  
 
-      <div className="w-1/2 bg-blue-400 flex items-center justify-center">
+      <div  style={{ backgroundColor: "#004C4C" }} className="w-1/2 flex items-center justify-center">
         <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-[500px]">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(() => console.log("enviado"))}>
@@ -52,7 +52,7 @@ export function Welcome() {
                         </FormControl>
                       </div>
                       <div className="flex flex-col items-center justify-center">
-                        <div className="w-[50px] h-[50px] rounded-full bg-blue-500 flex items-center justify-center shadow-[0_4px_8px_rgba(0,0,255,0.3)]">
+                        <div style={{ backgroundColor: "#004C4C" }} className="w-[50px] h-[50px] rounded-full flex items-center justify-center shadow-[0_4px_8px_rgba(0,0,255,0.3)]">
                           <img
                             src={camera}
                             alt="camera"
@@ -98,8 +98,9 @@ export function Welcome() {
                         </FormControl>
 
                         <button
+                          style={{ backgroundColor: "#004C4C" }}
                           type="submit"
-                          className="w-[150px] bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-5 rounded-md shadow-md transition duration-300 ease-in-out"
+                          className="w-[150px] hover:bg-blue-600 text-white font-semibold py-3 px-5 rounded-md shadow-md transition duration-300 ease-in-out"
                         >
                           Criar Conta
                         </button>
