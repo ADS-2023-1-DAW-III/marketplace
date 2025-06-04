@@ -10,6 +10,7 @@ import camera from "~/assets/camera.png";
 import { useForm } from "react-hook-form";
 import { Input } from "~/components/ui/input";
 import { useState } from "react";
+import FormToggle from "~/components/ui/toggleForm";
 
 export function Welcome() {
   const [isLogin, setIsLogin] = useState(false);
@@ -17,9 +18,12 @@ export function Welcome() {
 
   const toggleForm = (value: boolean) => setIsLogin(value);
 
+  const handleClick = () => {
+    console.log('Imagem clicada!');
+  };
+
   return (
     <main className="flex min-h-screen">
-      {/* Lado esquerdo */}
       <div className="w-1/2 bg-white flex items-center justify-center">
         <div style={{ color: "#004C4C" }} className="flex gap-4 items-center">
           <span className="text-7xl font-bold">M A R K E T</span>
@@ -32,34 +36,12 @@ export function Welcome() {
         </div>
       </div>
 
-      <div
-        style={{ backgroundColor: "#004C4C" }}
-        className="w-1/2 flex flex-col items-center justify-center relative"
-      >
-        <div className="absolute top-30 left-44 bg-[#e9f1f5] p-1 rounded-lg shadow-inner flex w-[167px] justify-between">
-          <button
-            onClick={() => toggleForm(true)}
-            className={`px-1 py-1 text-sm font-semibold rounded-md transition ${
-              isLogin
-                ? "bg-white shadow text-[#004C4C]"
-                : "text-[#004C4C] opacity-80 hover:opacity-100"
-            }`}
-          >
-            LOGIN
-          </button>
-          <button
-            onClick={() => toggleForm(false)}
-            className={`px-2 py-2 text-sm font-semibold rounded-md transition ${
-              !isLogin
-                ? "bg-white shadow text-[#004C4C]"
-                : "text-[#004C4C] opacity-80 hover:opacity-100"
-            }`}
-          >
-            CADASTRAR
-          </button>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-[500px] mt-16">
+        <div
+          style={{ backgroundColor: "#004C4C" }}
+          className="w-1/2 flex flex-col items-center justify-center relative"
+        >
+          <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-[500px] mt-16">
+              <FormToggle isLogin={isLogin} toggleForm={toggleForm} /> {/* Aqui você usa o novo componente */}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(() => console.log("enviado"))}>
               {!isLogin && (
@@ -87,7 +69,8 @@ export function Welcome() {
                               <img
                                 src={camera}
                                 alt="camera"
-                                className="w-[30px] h-[30px] object-cover rounded-full"
+                                className="w-[30px] h-[30px] object-cover rounded-full cursor-pointer transition-transform duration-300 hover:scale-110 active:scale-95"
+                                onClick={handleClick}
                               />
                             </div>
                             <span className="text-xs mt-1">
