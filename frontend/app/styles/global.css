@@ -19,7 +19,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1rem; /* espaço entre Tabs e Card */
+    gap: 1rem;
     padding: 1rem;
 }
 

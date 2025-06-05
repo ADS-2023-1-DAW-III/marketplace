@@ -28,9 +28,9 @@ src/
 │ └── ...
 │
 ├── pages/ # Cada tela tem sua própria pasta
-│ ├── Home/
-│ │ ├── Home.tsx
-│ │ ├── Home.module.css
+│ ├── Routes/
+│ │ ├── Routes.tsx
+│ │ ├── Routes.module.css
 │ │ └── HomeService.ts # Serviços (ex: chamadas axios) específicos da tela
 │ │
 │ ├── Login/
@@ -51,5 +51,5 @@ src/
 │ └── useAuth.ts
 │
 ├── App.tsx # Componente raiz
-├── main.tsx # Entrada da aplicação
+├── App.tsx # Entrada da aplicação
 └── index.css # Estilos globais
