@@ -1,11 +1,12 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, OneToOne, Generated } from 'typeorm';
 import { Pessoa } from '../pessoa/pessoa.entity';
 import { Servico } from '../servico/servico.entity';
 import { Pagamento } from '../pagamento/pagamento.entity';
 
 @Entity('negociacao')
 export class Negociacao {
-    @PrimaryColumn({ type: 'varchar', length: 50})
+    @PrimaryColumn({ type: 'uuid'})
+    @Generated('uuid')
     id: string
 
     @Column({ default: false})

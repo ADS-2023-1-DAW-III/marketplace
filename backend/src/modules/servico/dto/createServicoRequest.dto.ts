@@ -1,6 +1,10 @@
-import { IsNotEmpty, IsString, IsBoolean, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsString, IsBoolean, IsNumber, IsArray, ArrayNotEmpty } from 'class-validator';
 
 export class CreateServicoRequestDto {
+    @IsString()
+    @IsNotEmpty()
+    id_prestador: string;
+    
     @IsString()
     @IsNotEmpty()
     titulo: string;
@@ -22,8 +26,9 @@ export class CreateServicoRequestDto {
     @IsNotEmpty()
     descricao: string;
 
-    @IsString()
-    @IsNotEmpty()
-    categoria_id: string;
+    @IsArray()
+    @ArrayNotEmpty()
+    @IsString( { each: true })
+    categorias: string[];
 
 }

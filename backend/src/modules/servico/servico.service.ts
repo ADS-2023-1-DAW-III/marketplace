@@ -18,14 +18,26 @@ export class ServicoService {
     ) {}
 
     async create(createDto: CreateServicoRequestDto): Promise<ServicoDetailedResponseDto> {
-        await this.categoriaService.findOne(createDto.categoria_id);
+        const categorias = await Promise.all(
+            createDto.categorias.map(nome =>
+                this.categoriaService.findOne(nome) 
+            )
+        );
 
-        const novoServico: Servico = this.servicoRepository.create(createDto);
+        const pessoa = await this.pessoaService.findById(createDto.id_prestador);
+
+        const novoServico: Servico = this.servicoRepository.create({
+            ...createDto,
+            pessoa,
+            categorias
+        });
+
         const servicoSalvo: Servico = await this.servicoRepository.save(novoServico);
 
         const response: ServicoDetailedResponseDto = new ServicoDetailedResponseDto();
         response.message = "Serviço criado com sucesso";
         response.servicos = [new ServicoResponseDto(servicoSalvo)];
+        response.servicos[0].id_prestador = pessoa.username;
         return response;
     }
 
@@ -33,17 +45,10 @@ export class ServicoService {
         const pessoa = await this.pessoaService.findById(userId);
 
         const servicosPorUsuario: Servico[] = await this.servicoRepository.find({
-            where: { 
-                pessoa: { username: pessoa.username } 
-            },
-            relations: {
-                pessoa: true,
-                categorias: true,
-                negociacoes: {
-                    pagamento: true,
-                }
-            }
+            where: { pessoa: { username: pessoa.username } },
+            relations: ['pessoa', 'categorias', 'negociacoes', 'negociacoes.pagamento']
         });
+
         const response: ServicoDetailedResponseDto = new ServicoDetailedResponseDto();
         response.message = "Serviços prestados retornados com sucesso";
         response.servicos = servicosPorUsuario.map(servico => new ServicoResponseDto(servico));

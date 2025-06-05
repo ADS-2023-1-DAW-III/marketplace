@@ -11,11 +11,13 @@ export class ServicoResponseDto {
     descricao: string;
     preco: number;
     duracao: number;
+    id_prestador?: string;
     categorias?: CreateCategoriaResponseDto[];
     negociacoes?: CreateNegociacaoResponseDto[];
     pagamentos?: PagamentoResponseDto[];
 
     constructor(servico: Servico) {
+        this.id_prestador = servico.pessoa?.username;
         this.id = servico.id;
         this.caminhoImagem = servico.caminhoImagem;
         this.titulo = servico.titulo;
@@ -28,8 +30,8 @@ export class ServicoResponseDto {
             descricao: categoria.descricao
         }));
         this.negociacoes = servico.negociacoes?.map(negociacao => ({
-            pessoaId: negociacao.pessoa.username,
-            servicoId: negociacao.servico.id,
+            pessoaId: negociacao.pessoa?.username,
+            servicoId: negociacao.servico?.id,
             houve_negociacao: negociacao.houve_negociacao,
             aceito: negociacao.aceito,
             novo_valor: negociacao.novo_valor
