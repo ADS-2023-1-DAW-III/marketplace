@@ -6,7 +6,7 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { Negociacao } from './negociacao.entity';
 import { CreateNegociacaoDto } from './dto/createNegociacaoRequest.dto';
 import { CreateNegociacaoResponseDto } from './dto/createNegociacaoResponse.dto';
@@ -14,6 +14,8 @@ import { updateNegociacaoRequestDto } from './dto/updateNegociacaoRequest.dto';
 
 import { PessoaService } from '../pessoa/pessoa.service';
 import { ServicoService } from '../servico/servico.service';
+import { GetNegociacaoQueryDto } from './dto/getNegociacaoQuery.dto';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 
 @Injectable()
 export class NegociacaoService {
@@ -24,8 +26,56 @@ export class NegociacaoService {
     private readonly servicoService: ServicoService,
   ) {}
 
+  async paginate(
+    pagination: PaginationQueryDto,
+    options?: FindManyOptions<Negociacao>,
+  ) {
+    const { page = 1, limit = 10 } = pagination;
+    const skip = (page - 1) * limit;
+
+    const [negociacoes, total] = await this.negociacaoRepository.findAndCount({
+      ...options,
+      skip,
+      take: limit,
+    });
+
+    return {
+      total,
+      limit,
+      page,
+      negociacoes,
+    };
+  }
+
   async findAll(): Promise<Negociacao[]> {
     return this.negociacaoRepository.find();
+  }
+
+  async findAllByContractor(
+    idContractor: string,
+    query: GetNegociacaoQueryDto,
+  ) {
+    return this.paginate(query, {
+      where: {
+        pessoa: {
+          username: idContractor,
+        },
+      },
+      order: query.recentes ? { data: 'DESC' } : undefined,
+    });
+  }
+
+  async findAllByProvider(idProvider: string, query: GetNegociacaoQueryDto) {
+    return this.paginate(query, {
+      where: {
+        servico: {
+          pessoa: {
+            username: idProvider,
+          },
+        },
+      },
+      order: query.recentes ? { data: 'DESC' } : undefined,
+    });
   }
 
   async findOne(id: string): Promise<Negociacao> {
