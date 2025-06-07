@@ -41,7 +41,7 @@ export function Welcome() {
                 name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username:</FormLabel>
+                    <FormLabel>Username</FormLabel>
                     <FormControl>
                       <Input placeholder="Digite aqui" {...field} />
                     </FormControl>
