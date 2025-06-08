@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsBoolean, IsNumber, IsArray, ArrayNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsString, IsBoolean, IsNumber, IsArray, ArrayNotEmpty, Min } from 'class-validator';
 
 export class CreateServicoRequestDto {
     @IsString()
@@ -10,9 +10,11 @@ export class CreateServicoRequestDto {
     titulo: string;
     
     @IsNumber()
+    @Min(0)
     preco: number;
     
     @IsNumber()
+    @Min(0)
     duracao: number;
 
     @IsString()
