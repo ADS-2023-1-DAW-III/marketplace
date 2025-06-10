@@ -77,6 +77,7 @@ const Register = () => {
                 <FormLabel>Contato</FormLabel>
                 <FormControl>
                   <Input
+                    placeholder="(00) 00000-0000"
                     className="w-full py-5 text-lg"
                     {...form.register("contato")}
                   />
