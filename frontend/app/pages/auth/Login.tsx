@@ -25,7 +25,8 @@ const Login = () => {
 
   return (
     <Card className="w-full max-w-sm">
-      <CardHeader></CardHeader>
+      <CardHeader>
+      </CardHeader>
       <CardContent>
         <form>
           <div className="flex flex-col gap-6">
