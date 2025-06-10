@@ -31,8 +31,8 @@ const Register = () => {
   };
   return (
     <div
-      style={{ backgroundColor: "#004C4C" }}
-      className="w-1/2 flex flex-col items-center justify-center relative"
+      style={{ backgroundColor: "#ffffff" }}
+      className="w-[450px] h-[450px] rounded-md shadow-md flex flex-col items-center justify-center relative"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(() => console.log("enviado"))}>
@@ -45,13 +45,13 @@ const Register = () => {
                   <div className="flex-1">
                     <FormLabel className="mb-2">Nome</FormLabel>
                     <FormControl>
-                      <Input className="w-full py-6 text-lg" {...field} />
+                      <Input className="w-full py-5 text-lg" {...field} />
                     </FormControl>
                   </div>
                   <div className="flex flex-col items-center justify-center">
                     <div
                       style={{ backgroundColor: "#004C4C" }}
-                      className="w-[50px] h-[50px] rounded-full flex items-center justify-center shadow-[0_4px_8px_rgba(0,0,255,0.3)]"
+                      className="w-[40px] h-[40px] rounded-full flex items-center justify-center shadow-[0_4px_8px_rgba(0,0,255,0.3)]"
                     >
                       <img
                         src={camera}
@@ -69,7 +69,7 @@ const Register = () => {
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
-                    className="w-full py-6 text-lg"
+                    className="w-full py-5 text-lg"
                     {...form.register("email")}
                   />
                 </FormControl>
@@ -77,7 +77,7 @@ const Register = () => {
                 <FormLabel>Contato</FormLabel>
                 <FormControl>
                   <Input
-                    className="w-full py-6 text-lg"
+                    className="w-full py-5 text-lg"
                     {...form.register("contato")}
                   />
                 </FormControl>
@@ -86,7 +86,7 @@ const Register = () => {
                 <FormControl>
                   <Input
                     type="password"
-                    className="w-full py-6 text-lg"
+                    className="w-full py-5 text-lg"
                     {...form.register("senha")}
                   />
                 </FormControl>
@@ -95,13 +95,13 @@ const Register = () => {
                 <FormControl>
                   <Input
                     type="password"
-                    className="w-full py-6 text-lg"
+                    className="w-full py-5 text-lg"
                     {...form.register("confirmarSenha")}
                   />
                 </FormControl>
 
                 <FormLabel>Habilidades</FormLabel>
-                <div className="flex items-end justify-between gap-1 mt-[-12px]">
+                <div className="flex items-end justify-between gap-1 mt-[-1px]">
                   <FormControl>
                     <select
                       className="w-[220px] py-2 px-2 border rounded-md"
@@ -118,7 +118,7 @@ const Register = () => {
                   <button
                     style={{ backgroundColor: "#004C4C" }}
                     type="submit"
-                    className="w-[150px] opacity-100 hover:opacity-80 text-white font-semibold py-3 px-5 rounded-md shadow-md transition duration-300 ease-in-out"
+                    className="w-[150px] opacity-100 hover:opacity-80 text-white font-semibold py-2 px-5 rounded-md shadow-md transition duration-300 ease-in-out"
                   >
                     Criar Conta
                   </button>

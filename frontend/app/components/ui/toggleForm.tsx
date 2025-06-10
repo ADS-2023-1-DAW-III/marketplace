@@ -11,7 +11,7 @@ const FormToggle: React.FC<FormToggleProps> = ({ isLogin, toggleForm }) => {
       style={{ backgroundColor: "#004C4C" }}
       className="w-1/2 flex flex-col items-center justify-center relative"
     >
-      {/* Botão mais acima */}
+  
       <div className="absolute top-[-80px] left-13 transform -translate-x-1/2 bg-[#e9f1f5] p-1 rounded-lg shadow-inner flex w-[167px] justify-between">
         <button
           onClick={() => toggleForm(true)}
