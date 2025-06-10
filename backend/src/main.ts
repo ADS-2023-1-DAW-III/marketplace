@@ -13,6 +13,19 @@ async function bootstrap() {
     .setDescription('sistema de Marketplace de Serviços')
     .setVersion('1.0')
     .addTag('Marketplace')
+    .addGlobalResponse({
+      status: 401,
+      description: 'Não Autorizado: Token de acesso ausente ou inválido.',
+    })
+    .addGlobalResponse({
+      status: 400,
+      description: 'Requisição Inválida: Dados enviados são inválidos.',
+    })
+    .addGlobalResponse({
+      status: 500,
+      description:
+        'Erro Interno do Servidor: Ocorreu um erro inesperado no servidor.',
+    })
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
