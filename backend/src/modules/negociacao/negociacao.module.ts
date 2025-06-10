@@ -6,9 +6,8 @@ import { NegociacaoController } from '../../api/controllers/negociacao.controlle
 import { PessoaModule } from '../pessoa/pessoa.module';
 import { ServicoModule } from '../servico/servico.module';
 
-
 @Module({
-  imports: [DatabaseModule, PessoaModule, ServicoModule], 
+  imports: [DatabaseModule, PessoaModule, ServicoModule],
   providers: [...NegociacaoProviders, NegociacaoService],
   controllers: [NegociacaoController],
   exports: [NegociacaoService],

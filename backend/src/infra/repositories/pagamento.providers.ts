@@ -1,7 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Pagamento } from '../../modules/pagamento/pagamento.entity';
 
-
 export const PagamentoProviders = [
   {
     provide: 'PAGAMENTO_REPOSITORY',

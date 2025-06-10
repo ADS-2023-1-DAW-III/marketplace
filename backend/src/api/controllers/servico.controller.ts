@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Patch,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ServicoService } from '../../modules/servico/servico.service';
 import { CreateServicoRequestDto } from '../../modules/servico/dto/createServicoRequest.dto';
 import { UpdateServicoRequestDto } from '../../modules/servico/dto/updateServicoRequest.dto';
@@ -8,35 +17,35 @@ import { AuthGuard } from '@nestjs/passport';
 @UseGuards(AuthGuard('jwt'))
 @Controller('servico')
 export class ServicoController {
-    constructor(private readonly servicoService: ServicoService) {}
+  constructor(private readonly servicoService: ServicoService) {}
 
-    @Post()
-    async create(
-        @Body() dto: CreateServicoRequestDto,
-    ): Promise<ServicoResponseDto> {
-        return this.servicoService.create(dto);
-    }
+  @Post()
+  async create(
+    @Body() dto: CreateServicoRequestDto,
+  ): Promise<ServicoResponseDto> {
+    return this.servicoService.create(dto);
+  }
 
-    @Get()
-    async findAll(): Promise<ServicoResponseDto[]> {
-        return this.servicoService.findAll();
-    }
+  @Get()
+  async findAll(): Promise<ServicoResponseDto[]> {
+    return this.servicoService.findAll();
+  }
 
-    @Get(':id')
-    async findOne(@Param('id') id: string): Promise<ServicoResponseDto> {
-        return this.servicoService.findOne(id);
-    }
+  @Get(':id')
+  async findOne(@Param('id') id: string): Promise<ServicoResponseDto> {
+    return this.servicoService.findOne(id);
+  }
 
-    @Patch(':id')
-    async update(
-        @Param('id') id: string,
-        @Body() dto: UpdateServicoRequestDto,
-    ): Promise<ServicoResponseDto> {
-        return this.servicoService.update(id, dto);
-    }
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateServicoRequestDto,
+  ): Promise<ServicoResponseDto> {
+    return this.servicoService.update(id, dto);
+  }
 
-    @Delete(':id')
-    async remove(@Param('id') id: string): Promise<void> {
-        return this.servicoService.remove(id);
-    }
+  @Delete(':id')
+  async remove(@Param('id') id: string): Promise<void> {
+    return this.servicoService.remove(id);
+  }
 }

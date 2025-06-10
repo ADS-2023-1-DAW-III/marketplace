@@ -1,6 +1,6 @@
 export interface CreatePessoaRequestDTO {
   username: string;
-  abacate_id: "null"; // ALTERAR AO CRIAR FLUXO DA CRiAÇÃO DO USER NO ABACATE
+  abacate_id: 'null'; // ALTERAR AO CRIAR FLUXO DA CRiAÇÃO DO USER NO ABACATE
   nome: string;
   email: string;
   senha: string;

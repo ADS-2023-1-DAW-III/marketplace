@@ -1,4 +1,4 @@
-import { Pagamento } from "../pagamento.entity";
+import { Pagamento } from '../pagamento.entity';
 
 export class PagamentoResponseDto {
   id: string;
