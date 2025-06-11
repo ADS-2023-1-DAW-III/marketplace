@@ -8,6 +8,7 @@ import {
   CardFooter,
 } from "~/components/ui/card";
 import type { MetaArgs } from "react-router";
+import {useState} from "react";
 
 export function meta(_args: MetaArgs) {
   return [
@@ -25,6 +26,7 @@ type LoginFormInputs = {
 };
 
 const Login = () => {
+  const [loginError, setLoginError] = useState('');
   const {
     register,
     handleSubmit,
@@ -32,55 +34,65 @@ const Login = () => {
   }= useForm<LoginFormInputs>();
 
   const onSubmit = (data: LoginFormInputs) => {
-    console.log("Dados do login:", data);
-    // Preciso validar o email e senha para que o usuário entre
-    // e se estiverem inválidos, peço para preencher novamente
+    const mockEmail = 'usuario@teste.com';
+    const mockSenha = '12345';
+
+    if(data.email == mockEmail && data.password == mockSenha){
+      alert('Login bem sucedido! Redirecionando...');
+    } else {
+      setLoginError('Email ou senha inválidos.')
+    }
   };
 
   return (
-    <Card className="w-full max-w-sm" onSubmit={handleSubmit(onSubmit)}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <CardContent>
-          <div className="grid gap-2">
+      <Card className="w-full max-w-sm">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <CardContent>
             <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="email" className={errors.email ? "text-red-500" : ""}>Email</Label>
+              <div className="grid gap-2">
+                <div className="flex items-center">
+                  <Label htmlFor="email" className={errors.email ? "text-red-500" : ""}>Email</Label>
+                </div>
+                <Input
+                    id="email"
+                    type="email"
+                    {...register("email", {required: "Digite seu email."})}
+                />
+                {errors.email && (
+                    <span className="text-sm text-red-500">
+                      {errors.email.message}
+                    </span>
+                )}
               </div>
-              <Input
-                  id="email"
-                  type="email"
-                  {...register("email", {required: "Digite seu email."})}
-              />
-              {errors.email && (
-                  <span className="text-sm text-red-500">
-                    {errors.email.message}
-                  </span>
-              )}
-            </div>
 
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password" className={errors.password ? "text-red-500" : ""}>Senha</Label>
+              <div className="grid gap-2">
+                <div className="flex items-center">
+                  <Label htmlFor="password" className={errors.password ? "text-red-500" : ""}>Senha</Label>
+                </div>
+                <Input
+                    id="password"
+                    type="password"
+                    {...register("password", {required: "Digite sua senha."})}
+                />
+                {errors.password && (
+                    <span className="text-sm text-red-500">
+                      {errors.password.message}
+                    </span>
+                )}
               </div>
-              <Input
-                  id="password"
-                  type="password"
-                  {...register("password", {required: "Digite sua senha."})}
-              />
-              {errors.password && (
-                  <span className="text-sm text-red-500">
-                    {errors.password.message}
-                  </span>
+
+              {loginError && (
+                  <div className="text-red-500 text-sm text-center">{loginError}</div>
               )}
+
             </div>
-          </div>
-        </CardContent>
-        <CardFooter className="gap-2 mt-4">
-          <Button type="submit">Entrar</Button>
-          <Button variant="outline">Esqueci minha senha</Button>
-        </CardFooter>
-      </form>
-    </Card>
+          </CardContent>
+          <CardFooter className="gap-2 mt-4">
+            <Button type="submit">Entrar</Button>
+            <Button type='button' variant="outline">Esqueci minha senha</Button>
+          </CardFooter>
+        </form>
+      </Card>
   );
 };
 
