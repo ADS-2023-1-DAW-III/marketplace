@@ -1,27 +1,38 @@
-import { IsString, IsBoolean, IsNumber, IsOptional } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateServicoRequestDto {
-  @IsString()
-  @IsOptional()
-  caminhoImagem?: string;
-
-  @IsString()
-  @IsOptional()
-  titulo?: string;
-
-  @IsBoolean()
-  @IsOptional()
-  eh_negociavel?: boolean;
-
-  @IsString()
-  @IsOptional()
-  descricao?: string;
-
-  @IsNumber()
-  @IsOptional()
-  preco?: number;
-
-  @IsNumber()
-  @IsOptional()
-  duracao?: number;
+  @ApiProperty({
+    type: 'string',
+    description: 'Caminho da imagem do serviço',
+    nullable: false,
+  }) // @IsNotEmpty()
+  caminhoImagem: string;
+  @ApiProperty({
+    type: 'string',
+    description: 'Título do serviço',
+    nullable: false,
+  })
+  // @IsNotEmpty()
+  titulo: string;
+  @ApiProperty({
+    type: 'boolean',
+    description: 'Indica se o serviço é negociável',
+  })
+  eh_negociavel: boolean;
+  @ApiProperty({
+    type: 'string',
+    description: 'Descrição do serviço',
+    nullable: false,
+  }) // @IsNotEmpty()
+  descricao: string;
+  @ApiProperty({
+    type: 'number',
+    description: 'Preço do serviço',
+  })
+  preco: number;
+  @ApiProperty({
+    type: 'number',
+    description: 'Duração do serviço',
+  })
+  duracao: number;
 }

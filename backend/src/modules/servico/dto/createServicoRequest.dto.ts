@@ -1,24 +1,38 @@
-import { IsNotEmpty, IsString, IsBoolean, IsNumber } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateServicoRequestDto {
-  @IsString()
-  @IsNotEmpty()
+  @ApiProperty({
+    type: 'string',
+    description: 'Caminho da imagem do serviço',
+    nullable: false,
+  }) // @IsNotEmpty()
   caminhoImagem: string;
-
-  @IsString()
-  @IsNotEmpty()
+  @ApiProperty({
+    type: 'string',
+    description: 'Título do serviço',
+    nullable: false,
+  })
+  // @IsNotEmpty()
   titulo: string;
-
-  @IsBoolean()
+  @ApiProperty({
+    type: 'boolean',
+    description: 'Indica se o serviço é negociável',
+  })
   eh_negociavel: boolean;
-
-  @IsString()
-  @IsNotEmpty()
+  @ApiProperty({
+    type: 'string',
+    description: 'Descrição do serviço',
+    nullable: false,
+  }) // @IsNotEmpty()
   descricao: string;
-
-  @IsNumber()
+  @ApiProperty({
+    type: 'number',
+    description: 'Preço do serviço',
+  })
   preco: number;
-
-  @IsNumber()
+  @ApiProperty({
+    type: 'number',
+    description: 'Duração do serviço',
+  })
   duracao: number;
 }
