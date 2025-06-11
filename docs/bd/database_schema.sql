@@ -17,7 +17,7 @@ CREATE TABLE Categoria (
 
 CREATE TABLE Servico (
     id INT AUTO_INCREMENT NOT NULL,
-    id_imagem INT NOT NULL,
+    id_imagem VARCHAR(50) NOT NULL,
     titulo VARCHAR(50) NOT NULL,
     eh_negociavel BOOLEAN NOT NULL,
     descricao TEXT NOT NULL,
