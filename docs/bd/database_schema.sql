@@ -21,9 +21,9 @@ CREATE TABLE Servico (
     titulo VARCHAR(50) NOT NULL,
     eh_negociavel BOOLEAN NOT NULL,
     descricao TEXT NOT NULL,
-    preco DECIMAL NOT NULL,
+    preco INT NOT NULL,
     duracao INT NOT NULL,
-    status BOOLEAN NOT NULL,
+    status VARCHAR(50) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -60,7 +60,7 @@ CREATE TABLE Servico_Categoria (
 
 CREATE TABLE Avaliacao (
     id INT AUTO_INCREMENT NOT NULL,
-    comenterio TEXT NOT NULL,
+    comentario TEXT NOT NULL,
     estrelas INT NOT NULL CHECK (estrelas BETWEEN 1 AND 5),
     id_pessoa VARCHAR(100) NOT NULL,
     id_servico INT NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE Avaliacao (
 );
 
 CREATE TABLE Pagamento (
-    id_abacate INT AUTO_INCREMENT NOT NULL,
+    id_abacate VARCHAR(32) NOT NULL,
     data DATETIME NOT NULL,
     status VARCHAR(50) NOT NULL,
     valor INT NOT NULL,
