@@ -25,7 +25,7 @@ export class CategoriaController {
   @ApiResponse({
     status: 201,
     description: 'Categoria criada com sucesso',
-    type: CreateCategoriaDto,
+    type: CreateCategoriaResponseDto,
   })
   @Post()
   async create(
@@ -47,7 +47,7 @@ export class CategoriaController {
   @ApiResponse({
     status: 200,
     description: 'Retorna a categoria com o determinado nome',
-    type: CreateCategoriaDto,
+    type: CreateCategoriaResponseDto,
   })
   @Get(':nome')
   async findOne(
@@ -59,7 +59,7 @@ export class CategoriaController {
   @ApiResponse({
     status: 200,
     description: 'Retorna a categoria que foi atualizada',
-    type: CreateCategoriaDto,
+    type: CreateCategoriaResponseDto,
   })
   @Patch(':nome')
   async update(
