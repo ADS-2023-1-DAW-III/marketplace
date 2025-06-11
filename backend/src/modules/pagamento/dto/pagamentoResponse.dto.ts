@@ -4,7 +4,7 @@ import { Pagamento } from '../pagamento.entity';
 export class PagamentoResponseDto {
   @ApiProperty({
     type: 'string',
-    description: 'Id do pagamento no banco de dados'
+    description: 'Id do pagamento no banco de dados',
   })
   id: string;
   @ApiProperty({
@@ -30,7 +30,7 @@ export class PagamentoResponseDto {
 
   constructor(entity: Pagamento) {
     this.id = entity.id;
-    this.id_abacate = entity.id_abacte;
+    this.id_abacate = entity.id_abacate;
     this.data = entity.data;
     this.status = entity.status;
     this.valor = entity.valor;

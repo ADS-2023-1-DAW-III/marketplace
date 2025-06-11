@@ -20,7 +20,7 @@ import { Pagamento } from 'src/modules/pagamento/pagamento.entity';
 @UseGuards(AuthGuard('jwt'))
 @Controller('pagamentos')
 export class PagamentoController {
-  constructor(private readonly pagamentoService: PagamentoService) { }
+  constructor(private readonly pagamentoService: PagamentoService) {}
 
   @ApiResponse({
     status: 201,

@@ -13,6 +13,8 @@ async function bootstrap() {
     .setDescription('sistema de Marketplace de Serviços')
     .setVersion('1.0')
     .addTag('Marketplace')
+    .addTag('categoria', 'API referente a CRUD de categoria')
+    .addTag('negociacao', 'API referente a CRUD de negociação')
     .addTag('pagamento', 'API referente a CRUD de pagamento')
     .addTag('serviço', 'API referente a CRUD de serviço')
     .addGlobalResponse({

@@ -14,8 +14,9 @@ import { CreateCategoriaResponseDto } from '../../modules/categoria/dto/createCa
 import { UpdateCategoriaRequestDto } from '../../modules/categoria/dto/updateCategoriaRequest.dto';
 import { Categoria } from '../../modules/categoria/categoria.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('categoria')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
 @Controller('categorias')

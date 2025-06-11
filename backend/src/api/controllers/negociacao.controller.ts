@@ -18,10 +18,17 @@ import { CreateNegociacaoDto } from '../../modules/negociacao/dto/createNegociac
 import { updateNegociacaoRequestDto } from '../../modules/negociacao/dto/updateNegociacaoRequest.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateNegociacaoResponseDto } from 'src/modules/negociacao/dto/createNegociacaoResponse.dto';
 import { UpdateCategoriaRequestDto } from 'src/modules/categoria/dto/updateCategoriaRequest.dto';
 
+@ApiTags('negociacao')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
 @Controller('negociacoes')

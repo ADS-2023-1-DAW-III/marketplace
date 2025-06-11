@@ -6,7 +6,7 @@ export class Pagamento {
   id: string;
 
   @Column()
-  id_abacte: string;
+  id_abacate: string;
 
   @Column()
   data: Date;
