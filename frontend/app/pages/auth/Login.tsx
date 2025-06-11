@@ -7,7 +7,7 @@ import {
   CardContent,
   CardFooter,
 } from "~/components/ui/card";
-import type { MetaArgs } from "react-router";
+import {type MetaArgs, useNavigate} from "react-router";
 import {useState} from "react";
 
 export function meta(_args: MetaArgs) {
@@ -27,6 +27,7 @@ type LoginFormInputs = {
 
 const Login = () => {
   const [loginError, setLoginError] = useState('');
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -89,7 +90,13 @@ const Login = () => {
           </CardContent>
           <CardFooter className="gap-2 mt-4">
             <Button type="submit">Entrar</Button>
-            <Button type='button' variant="outline">Esqueci minha senha</Button>
+            <Button
+                type='button'
+                variant="outline"
+                onClick={() => navigate("/recuperar-senha")}
+            >
+              Esqueci minha senha
+            </Button>
           </CardFooter>
         </form>
       </Card>
