@@ -23,7 +23,7 @@ export class PagamentoController {
 
   @ApiResponse({
     status: 201,
-    description: 'Pagamento criada com sucesso',
+    description: 'Pagamento criado com sucesso',
     type: PagamentoResponseDto,
   })
   @Post()
