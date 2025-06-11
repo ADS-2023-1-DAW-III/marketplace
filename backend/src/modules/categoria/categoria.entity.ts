@@ -3,24 +3,23 @@ import { Servico } from '../servico/servico.entity';
 
 @Entity('categorias')
 export class Categoria {
-    @PrimaryColumn()
-    nome: string;
+  @PrimaryColumn()
+  nome: string;
 
-    @Column({ type: 'text', nullable: true })
-    descricao: string;
+  @Column({ type: 'text', nullable: true })
+  descricao: string;
 
-    @ManyToMany(() => Servico, servico => servico.categorias)
-    @JoinTable({
-        name: 'categoria_servico',
-        joinColumn: {
-        name: 'categoria_nome',
-        referencedColumnName: 'nome',
+  @ManyToMany(() => Servico, (servico) => servico.categorias)
+  @JoinTable({
+    name: 'categoria_servico',
+    joinColumn: {
+      name: 'categoria_nome',
+      referencedColumnName: 'nome',
     },
-        inverseJoinColumn: {
-        name: 'servico_id',
-        referencedColumnName: 'id',
+    inverseJoinColumn: {
+      name: 'servico_id',
+      referencedColumnName: 'id',
     },
-    })
-    servicos: Servico[];
-    
+  })
+  servicos: Servico[];
 }

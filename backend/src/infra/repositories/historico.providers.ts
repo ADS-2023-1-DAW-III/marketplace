@@ -1,7 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Historico } from 'src/modules/historico/historico.entity';
 
-
 export const HistoricoProviders = [
   {
     provide: 'HISTORICO_REPOSITORY',

@@ -3,12 +3,16 @@ import { PessoaService } from '../pessoa/pessoa.service';
 import { CreatePessoaRequestDTO } from '../pessoa/dto/createPessoaRequest.dto';
 import { LoginRequestDTO } from './dto/authRequest.dto';
 import { AuthResponseDTO } from './authResponse.dto';
-import { generateJWT } from '../../lib/auth/auth';
+// import { generateJWT } from '../../lib/auth/auth'; // Remova ou comente esta linha
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt'; // Importe o JwtService
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly pessoaService: PessoaService) {}
+  constructor(
+    private readonly pessoaService: PessoaService,
+    private readonly jwtService: JwtService, // Injete o JwtService
+  ) {}
 
   async signup(dto: CreatePessoaRequestDTO): Promise<AuthResponseDTO> {
     const hashedPassword = await bcrypt.hash(dto.senha, 10);
@@ -18,7 +22,13 @@ export class AuthService {
       senha: hashedPassword,
     });
 
-    const token = generateJWT({ userId: pessoa.abacate_id });
+    // Use o jwtService para gerar o token
+    const payload = {
+      sub: pessoa.abacate_id,
+      username: pessoa.username,
+      email: pessoa.email,
+    }; // Adapte o payload para o que sua estratégia espera
+    const token = this.jwtService.sign(payload);
 
     return {
       token,
@@ -28,10 +38,10 @@ export class AuthService {
 
   async login(dto: LoginRequestDTO): Promise<AuthResponseDTO> {
     const pessoas = await this.pessoaService.findAll();
-    let pessoa = pessoas.find(p => p.email === dto.login);
+    let pessoa = pessoas.find((p) => p.email === dto.login);
 
     if (pessoa === undefined) {
-      pessoa = pessoas.find(p => p.username === dto.login);
+      pessoa = pessoas.find((p) => p.username === dto.login);
     }
 
     if (!pessoa) {
@@ -43,7 +53,13 @@ export class AuthService {
       throw new UnauthorizedException('Usuário ou senha inválidos');
     }
 
-    const token = generateJWT({ userId: pessoa.abacate_id });
+    // Use o jwtService para gerar o token
+    const payload = {
+      sub: pessoa.abacate_id,
+      username: pessoa.username,
+      email: pessoa.email,
+    }; // Adapte o payload para o que sua estratégia espera
+    const token = this.jwtService.sign(payload);
 
     return {
       token,

@@ -10,7 +10,7 @@ import AbacatePay from 'abacatepay-nodejs-sdk';
 @Injectable()
 export class AbacateService {
   public getClient() {
-    const abacateClient = AbacatePay(process.env.ABACATE_TOKEN!);
+    const abacateClient = AbacatePay('abc_dev_N33FzdeypW2BdERLNjCJbzA6');
 
     return abacateClient;
   }

@@ -1,16 +1,13 @@
-import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Historico } from '../historico/historico.entity';
 
 @Entity('pessoa')
 export class Pessoa {
-  @PrimaryColumn({ type: 'varchar', length: 50 })
-  username: string;
-
-  @Column({ type: 'varchar', length: 36 })
+  @PrimaryGeneratedColumn('uuid') // Ou '@PrimaryGeneratedColumn()' se for numérico
   abacate_id: string;
 
-  @Column({ type: 'varchar', length: 100 })
-  nome: string;
+  @Column({ type: 'varchar', length: 100, unique: true })
+  username: string;
 
   @Column({ type: 'varchar', length: 100, unique: true })
   email: string;
@@ -18,8 +15,17 @@ export class Pessoa {
   @Column({ type: 'varchar', length: 255 })
   senha: string;
 
+  @Column({ type: 'varchar', length: 100 })
+  nome: string;
+
+  @Column({ type: 'varchar', length: 36 })
+  abacatePayCustomerId?: string;
+
   @Column({ type: 'varchar', length: 100, nullable: true })
-  contato: string;
+  telefone: string;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  taxId: string;
 
   @OneToMany(() => Historico, (historico) => historico.pessoa)
   historico: Historico[];

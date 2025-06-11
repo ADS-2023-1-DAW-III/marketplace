@@ -14,9 +14,28 @@ import { HistoricoModule } from './modules/historico/historico.module';
 import { ServicoController } from './api/controllers/servico.controller';
 import { HistoricoController } from './api/controllers/historico.controller';
 import { AuthModule } from './modules/auth/auth.module';
+import { AbacatePayModule } from './modules/abacate-pay/abacate-pay.module';
 
 @Module({
-  imports: [PessoaModule, AbacateModule, PagamentoModule, NegociacaoModule, CategoriaModule, ServicoModule, HistoricoModule, AuthModule],
-  controllers: [AbacateController, PessoaController, PagamentoController, NegociacaoController, CategoriaController, ServicoController, HistoricoController],
+  imports: [
+    PessoaModule,
+    AbacateModule,
+    PagamentoModule,
+    NegociacaoModule,
+    CategoriaModule,
+    ServicoModule,
+    HistoricoModule,
+    AuthModule,
+    AbacatePayModule,
+  ],
+  controllers: [
+    AbacateController,
+    PessoaController,
+    PagamentoController,
+    NegociacaoController,
+    CategoriaController,
+    ServicoController,
+    HistoricoController,
+  ],
 })
 export class AppModule {}

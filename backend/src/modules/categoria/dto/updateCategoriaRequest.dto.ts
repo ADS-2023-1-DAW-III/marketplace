@@ -1,3 +1,3 @@
 export interface UpdateCategoriaRequestDto {
-    descricao: string;
+  descricao: string;
 }

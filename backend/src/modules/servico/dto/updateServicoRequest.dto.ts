@@ -1,27 +1,27 @@
-import {IsString, IsBoolean, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsBoolean, IsNumber, IsOptional } from 'class-validator';
 
 export class UpdateServicoRequestDto {
-    @IsString()
-    @IsOptional()
-    caminhoImagem?: string;
+  @IsString()
+  @IsOptional()
+  caminhoImagem?: string;
 
-    @IsString()
-    @IsOptional()
-    titulo?: string;
+  @IsString()
+  @IsOptional()
+  titulo?: string;
 
-    @IsBoolean()
-    @IsOptional()
-    eh_negociavel?: boolean;
+  @IsBoolean()
+  @IsOptional()
+  eh_negociavel?: boolean;
 
-    @IsString()
-    @IsOptional()
-    descricao?: string;
+  @IsString()
+  @IsOptional()
+  descricao?: string;
 
-    @IsNumber()
-    @IsOptional()
-    preco?: number;
+  @IsNumber()
+  @IsOptional()
+  preco?: number;
 
-    @IsNumber()
-    @IsOptional()
-    duracao?: number;
+  @IsNumber()
+  @IsOptional()
+  duracao?: number;
 }

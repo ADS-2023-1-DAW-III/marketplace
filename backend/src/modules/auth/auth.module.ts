@@ -11,7 +11,7 @@ import { JwtStrategy } from './jwt.strategy';
     PessoaModule,
     PassportModule,
     JwtModule.register({
-      secret: 'SENHA',
+      secret: process.env.JWT_SECRET || 'SENHA', // Use a variável de ambiente ou a mesma chave literal
       signOptions: { expiresIn: '1h' },
     }),
   ],
