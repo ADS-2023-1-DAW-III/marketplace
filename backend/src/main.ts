@@ -13,6 +13,8 @@ async function bootstrap() {
     .setDescription('sistema de Marketplace de Serviços')
     .setVersion('1.0')
     .addTag('Marketplace')
+    .addTag('pagamento', 'API referente a CRUD de pagamento')
+    .addTag('serviço', 'API referente a CRUD de serviço')
     .addGlobalResponse({
       status: 401,
       description: 'Não Autorizado: Token de acesso ausente ou inválido.',

@@ -12,10 +12,11 @@ import { PagamentoService } from '../../modules/pagamento/pagamento.service';
 import { CreatePagamentoDto } from '../../modules/pagamento/dto/createPagamentoRequest.dto';
 import { UpdatePagamentoDto } from '../../modules/pagamento/dto/updatePagamentoRequest.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBody, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PagamentoResponseDto } from 'src/modules/pagamento/dto/pagamentoResponse.dto';
 import { Pagamento } from 'src/modules/pagamento/pagamento.entity';
 
+@ApiTags('pagamento')
 @UseGuards(AuthGuard('jwt'))
 @Controller('pagamentos')
 export class PagamentoController {

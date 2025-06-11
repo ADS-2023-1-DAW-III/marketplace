@@ -13,9 +13,10 @@ import { CreateServicoRequestDto } from '../../modules/servico/dto/createServico
 import { UpdateServicoRequestDto } from '../../modules/servico/dto/updateServicoRequest.dto';
 import { ServicoResponseDto } from '../../modules/servico/dto/createServicoResponse.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBody, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Servico } from 'src/modules/servico/servico.entity';
 
+@ApiTags('servico')
 @UseGuards(AuthGuard('jwt'))
 @Controller('servico')
 export class ServicoController {
