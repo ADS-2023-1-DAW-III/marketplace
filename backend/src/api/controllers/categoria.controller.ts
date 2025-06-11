@@ -25,6 +25,7 @@ export class CategoriaController {
   @ApiResponse({
     status: 201,
     description: 'Categoria criada com sucesso',
+    type: CreateCategoriaDto,
   })
   @Post()
   async create(
@@ -68,6 +69,10 @@ export class CategoriaController {
     return this.categoriaService.update(nome, dto);
   }
 
+  @ApiResponse({
+    status: 204,
+    description: 'Remoção da categoria com sucesso',
+  })
   @Delete(':nome')
   async remove(@Param('nome') nome: string): Promise<void> {
     return this.categoriaService.remove(nome);
