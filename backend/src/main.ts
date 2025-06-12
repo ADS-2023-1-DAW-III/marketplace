@@ -1,9 +1,25 @@
-import { NestFactory } from '@nestjs/core';
+import { BaseExceptionFilter, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ArgumentsHost, Catch, ConflictException } from '@nestjs/common';
+import { QueryFailedError } from 'typeorm';
 
 dotenv.config();
+
+@Catch(QueryFailedError)
+export class QueryErrorFilter extends BaseExceptionFilter {
+  public catch(exception: any, host: ArgumentsHost): any {
+    const detail = exception.detail;
+    if (typeof detail === 'string' && detail.includes('already exists')) {
+      const messageStart = exception.table.split('_').join(' ') + ' with';
+      throw new ConflictException(
+        exception.detail.replace('Key', messageStart),
+      );
+    }
+    return super.catch(exception, host);
+  }
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
