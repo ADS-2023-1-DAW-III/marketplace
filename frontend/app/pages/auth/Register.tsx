@@ -25,8 +25,7 @@ export function meta(_args: MetaArgs) {
 
 const Register = () => {
   const [isLogin, setIsLogin] = useState(false);
-
-  const form = useForm(); 
+  const form = useForm();
   const senha = form.watch("senha");
 
   const handleClick = () => {
@@ -41,10 +40,9 @@ const Register = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit((data) => {
-      
             const payload = {
               username: data.username,
-              nome: data.username, 
+              nome: data.username,
               email: data.email,
               senha: data.senha,
               abacate_id: "abc123",
@@ -175,26 +173,22 @@ const Register = () => {
             )}
           />
 
-          {/* Habilidades */}
+          {/* Habilidades - agora é textarea */}
           <FormField
             control={form.control}
             name="habilidade"
-            rules={{ required: "Selecione uma habilidade" }}
+            rules={{ required: "Digite uma habilidade" }}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Habilidades</FormLabel>
                 <div className="flex items-end justify-between gap-1 mt-[-1px]">
                   <FormControl>
-                    <select
-                      className="w-[220px] py-2 px-2 border rounded-md"
+                    <textarea
+                      className="w-[220px] h-[40px] py-1 px-1 border rounded-md resize-none"
+                      rows={1}
+                      placeholder="Digite suas habilidades..."
                       {...field}
-                    >
-                      <option value="">Select</option>
-                      <option value="html">HTML</option>
-                      <option value="css">CSS</option>
-                      <option value="js">JavaScript</option>
-                      <option value="react">React</option>
-                    </select>
+                    />
                   </FormControl>
 
                   <button
