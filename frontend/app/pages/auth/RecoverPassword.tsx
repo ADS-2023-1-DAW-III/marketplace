@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
-import { Label } from "~/components/ui/label";
 import type { MetaArgs } from "react-router";
+import {z} from "zod";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "~/components/ui/form";
 
 export function meta(_args: MetaArgs) {
     return [
@@ -16,55 +18,53 @@ export function meta(_args: MetaArgs) {
     ];
 }
 
-type Entrada = {
-    email: string;
-}
+const formSchema = z.object({
+    email: z.string().min(1, "Digite seu email.").email("Email inválido."),
+});
 
 const RecoverPassword = () => {
     const navigate = useNavigate();
 
-    const {
-        register,
-        handleSubmit,
-        formState: {errors},
-    } = useForm<Entrada>();
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: "",
+        },
+    });
 
-    const onSubmit = (data: Entrada) => {
+    const onSubmit = (data: z.infer<typeof formSchema>) => {
         alert(`Se o email "${data.email}" estiver cadastrado, enviaremos instruções para a recuperação.`);
         navigate("/login");
-    }
+    };
 
     return(
       <Card className='w-full max-w-sm'>
-          <form onSubmit={handleSubmit(onSubmit)}>
-              <CardContent>
-                  <div className="grid gap-4">
-                      <div className="grid gap-2">
-                          <Label htmlFor="email">Email</Label>
-
-                          <Input
-                              id="email"
-                              type="email"
-                              {...register("email", {
-                                  required: "Digite seu email.",
-                                  pattern: {
-                                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                      message: "Email inválido.",
-                                  },
-                              })}
-                          />
-                          {errors.email && (
-                              <span className="text-sm text-red-500">{errors.email.message}</span>
+          <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                  <CardContent className='space-y-4'>
+                      <FormField
+                          control={form.control}
+                          name='email'
+                          render={({ field }) => (
+                              <FormItem>
+                                  <FormLabel>Email</FormLabel>
+                                  <FormControl>
+                                      <Input type="email" placeholder="Digite seu email" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                              </FormItem>
                           )}
-                      </div>
-                  </div>
-              </CardContent>
-              <CardFooter className="flex flex-col gap-2 mt-4">
-                  <Button type="submit" className="w-full">
-                      Verificar email
-                  </Button>
-              </CardFooter>
-          </form>
+                      />
+                  </CardContent>
+
+                  <CardFooter className="flex flex-col gap-2 mt-4">
+                      <Button type="submit" className="w-full">
+                          Verificar email
+                      </Button>
+                  </CardFooter>
+
+              </form>
+          </Form>
       </Card>
     );
 }
