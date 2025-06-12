@@ -28,10 +28,10 @@ export class AuthService {
 
   async login(dto: LoginRequestDTO): Promise<AuthResponseDTO> {
     const pessoas = await this.pessoaService.findAll();
-    let pessoa = pessoas.find(p => p.email === dto.login);
+    let pessoa = pessoas.find((p) => p.email === dto.login);
 
     if (pessoa === undefined) {
-      pessoa = pessoas.find(p => p.username === dto.login);
+      pessoa = pessoas.find((p) => p.username === dto.login);
     }
 
     if (!pessoa) {

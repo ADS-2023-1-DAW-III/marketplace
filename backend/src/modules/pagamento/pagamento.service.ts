@@ -23,11 +23,15 @@ export class PagamentoService {
 
   async findOne(id: string): Promise<PagamentoResponseDto> {
     const pagamento = await this.pagamentoRepository.findOne({ where: { id } });
-    if (!pagamento) throw new NotFoundException(`Pagamento ${id} não encontrado`);
+    if (!pagamento)
+      throw new NotFoundException(`Pagamento ${id} não encontrado`);
     return pagamento;
   }
 
-  async update(id: string, dto: UpdatePagamentoDto): Promise<PagamentoResponseDto> {
+  async update(
+    id: string,
+    dto: UpdatePagamentoDto,
+  ): Promise<PagamentoResponseDto> {
     const pagamento = await this.findOne(id);
     Object.assign(pagamento, dto);
     return await this.pagamentoRepository.save(pagamento);

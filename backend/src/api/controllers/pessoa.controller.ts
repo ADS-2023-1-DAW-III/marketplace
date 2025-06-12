@@ -1,20 +1,41 @@
-import { Body, Controller, Get, Post, HttpCode, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  HttpCode,
+  UseGuards,
+} from '@nestjs/common';
 import { PessoaService } from '../../modules/pessoa/pessoa.service';
 import { Pessoa } from '../../modules/pessoa/pessoa.entity';
 import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createPessoaRequest.dto';
 import { CreatePessoaResponseDTO } from '../../modules/pessoa/dto/createPessoaResponse.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+
+@ApiTags('pessoa')
+@ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
 @Controller('pessoas')
 export class PessoaController {
   constructor(private readonly pessoaService: PessoaService) {}
-
+  
+  @ApiResponse({
+    status: 200,
+    description: 'Lista todas as Pessoas',
+    type: [Pessoa],
+  })
   @Get()
   async findAll(): Promise<Pessoa[]> {
     return this.pessoaService.findAll();
   }
 
+  @ApiResponse({
+    status: 201,
+    description: 'Pessoa criada com sucesso',
+    type: CreatePessoaResponseDTO,
+  })
   @Post()
   @HttpCode(200)
   async createPessoa(
