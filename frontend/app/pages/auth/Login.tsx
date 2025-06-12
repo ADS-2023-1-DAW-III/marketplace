@@ -9,6 +9,8 @@ import {
 import {type MetaArgs, useNavigate} from "react-router";
 import {useState} from "react";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "~/components/ui/form";
+import z from "zod";
+import {zodResolver} from "@hookform/resolvers/zod";
 
 export function meta(_args: MetaArgs) {
   return [
@@ -20,28 +22,30 @@ export function meta(_args: MetaArgs) {
   ];
 }
 
-type LoginFormInputs = {
-  email: string;
-  password: string;
-};
+const formSchema = z.object({
+    email: z.string().min(1, 'Digite seu email.').email("Email inválido."),
+    password: z.string().min(1, 'Digite sua senha.'),
+});
 
 const Login = () => {
   const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
 
-  const form = useForm<LoginFormInputs>({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+  const form = useForm<z.infer<typeof formSchema>>({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+        email: "",
+        password: "",
+      },
   });
 
-  const onSubmit = (data: LoginFormInputs) => {
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
     const mockEmail = 'usuario@teste.com';
     const mockSenha = '12345';
 
     if(data.email == mockEmail && data.password == mockSenha){
       alert('Login bem sucedido! Redirecionando...');
+      //navigate("/tela-inicial")
     } else {
       setLoginError('Email ou senha inválidos.')
     }
@@ -88,13 +92,11 @@ const Login = () => {
             </CardContent>
 
             <CardFooter className="gap-2 mt-4">
-              <Button type="submit">Entrar</Button>
               <Button
-                  type='button'
-                  variant="outline"
-                  onClick={() => navigate("/recuperar-senha")}
+                  type="submit"
+                  //onClick={() => navigate("/tela-inicial")}
               >
-                Esqueci minha senha
+                  Entrar
               </Button>
             </CardFooter>
           </form>
