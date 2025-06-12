@@ -1,5 +1,4 @@
 import {Logo} from "~/components/ui/Logo";
-import AuthTabs from "~/components/ui/AuthTabs";
 import {Outlet} from "react-router";
 
 const LayoutMin = () => {

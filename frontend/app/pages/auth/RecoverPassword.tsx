@@ -63,15 +63,6 @@ const RecoverPassword = () => {
                   <Button type="submit" className="w-full">
                       Verificar email
                   </Button>
-
-                  <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => navigate("/login")}
-                  >
-                      Voltar para login
-                  </Button>
               </CardFooter>
           </form>
       </Card>
