@@ -16,7 +16,9 @@ async function bootstrap() {
     .addTag('categoria', 'API referente a CRUD de categoria')
     .addTag('negociacao', 'API referente a CRUD de negociação')
     .addTag('pagamento', 'API referente a CRUD de pagamento')
-    .addTag('serviço', 'API referente a CRUD de serviço')
+    .addTag('servico', 'API referente a CRUD de serviço')
+    .addTag('historico', 'API referente a CRUD de serviço')
+    .addTag('pessoa', 'API referente a CRUD de pessoa')
     .addGlobalResponse({
       status: 401,
       description: 'Não Autorizado: Token de acesso ausente ou inválido.',
