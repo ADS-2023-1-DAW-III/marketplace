@@ -45,7 +45,6 @@ const Register = () => {
               nome: data.username,
               email: data.email,
               senha: data.senha,
-              abacate_id: "abc123",
             };
 
             axios
