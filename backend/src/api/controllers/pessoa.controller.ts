@@ -5,30 +5,43 @@ import {
   Post,
   HttpCode,
   UseGuards,
-  Param,
-  Request,
   HttpStatus,
+  Param,
+  BadRequestException,
+  Query,
   Put,
   Delete,
-  Query,
-  BadRequestException,
+  Request,
 } from '@nestjs/common';
 import { PessoaService } from '../../modules/pessoa/pessoa.service';
 import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createPessoaRequest.dto';
 import { PessoaResponseDTO } from '../../modules/pessoa/dto/pessoaResponse.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteResult } from 'typeorm';
 
+@ApiTags('pessoa')
+@ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
 @Controller('pessoas')
 export class PessoaController {
   constructor(private readonly pessoaService: PessoaService) {}
 
+  @ApiResponse({
+    status: 200,
+    description: 'Lista todas as Pessoas',
+    type: [PessoaResponseDTO],
+  })
   @Get()
   async findAll(): Promise<PessoaResponseDTO[]> {
     return this.pessoaService.findAll();
   }
 
+  @ApiResponse({
+    status: 201,
+    description: 'Pessoa criada com sucesso',
+    type: PessoaResponseDTO,
+  })
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createPessoa(
