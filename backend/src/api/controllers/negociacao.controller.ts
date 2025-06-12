@@ -1,8 +1,23 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+  Req,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
+  UnauthorizedException,
+  Query,
+} from '@nestjs/common';
 import { NegociacaoService } from '../../modules/negociacao/negociacao.service';
 import { CreateNegociacaoDto } from '../../modules/negociacao/dto/createNegociacaoRequest.dto';
 import { updateNegociacaoRequestDto } from '../../modules/negociacao/dto/updateNegociacaoRequest.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('negociacoes')
@@ -19,9 +34,35 @@ export class NegociacaoController {
     return this.negociacaoService.findAll();
   }
 
+  @Get('contratante/:id_pessoa')
+  findAllByContractor(
+    @Param('id_pessoa') idPessoa: string,
+    @Query() query: PaginationQueryDto,
+  ) {
+    return this.negociacaoService.findAllByContractor(idPessoa, query);
+  }
+
+  @Get('prestador/:id_prestador')
+  findAllByProvider(
+    @Param('id_prestador') idPrestador: string,
+    @Query() query: PaginationQueryDto,
+  ) {
+    return this.negociacaoService.findAllByProvider(idPrestador, query);
+  }
+
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.negociacaoService.findOne(id);
+  async findOne(
+    @Req() request: { user: { userId: string } },
+    @Param('id') id: string,
+  ) {
+    const negociacao = await this.negociacaoService.verifyStatus(
+      request.user.userId,
+      id,
+    );
+    return {
+      message: 'Status da negociação atualizado',
+      negociacao,
+    };
   }
 
   @Put(':id')
@@ -32,5 +73,15 @@ export class NegociacaoController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.negociacaoService.remove(id);
+  }
+
+  @Put(':id/accept')
+  @HttpCode(HttpStatus.OK)
+  acceptNegotiation(@Param('id') id: string, @Req() req: any) {
+    const userId = req.user?.username;
+    if (!userId) {
+      throw new UnauthorizedException('Usuário não autenticado');
+    }
+    return this.negociacaoService.acceptNegotiation(id, userId);
   }
 }
