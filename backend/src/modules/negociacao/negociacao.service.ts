@@ -16,6 +16,7 @@ import { PessoaService } from '../pessoa/pessoa.service';
 import { ServicoService } from '../servico/servico.service';
 import { GetNegociacaoQueryDto } from './dto/getNegociacaoQuery.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
+import { NegociacaoDto } from './dto/negociacao.dto';
 
 @Injectable()
 export class NegociacaoService {
@@ -26,7 +27,7 @@ export class NegociacaoService {
     private readonly servicoService: ServicoService,
   ) {}
 
-  async paginate(
+  private async paginate(
     pagination: PaginationQueryDto,
     options?: FindManyOptions<Negociacao>,
   ) {
@@ -78,14 +79,36 @@ export class NegociacaoService {
     });
   }
 
-  async findOne(id: string): Promise<Negociacao> {
-    const negociacao = await this.negociacaoRepository.findOne({
-      where: { id },
-    });
+  async verifyStatus(
+    pessoaId: string,
+    negociacaoId: string,
+  ): Promise<NegociacaoDto> {
+    const negociacao = await this.negociacaoRepository
+      .createQueryBuilder('negociacao')
+      .leftJoinAndSelect('negociacao.pessoa', 'pessoa')
+      .leftJoinAndSelect('negociacao.servico', 'servico')
+      .leftJoinAndSelect('servico.pessoa', 'servicoPessoa')
+      .where('negociacao.id = :negociacaoId', { negociacaoId })
+      .andWhere(
+        '(pessoa.username = :pessoaId OR servicoPessoa.username = :pessoaId)',
+        { pessoaId },
+      )
+      .getOne();
+
     if (!negociacao) {
       throw new NotFoundException('Negociação não encontrada');
     }
-    return negociacao;
+
+    const negociacaoDto: NegociacaoDto = {
+      id_pessoa: negociacao.pessoa.username,
+      id_servico: negociacao.servico.id,
+      novo_valor: negociacao.novo_valor,
+      valor: negociacao.servico.preco,
+      houve_negociacao: negociacao.houve_negociacao,
+      aceito: negociacao.aceito,
+    };
+
+    return negociacaoDto;
   }
 
   async create(
@@ -114,14 +137,22 @@ export class NegociacaoService {
     id: string,
     updateDto: updateNegociacaoRequestDto,
   ): Promise<Negociacao> {
-    const negociacao = await this.findOne(id);
+    const negociacao = await this.negociacaoRepository.findOneBy({ id });
+
+    if (!negociacao) {
+      throw new NotFoundException('Negociação não encontrada');
+    }
+
     Object.assign(negociacao, updateDto);
     return this.negociacaoRepository.save(negociacao);
   }
 
   async remove(id: string): Promise<void> {
-    const negociacao = await this.findOne(id);
-    await this.negociacaoRepository.remove(negociacao);
+    const result = await this.negociacaoRepository.delete({ id });
+
+    if (!result.affected) {
+      throw new NotFoundException('Negociação não encontrada');
+    }
   }
 
   async acceptNegotiation(id: string, userId: string): Promise<Negociacao> {
