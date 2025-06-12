@@ -36,11 +36,11 @@ app/
 
 ├── pages/ # Cada tela tem sua própria pasta
 
-│ ├── Home/
+│ ├── Routes/
 
-│ │ ├── Home.tsx
+│ │ ├── Routes.tsx
 
-│ │ ├── Home.module.css
+│ │ ├── Routes.module.css
 
 │ │ └── HomeService.ts # Serviços (ex: chamadas axios) específicos da tela
 
