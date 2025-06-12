@@ -7,55 +7,60 @@ import { ServicoResponseDto } from './dto/createServicoResponse.dto';
 
 @Injectable()
 export class ServicoService {
-    constructor(
-        @Inject('SERVICO_REPOSITORY')
-        private servicoRepository: Repository<Servico>,
-    ) {}
+  constructor(
+    @Inject('SERVICO_REPOSITORY')
+    private servicoRepository: Repository<Servico>,
+  ) {}
 
-    async create(createDto: CreateServicoRequestDto): Promise<ServicoResponseDto> {
-        const novoServico = this.servicoRepository.create(createDto);
-        const servicoSalvo = await this.servicoRepository.save(novoServico);
-        return new ServicoResponseDto(servicoSalvo);
+  async create(
+    createDto: CreateServicoRequestDto,
+  ): Promise<ServicoResponseDto> {
+    const novoServico = this.servicoRepository.create(createDto);
+    const servicoSalvo = await this.servicoRepository.save(novoServico);
+    return new ServicoResponseDto(servicoSalvo);
+  }
+
+  async findAll(): Promise<ServicoResponseDto[]> {
+    const servicos = await this.servicoRepository.find();
+    return servicos.map((servico) => new ServicoResponseDto(servico));
+  }
+
+  async findOne(id: string): Promise<ServicoResponseDto> {
+    const servico = await this.servicoRepository.findOne({
+      where: { id },
+      relations: ['pessoa'],
+    });
+
+    if (!servico) {
+      throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
     }
 
-    async findAll(): Promise<ServicoResponseDto[]> {
-        const servicos = await this.servicoRepository.find();
-        return servicos.map(servico => new ServicoResponseDto(servico));
+    return new ServicoResponseDto(servico);
+  }
+
+  async update(
+    id: string,
+    updateDto: UpdateServicoRequestDto,
+  ): Promise<ServicoResponseDto> {
+    const exists = await this.servicoRepository.exist({ where: { id } });
+    if (!exists) {
+      throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
     }
 
-    async findOne(id: string): Promise<ServicoResponseDto> {
-        const servico = await this.servicoRepository.findOne({ 
-            where: { id },
-            relations: ['pessoa']
-        });
-        
-        if (!servico) {
-            throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
-        }
-        
-        return new ServicoResponseDto(servico);
-    }
+    await this.servicoRepository.update(id, updateDto);
+    const updated = await this.servicoRepository.findOne({
+      where: { id },
+      relations: ['pessoa'],
+    });
 
-    async update(id: string, updateDto: UpdateServicoRequestDto): Promise<ServicoResponseDto> {
-        const exists = await this.servicoRepository.exist({ where: { id } });
-        if (!exists) {
-            throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
-        }
+    return new ServicoResponseDto(updated!);
+  }
 
-        await this.servicoRepository.update(id, updateDto);
-        const updated = await this.servicoRepository.findOne({ 
-            where: { id },
-            relations: ['pessoa'] 
-        });
-        
-        return new ServicoResponseDto(updated!);
-    }
+  async remove(id: string): Promise<void> {
+    await this.servicoRepository.delete(id);
+  }
 
-    async remove(id: string): Promise<void> {
-        await this.servicoRepository.delete(id);
-    }
-
-    async findById(id: string): Promise<Servico | null> {
-        return this.servicoRepository.findOne({ where: { id } });
-    }
+  async findById(id: string): Promise<Servico | null> {
+    return this.servicoRepository.findOne({ where: { id } });
+  }
 }

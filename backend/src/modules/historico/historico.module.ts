@@ -7,9 +7,14 @@ import { PessoaProviders } from 'src/infra/repositories/pessoa.providers';
 import { ServicoProviders } from 'src/infra/repositories/servico.providers';
 
 @Module({
-    imports: [DatabaseModule],
-    controllers: [HistoricoController],
-    providers: [...HistoricoProviders, ...PessoaProviders, ...ServicoProviders, HistoricoService],
-    exports: [HistoricoService],
+  imports: [DatabaseModule],
+  controllers: [HistoricoController],
+  providers: [
+    ...HistoricoProviders,
+    ...PessoaProviders,
+    ...ServicoProviders,
+    HistoricoService,
+  ],
+  exports: [HistoricoService],
 })
 export class HistoricoModule {}

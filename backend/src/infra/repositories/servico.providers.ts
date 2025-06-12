@@ -1,7 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Servico } from '../../modules/servico/servico.entity';
 
-
 export const ServicoProviders = [
   {
     provide: 'SERVICO_REPOSITORY',
