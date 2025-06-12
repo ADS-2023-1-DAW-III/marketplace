@@ -11,6 +11,7 @@ import camera from "~/assets/camera.png";
 import { useForm } from "react-hook-form";
 import { Input } from "~/components/ui/input";
 import { useState } from "react";
+import axios from "axios";
 
 export function meta(_args: MetaArgs) {
   return [
@@ -24,21 +25,47 @@ export function meta(_args: MetaArgs) {
 
 const Register = () => {
   const [isLogin, setIsLogin] = useState(false);
-  const form = useForm();
+
+  const form = useForm(); 
+  const senha = form.watch("senha");
 
   const handleClick = () => {
     console.log("Imagem clicada!");
   };
+
   return (
     <div
       style={{ backgroundColor: "#ffffff" }}
-      className="w-[450px] h-[450px] rounded-md shadow-md flex flex-col items-center justify-center relative"
+      className="w-[450px] h-auto rounded-md shadow-md flex flex-col items-center justify-center p-5"
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(() => console.log("enviado"))}>
+        <form
+          onSubmit={form.handleSubmit((data) => {
+      
+            const payload = {
+              username: data.username,
+              nome: data.username, 
+              email: data.email,
+              senha: data.senha,
+              abacate_id: "abc123",
+            };
+
+            axios
+              .post("/auth/signup", payload)
+              .then((response) => {
+                console.log("Usuário criado:", response.data);
+                localStorage.setItem("token", response.data.token);
+              })
+              .catch((error) => {
+                console.error("Erro ao cadastrar:", error);
+              });
+          })}
+        >
+          {/* Nome */}
           <FormField
             control={form.control}
             name="username"
+            rules={{ required: "Campo obrigatório" }}
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center gap-3 mb-2">
@@ -47,6 +74,7 @@ const Register = () => {
                     <FormControl>
                       <Input className="w-full py-5 text-lg" {...field} />
                     </FormControl>
+                    <FormMessage />
                   </div>
                   <div className="flex flex-col items-center justify-center">
                     <div
@@ -65,48 +93,101 @@ const Register = () => {
                     </span>
                   </div>
                 </div>
+              </FormItem>
+            )}
+          />
 
+          {/* Email */}
+          <FormField
+            control={form.control}
+            name="email"
+            rules={{
+              required: "Campo obrigatório",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Formato de e-mail inválido",
+              },
+            }}
+            render={({ field }) => (
+              <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input
-                    className="w-full py-5 text-lg"
-                    {...form.register("email")}
-                  />
+                  <Input className="w-full py-5 text-lg" {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
+          {/* Contato */}
+          <FormField
+            control={form.control}
+            name="contato"
+            rules={{ required: "Campo obrigatório" }}
+            render={({ field }) => (
+              <FormItem>
                 <FormLabel>Contato</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="(00) 00000-0000"
                     className="w-full py-5 text-lg"
-                    {...form.register("contato")}
+                    {...field}
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
+          {/* Senha */}
+          <FormField
+            control={form.control}
+            name="senha"
+            rules={{ required: "Campo obrigatório" }}
+            render={({ field }) => (
+              <FormItem>
                 <FormLabel>Senha</FormLabel>
                 <FormControl>
-                  <Input
-                    type="password"
-                    className="w-full py-5 text-lg"
-                    {...form.register("senha")}
-                  />
+                  <Input type="password" className="w-full py-5 text-lg" {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
+          {/* Confirmar senha */}
+          <FormField
+            control={form.control}
+            name="confirmarSenha"
+            rules={{
+              required: "Campo obrigatório",
+              validate: (value) =>
+                value === senha || "As senhas não coincidem",
+            }}
+            render={({ field }) => (
+              <FormItem>
                 <FormLabel>Confirmar senha</FormLabel>
                 <FormControl>
-                  <Input
-                    type="password"
-                    className="w-full py-5 text-lg"
-                    {...form.register("confirmarSenha")}
-                  />
+                  <Input type="password" className="w-full py-5 text-lg" {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
+          {/* Habilidades */}
+          <FormField
+            control={form.control}
+            name="habilidade"
+            rules={{ required: "Selecione uma habilidade" }}
+            render={({ field }) => (
+              <FormItem>
                 <FormLabel>Habilidades</FormLabel>
                 <div className="flex items-end justify-between gap-1 mt-[-1px]">
                   <FormControl>
                     <select
                       className="w-[220px] py-2 px-2 border rounded-md"
-                      {...form.register("habilidade")}
+                      {...field}
                     >
                       <option value="">Select</option>
                       <option value="html">HTML</option>
