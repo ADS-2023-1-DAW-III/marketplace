@@ -51,8 +51,18 @@ export class NegociacaoController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.negociacaoService.findOne(id);
+  async findOne(
+    @Req() request: { user: { userId: string } },
+    @Param('id') id: string,
+  ) {
+    const negociacao = await this.negociacaoService.verifyStatus(
+      request.user.userId,
+      id,
+    );
+    return {
+      message: 'Status da negociação atualizado',
+      negociacao,
+    };
   }
 
   @Put(':id')
