@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, OneToMany, ManyToMany, Generated, JoinColumn } from 'typeorm';
+import { 
+    Entity, 
+    Column, 
+    ManyToOne, 
+    OneToMany, 
+    ManyToMany, 
+    PrimaryGeneratedColumn 
+} from 'typeorm';
 import { Pessoa } from '../pessoa/pessoa.entity';
 import { Historico } from '../historico/historico.entity';
 import { Categoria } from '../categoria/categoria.entity';
@@ -6,8 +13,7 @@ import { Negociacao } from '../negociacao/negociacao.entity';
 
 @Entity('servico')
 export class Servico {
-    @PrimaryColumn({ type: 'uuid'})
-    @Generated('uuid')
+    @PrimaryGeneratedColumn("uuid")
     id: string
 
     @Column({nullable: false})

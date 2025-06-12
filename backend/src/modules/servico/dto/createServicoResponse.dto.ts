@@ -24,11 +24,11 @@ export class ServicoResponseDto {
     this.descricao = servico.descricao;
     this.preco = servico.preco;
     this.duracao = servico.duracao;
-    this.id_prestador = servico.pessoa.username;
-    this.categorias = servico.categorias.map(c => ({ nome: c.nome, descricao: c.descricao }));
-    this.negociacoes = servico.negociacoes.map(n => new CreateNegociacaoResponseDto(n));
+    this.id_prestador = servico.pessoa.username || '';
+    this.categorias = servico.categorias?.map(c => ({ nome: c.nome, descricao: c.descricao }));
+    this.negociacoes = servico.negociacoes?.map(n => new CreateNegociacaoResponseDto(n));
     this.pagamentos = servico.negociacoes
-      .filter(n => n.pagamento)
-      .map(n => new PagamentoResponseDto(n.pagamento!));
+      ?.filter(n => n.pagamento)
+      ?.map(n => new PagamentoResponseDto(n.pagamento!));
   }
 }

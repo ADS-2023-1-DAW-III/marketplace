@@ -66,11 +66,19 @@ export class ServicoService {
   }
 
   async findAll(): Promise<ServicoDetailedResponseDto> {
-    const servicos = await this.servicoRepository.find({ relations: ['categorias'] });
-    const response = new ServicoDetailedResponseDto();
-    response.message = 'Serviços retornados com sucesso';
-    response.servicos = servicos.map(s => new ServicoResponseDto(s));
-    return response;
+    const servicos = await this.servicoRepository.find({ 
+      relations: [
+        'pessoa', 
+        'categorias', 
+        'negociacoes', 
+        'negociacoes.pessoa', 
+        'negociacoes.pagamento'
+      ]
+    });
+      const response = new ServicoDetailedResponseDto();
+      response.message = 'Serviços retornados com sucesso';
+      response.servicos = servicos.map(s => new ServicoResponseDto(s));
+      return response;
   }
 
   async findOne(id: string): Promise<ServicoDetailedResponseDto> {
@@ -83,5 +91,14 @@ export class ServicoService {
     response.message = 'Serviço encontrado';
     response.servicos = [new ServicoResponseDto(servico)];
     return response;
+  }
+
+  async findById(id: string): Promise<Servico> {
+    const servico = await this.servicoRepository.findOne({
+      where: { id },
+      relations: ['pessoa', 'categorias', 'negociacoes', 'negociacoes.pessoa', 'negociacoes.pagamento'],
+    });
+    if (!servico) throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
+    return servico;
   }
 }
