@@ -7,37 +7,35 @@ import { AuthGuard } from '@nestjs/passport';
 @UseGuards(AuthGuard('jwt'))
 @Controller('avaliacoes')
 export class AvaliacaoController {
-    constructor(private readonly avaliacaoService: AvaliacaoService) {}
+  constructor(private readonly avaliacaoService: AvaliacaoService) {}
 
-    @Post()
-    async create(
-        @Body() dto: AvaliacaoRequestDTO
-    ): Promise<AvaliacaoResponseDTO> {
-        return this.avaliacaoService.create(dto);
-    }
+  @Post()
+  async create(
+    @Body() dto: AvaliacaoRequestDTO,
+  ): Promise<AvaliacaoResponseDTO> {
+    return this.avaliacaoService.create(dto);
+  }
 
-    @Get()
-    async findAll(): Promise<AvaliacaoRequestDTO[]> {
-        return this.avaliacaoService.findAll();
-    }
+  @Get()
+  async findAll(): Promise<AvaliacaoRequestDTO[]> {
+    return this.avaliacaoService.findAll();
+  }
 
-    @Get(':id')
-    async findOne(
-        @Param('id') id: string,
-    ): Promise<AvaliacaoResponseDTO> {
-        return this.avaliacaoService.findOne(id);
-    }
+  @Get(':id')
+  async findOne(@Param('id') id: string): Promise<AvaliacaoResponseDTO> {
+    return this.avaliacaoService.findOne(id);
+  }
 
-    @Patch(':id')
-    async update(
-        @Param('id') id: string,
-        @Body() dto: AvaliacaoRequestDTO,
-    ): Promise<AvaliacaoResponseDTO> {
-        return this.avaliacaoService.update(id, dto);
-    }
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() dto: AvaliacaoRequestDTO,
+  ): Promise<AvaliacaoResponseDTO> {
+    return this.avaliacaoService.update(id, dto);
+  }
 
-    @Delete(':id')
-    async remove(@Param('id') id: string): Promise<void> {
-        return this.avaliacaoService.remove(id);
-    }
+  @Delete(':id')
+  async remove(@Param('id') id: string): Promise<void> {
+    return this.avaliacaoService.remove(id);
+  }
 }
