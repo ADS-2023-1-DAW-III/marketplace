@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Pessoa } from '../pessoa.entity';
 
-export class CreatePessoaResponseDTO {
+export class PessoaResponseDTO {
   @ApiProperty({
     type: 'string',
     description: 'Nome de usuário',
@@ -33,5 +33,6 @@ export class CreatePessoaResponseDTO {
     this.abacate_id = pessoa.abacate_id;
     this.nome = pessoa.nome;
     this.contato = pessoa.contato;
+    this.email = pessoa.email;
   }
 }
