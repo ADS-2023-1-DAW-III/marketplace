@@ -27,12 +27,18 @@ export class PessoaResponseDTO {
     description: 'Contato da pessoa',
   })
   contato: string;
+  @ApiProperty({
+    type: 'string',
+    description: 'Url de acessoa imagem de perfil da pessoa',
+  })
+  profileImageUrl?: string;
 
-  constructor(pessoa: Pessoa) {
+  constructor(pessoa: Pessoa, profileImageUrl?: string) {
     this.username = pessoa.username;
     this.abacate_id = pessoa.abacate_id;
     this.nome = pessoa.nome;
     this.contato = pessoa.contato;
     this.email = pessoa.email;
+    this.profileImageUrl = profileImageUrl;
   }
 }

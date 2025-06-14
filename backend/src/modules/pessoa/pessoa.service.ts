@@ -9,6 +9,7 @@ import { Pessoa } from './pessoa.entity';
 import { CreatePessoaRequestDTO } from './dto/createPessoaRequest.dto';
 import { PessoaResponseDTO } from './dto/pessoaResponse.dto';
 import { AbacateService } from 'src/infra/service/abacate.service';
+import { StorageService } from 'src/infra/storage/storage.service';
 
 @Injectable()
 export class PessoaService {
@@ -16,6 +17,7 @@ export class PessoaService {
     @Inject('PESSOA_REPOSITORY')
     private pessoaRepository: Repository<Pessoa>,
     private readonly abacateService: AbacateService,
+    private readonly storageService: StorageService,
   ) {}
 
   async findAll(): Promise<PessoaResponseDTO[]> {
@@ -23,8 +25,13 @@ export class PessoaService {
     return pessoas.map((pessoa) => new PessoaResponseDTO(pessoa));
   }
 
-  async create(request: CreatePessoaRequestDTO): Promise<PessoaResponseDTO> {
+  async create(
+    request: CreatePessoaRequestDTO,
+    profileImage?: Express.Multer.File,
+  ): Promise<PessoaResponseDTO> {
     const newPessoa: Pessoa = this.pessoaRepository.create(request);
+
+    console.log(profileImage?.originalname);
 
     const existingUser = await this.pessoaRepository.findOne({
       where: { username: request.username },
@@ -53,6 +60,15 @@ export class PessoaService {
     await this.pessoaRepository.save(newPessoa);
 
     const pessoaResponse: PessoaResponseDTO = new PessoaResponseDTO(newPessoa);
+
+    if (profileImage) {
+      const profileImageUrl = this.storageService.saveProfileImage(
+        newPessoa.username,
+        profileImage,
+      );
+
+      pessoaResponse.profileImageUrl = profileImageUrl;
+    }
 
     return pessoaResponse;
   }
@@ -85,7 +101,10 @@ export class PessoaService {
         `Pessoa não encontrada com o username: ${username}`,
       );
     }
-    return new PessoaResponseDTO(pessoa);
+    const profileImageUrl = this.storageService.getProfileImage(
+      pessoa.username,
+    );
+    return new PessoaResponseDTO(pessoa, profileImageUrl);
   }
 
   async findByUsernameOrEmail(username: string, email: string) {

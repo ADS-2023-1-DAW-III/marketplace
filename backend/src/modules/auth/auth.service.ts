@@ -10,13 +10,19 @@ import * as bcrypt from 'bcrypt';
 export class AuthService {
   constructor(private readonly pessoaService: PessoaService) {}
 
-  async signup(dto: CreatePessoaRequestDTO): Promise<AuthResponseDTO> {
+  async signup(
+    dto: CreatePessoaRequestDTO,
+    profileImage?: Express.Multer.File,
+  ): Promise<AuthResponseDTO> {
     const hashedPassword = await bcrypt.hash(dto.senha, 10);
 
-    const pessoa = await this.pessoaService.create({
-      ...dto,
-      senha: hashedPassword,
-    });
+    const pessoa = await this.pessoaService.create(
+      {
+        ...dto,
+        senha: hashedPassword,
+      },
+      profileImage,
+    );
 
     const token = generateJWT({
       userId: pessoa.abacate_id,

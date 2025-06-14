@@ -1,9 +1,18 @@
-import { Body, Controller, Post, HttpCode } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  HttpCode,
+  UseInterceptors,
+  UploadedFile,
+  ParseFilePipeBuilder,
+} from '@nestjs/common';
 import { AuthService } from '../../modules/auth/auth.service';
 import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createPessoaRequest.dto';
 import { LoginRequestDTO } from 'src/modules/auth/dto/authRequest.dto';
 import { AuthResponseDTO } from '../../modules/auth/authResponse.dto';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
@@ -18,11 +27,20 @@ export class AuthController {
     type: CreatePessoaRequestDTO,
   })
   @Post('signup')
+  @UseInterceptors(FileInterceptor('file'))
   @HttpCode(201)
   async signup(
     @Body() request: CreatePessoaRequestDTO,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({ fileType: /(jpg|jpeg|png)$/ })
+        .build({
+          fileIsRequired: false,
+        }),
+    )
+    file?: Express.Multer.File,
   ): Promise<AuthResponseDTO> {
-    return this.authService.signup(request);
+    return this.authService.signup(request, file);
   }
 
   @ApiResponse({
