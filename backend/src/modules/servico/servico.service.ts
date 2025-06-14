@@ -15,7 +15,10 @@ export class ServicoService {
   async create(
     createDto: CreateServicoRequestDto,
   ): Promise<ServicoResponseDto> {
-    const novoServico = this.servicoRepository.create(createDto);
+    const novoServico = this.servicoRepository.create({
+      id: 'abc-123',
+      ...createDto
+    });
     const servicoSalvo = await this.servicoRepository.save(novoServico);
     return new ServicoResponseDto(servicoSalvo);
   }
