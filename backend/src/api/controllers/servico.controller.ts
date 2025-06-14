@@ -7,6 +7,8 @@ import {
   Patch,
   Delete,
   UseGuards,
+  Request,
+  HttpCode,
 } from '@nestjs/common';
 import { ServicoService } from '../../modules/servico/servico.service';
 import { CreateServicoRequestDto } from '../../modules/servico/dto/createServicoRequest.dto';
@@ -15,10 +17,11 @@ import { ServicoResponseDto } from '../../modules/servico/dto/createServicoRespo
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Servico } from 'src/modules/servico/servico.entity';
+import { ServicoDetailedResponseDto } from 'src/modules/servico/dto/servicoDetailedResponse.dto';
 
 @ApiTags('servico')
 @UseGuards(AuthGuard('jwt'))
-@Controller('servico')
+@Controller('servicos')
 export class ServicoController {
   constructor(private readonly servicoService: ServicoService) { }
 
@@ -28,19 +31,49 @@ export class ServicoController {
     type: ServicoResponseDto,
   })
   @Post()
+  @HttpCode(201)
   async create(
     @Body() dto: CreateServicoRequestDto,
-  ): Promise<ServicoResponseDto> {
+    @Request() req,
+  ): Promise<ServicoDetailedResponseDto> {
+    dto.id_prestador = req.user.username;
     return this.servicoService.create(dto);
   }
 
   @ApiResponse({
     status: 200,
-    description: 'Lista todas os serviços',
+    description: 'Lista os serviços prestados pelo usuário autenticado',
+    type: ServicoDetailedResponseDto,
+  })
+  @Get('prestados')
+  @HttpCode(200)
+  async findServicesProvided(
+    @Request() req,
+  ): Promise<ServicoDetailedResponseDto> {
+    return this.servicoService.findServicesProvidedByUser(req.user.username);
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'Lista os serviços contratados pelo usuário autenticado',
+    type: ServicoDetailedResponseDto,
+  })
+  @Get('contratados')
+  @HttpCode(200)
+  async findServicesContracted(
+    @Request() req,
+  ): Promise<ServicoDetailedResponseDto> {
+    return this.servicoService.findServicesContractedByUser(req.user.username);
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'Lista todos os serviços',
     type: [Servico],
   })
   @Get()
-  async findAll(): Promise<ServicoResponseDto[]> {
+  @HttpCode(200)
+  async findAll(): Promise<ServicoDetailedResponseDto> {
     return this.servicoService.findAll();
   }
 
@@ -50,32 +83,8 @@ export class ServicoController {
     type: ServicoResponseDto,
   })
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<ServicoResponseDto> {
+  @HttpCode(200)
+  async findOne(@Param('id') id: string): Promise<ServicoDetailedResponseDto> {
     return this.servicoService.findOne(id);
-  }
-
-  @ApiResponse({
-    status: 200,
-    description: 'Atualiza um serviço pelo id',
-    type: [ServicoResponseDto],
-  })
-  @ApiBody({
-    type: UpdateServicoRequestDto,
-  })
-  @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() dto: UpdateServicoRequestDto,
-  ): Promise<ServicoResponseDto> {
-    return this.servicoService.update(id, dto);
-  }
-
-  @ApiResponse({
-    status: 204,
-    description: 'Remoção do serviço com sucesso',
-  })
-  @Delete(':id')
-  async remove(@Param('id') id: string): Promise<void> {
-    return this.servicoService.remove(id);
   }
 }

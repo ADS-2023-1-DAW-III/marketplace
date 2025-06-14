@@ -21,4 +21,5 @@ export class CreatePagamentoDto {
     description: 'Valor do pagamento',
   })
   valor: number;
+  negociacao_id: string;
 }
