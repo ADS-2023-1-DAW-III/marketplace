@@ -68,7 +68,7 @@ export class ServicoController {
 
   @ApiResponse({
     status: 200,
-    description: 'Lista todas os serviços',
+    description: 'Lista todos os serviços',
     type: [Servico],
   })
   @Get()
