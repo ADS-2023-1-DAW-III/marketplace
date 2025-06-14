@@ -10,7 +10,7 @@ export class CategoriaService {
   constructor(
     @Inject('CATEGORIA_REPOSITORY')
     private categoriaRepository: Repository<Categoria>,
-  ) {}
+  ) { }
 
   async create(dto: CreateCategoriaDto): Promise<CreateCategoriaResponseDto> {
     const categoria = this.categoriaRepository.create(dto);
@@ -30,6 +30,13 @@ export class CategoriaService {
       throw new NotFoundException(
         `Categoria com nome "${nome}" não encontrada.`,
       );
+    }
+    return new CreateCategoriaResponseDto(categoria);
+  }
+  async findOne(nome: string): Promise<CreateCategoriaResponseDto> {
+    const categoria = await this.categoriaRepository.findOne({ where: { nome } });
+    if (!categoria) {
+      throw new NotFoundException(`Categoria com nome '${nome}' não encontrada.`);
     }
     return new CreateCategoriaResponseDto(categoria);
   }

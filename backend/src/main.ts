@@ -1,6 +1,7 @@
 import { BaseExceptionFilter, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
+import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ArgumentsHost, Catch, ConflictException } from '@nestjs/common';
 import { QueryFailedError } from 'typeorm';
@@ -23,6 +24,17 @@ export class QueryErrorFilter extends BaseExceptionFilter {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+
+    })
+  )
 
   const config = new DocumentBuilder()
     .setTitle('Marketplace')

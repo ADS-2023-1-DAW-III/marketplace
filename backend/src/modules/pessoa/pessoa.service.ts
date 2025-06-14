@@ -16,7 +16,7 @@ export class PessoaService {
     @Inject('PESSOA_REPOSITORY')
     private pessoaRepository: Repository<Pessoa>,
     private readonly abacateService: AbacateService,
-  ) {}
+  ) { }
 
   async findAll(): Promise<PessoaResponseDTO[]> {
     const pessoas = await this.pessoaRepository.find();

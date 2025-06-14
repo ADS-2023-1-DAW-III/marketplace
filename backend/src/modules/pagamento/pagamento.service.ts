@@ -38,7 +38,8 @@ export class PagamentoService {
   }
 
   async remove(id: string): Promise<void> {
-    const pagamento = await this.findOne(id);
+    const pagamento = await this.pagamentoRepository.findOne({ where: { id } });
+    if (!pagamento) throw new NotFoundException(`Pagamento ${id} não encontrado`);
     await this.pagamentoRepository.remove(pagamento);
   }
 }
