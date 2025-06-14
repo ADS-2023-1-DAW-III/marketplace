@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, ManyToOne } from 'typeorm';
+import { Pessoa } from '../pessoa/pessoa.entity';
+import { Servico } from '../servico/servico.entity';
 
 @Entity('avaliacao')
 export class Avaliacao {
@@ -10,4 +12,10 @@ export class Avaliacao {
 
   @Column({ type: 'integer', nullable: false })
   estrelas: number;
+
+  @ManyToOne(() => Pessoa, (pessoa) => pessoa.avaliacao)
+  pessoa: Pessoa;
+
+  @ManyToOne(() => Servico, (servico) => servico.avaliacao)
+  servico: Servico;
 }
