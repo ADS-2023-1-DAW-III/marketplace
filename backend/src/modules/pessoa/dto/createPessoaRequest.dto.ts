@@ -5,9 +5,8 @@ import {
   IsString,
   Length,
   Matches,
-} from 'class-validator'; // Adicione validadores
+} from 'class-validator';
 import { IsCpfFormat } from '../decorators/is-cpf-format.decorator';
-// Importe o decorador
 
 export class CreatePessoaRequestDTO {
   @ApiProperty({
@@ -31,7 +30,7 @@ export class CreatePessoaRequestDTO {
   })
   @IsString()
   @IsNotEmpty()
-  nome: string; // Adicionado
+  nome: string;
 
   @ApiProperty({
     type: 'string',
@@ -59,7 +58,7 @@ export class CreatePessoaRequestDTO {
   @Matches(/^\d{10,11}$/, {
     message: 'O número de telefone deve ter 10 ou 11 dígitos numéricos.',
   })
-  contato: string; // Alterei o nome para 'cellphone' no AbacatePayService, mas mantive 'contato' aqui para consistência com sua entidade
+  contato: string;
 
   @ApiProperty({
     type: 'string',
@@ -67,7 +66,6 @@ export class CreatePessoaRequestDTO {
   })
   @IsString()
   @IsNotEmpty()
-  @IsCpfFormat({ message: 'CPF inválido.' }) // Adicionando a validação de formato
-  // @Matches(/^\d{11}$/, { message: 'O CPF deve ter 11 dígitos numéricos.' }) // Ou use IsCpfFormat
-  cpf: string; // Adicionado
+  @IsCpfFormat({ message: 'CPF inválido.' })
+  cpf: string;
 }
