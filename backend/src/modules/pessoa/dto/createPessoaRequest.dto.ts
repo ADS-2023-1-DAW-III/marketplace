@@ -23,6 +23,11 @@ export class CreatePessoaRequestDTO {
   email: string;
   @ApiProperty({
     type: 'string',
+    description: 'Cpf do usuário'
+  })
+  cpf: string;
+  @ApiProperty({
+    type: 'string',
     description: 'Senha de usuário',
   })
   senha: string;

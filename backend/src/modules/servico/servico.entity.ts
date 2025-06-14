@@ -9,6 +9,7 @@ import {
 import { Pessoa } from '../pessoa/pessoa.entity';
 import { Historico } from '../historico/historico.entity';
 import { Categoria } from '../categoria/categoria.entity';
+import { Avaliacao } from '../avaliacao/avaliacao.entity';
 
 @Entity('servico')
 export class Servico {
@@ -41,4 +42,7 @@ export class Servico {
 
   @ManyToMany(() => Categoria, (categoria) => categoria.servicos)
   categorias: Categoria[];
+  
+  @ManyToOne(() => Avaliacao, (avaliacao) => avaliacao.servico)
+  avaliacao: Avaliacao[];
 }

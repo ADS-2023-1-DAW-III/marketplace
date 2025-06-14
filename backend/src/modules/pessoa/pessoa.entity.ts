@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 import { Historico } from '../historico/historico.entity';
+import { Avaliacao } from '../avaliacao/avaliacao.entity';
 
 @Entity('pessoa')
 export class Pessoa {
@@ -26,4 +27,7 @@ export class Pessoa {
 
   @OneToMany(() => Historico, (historico) => historico.pessoa)
   historico: Historico[];
+  
+  @OneToMany(() => Avaliacao, (avaliacao) => avaliacao.pessoa)
+  avaliacao: Avaliacao[];
 }

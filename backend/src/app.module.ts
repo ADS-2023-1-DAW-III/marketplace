@@ -14,6 +14,8 @@ import { HistoricoModule } from './modules/historico/historico.module';
 import { ServicoController } from './api/controllers/servico.controller';
 import { HistoricoController } from './api/controllers/historico.controller';
 import { AuthModule } from './modules/auth/auth.module';
+import { AvaliacaoModule } from './modules/avaliacao/avaliacao.module';
+import { AvaliacaoController } from './api/controllers/avaliacao.controller';
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import { AuthModule } from './modules/auth/auth.module';
     ServicoModule,
     HistoricoModule,
     AuthModule,
+    AvaliacaoModule,
   ],
   controllers: [
     AbacateController,
@@ -34,6 +37,7 @@ import { AuthModule } from './modules/auth/auth.module';
     CategoriaController,
     ServicoController,
     HistoricoController,
+    AvaliacaoController,
   ],
 })
 export class AppModule {}
