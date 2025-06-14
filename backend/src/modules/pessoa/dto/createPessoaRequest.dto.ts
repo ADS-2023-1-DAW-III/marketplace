@@ -30,5 +30,14 @@ export class CreatePessoaRequestDTO {
     type: 'string',
     description: 'Contato da pessoa',
   })
+  @ApiProperty({
+    type: 'string',
+    description: 'Contato da pessoa',
+  })
   contato: string;
+  @ApiProperty({
+    type: 'string',
+    description: 'Habilidades da pessoa',
+  })
+  habilidades: string;
 }
