@@ -9,6 +9,7 @@ import {
 import { Pessoa } from '../pessoa/pessoa.entity';
 import { Historico } from '../historico/historico.entity';
 import { Categoria } from '../categoria/categoria.entity';
+import { Pagamento } from '../pagamento/pagamento.entity';
 import { Negociacao } from '../negociacao/negociacao.entity';
 
 @Entity('servico')
@@ -42,6 +43,9 @@ export class Servico {
 
   @ManyToMany(() => Categoria, (categoria) => categoria.servicos)
   categorias: Categoria[];
+
+  @OneToMany(() => Pagamento, (pagamento) => pagamento.servico) // <-- ADICIONADO: Relação com Pagamento
+  pagamentosRecebidos: Pagamento[]; // <-- ADICIONADO
 
   @OneToMany(() => Negociacao, (negociacao) => negociacao.servico)
   negociacoes: Negociacao[];

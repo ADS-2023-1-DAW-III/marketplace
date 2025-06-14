@@ -1,11 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePagamentoDto {
   @ApiProperty({
     type: 'string',
-    description: 'Id do pagamento',
+    description: 'ID da pessoa contratante.',
+    example: 'abc123',
   })
-  id_abacte: string;
+  id_pessoa: string;
   @ApiProperty({
     type: Date,
     description: 'Data que ocorreu o pagamento',
@@ -21,5 +22,12 @@ export class CreatePagamentoDto {
     description: 'Valor do pagamento',
   })
   valor: number;
+
+  @ApiProperty({
+    type: 'string',
+    description: 'ID do serviço contratado',
+    example: 'servico123',
+  })
+  id_servico: string; // ID do serviço contratado
   negociacao_id: string;
 }
