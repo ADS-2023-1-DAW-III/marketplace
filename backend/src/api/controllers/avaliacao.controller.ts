@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Get, Put, Param, Patch, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Put,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { AvaliacaoService } from 'src/modules/avaliacao/avaliacao.service';
 import { AvaliacaoRequestDTO } from 'src/modules/avaliacao/dto/AvaliacaoRequest.dto';
 import { AvaliacaoResponseDTO } from 'src/modules/avaliacao/dto/AvaliacaoResponse.dto';
@@ -17,7 +26,7 @@ export class AvaliacaoController {
   }
 
   @Get()
-  async findAll(): Promise<AvaliacaoRequestDTO[]> {
+  async findAll(): Promise<AvaliacaoResponseDTO[]> {
     return this.avaliacaoService.findAll();
   }
 
@@ -26,7 +35,7 @@ export class AvaliacaoController {
     return this.avaliacaoService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   async update(
     @Param('id') id: string,
     @Body() dto: AvaliacaoRequestDTO,
