@@ -31,4 +31,10 @@ export class CreatePessoaRequestDTO {
     description: 'Contato da pessoa',
   })
   contato: string;
+
+  @ApiProperty({
+    type: 'string',
+    description: 'CPF da pessoa',
+  })
+  cpf: string;
 }
