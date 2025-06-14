@@ -1,11 +1,16 @@
 import Header from "../../components/ui/Header";
-import CategoryFilter from "src/components/Categoryfilter";
+import CategoryFilter from "src/components/CategoryFilter";
 import ServiceCard from "../../components/ServiceCard";
+import Hero from "../../components/ui/Hero";
+import Sidebar from "../../components/ui/Sidebar";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+    <div className="min-h-screen bg-white">
+      <div className="bg-[#307B8E] h-screen">
+          <Header />
+        <Hero />
+      </div>
       
       <main className="container mx-auto px-4 py-8">
         {/* Seção Hero */}
