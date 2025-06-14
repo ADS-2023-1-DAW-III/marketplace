@@ -1,13 +1,17 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../pages/welcome/welcome";
+import HomeComponent from "../../src/pages/Home/Home"; // Renomeei o import para evitar conflito
 
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Marketplace" },
-    { name: "Marketplace", content: "Bem vindo a seu markteplace de serviços" },
+    { 
+      name: "description", // Alterei para 'description' (padrão SEO)
+      content: "Bem vindo ao seu marketplace de serviços" // Corrigi typo em "marketplace"
+    },
   ];
 }
 
-export default function Home() {
-  return <Welcome />;
+// Correção crítica: removi a recursão infinita
+export default function HomeRoute() {
+  return <HomeComponent />; // Agora renderiza o componente real
 }
