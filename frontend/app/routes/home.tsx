@@ -1,5 +1,5 @@
 import type { Route } from "./+types/home";
-import  Payment from "~/pages/Payment/Payment";
+import  PaymentHistory from "~/pages/Payment/PaymentHistory";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,5 +9,5 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <Payment />;
+  return <PaymentHistory />;
 }
