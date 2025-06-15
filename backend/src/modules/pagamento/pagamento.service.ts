@@ -9,24 +9,23 @@ import { Repository } from 'typeorm';
 import { Pagamento, PaymentStatus } from './pagamento.entity';
 import { UpdatePagamentoDto } from './dto/updatePagamentoRequest.dto';
 import { CreatePagamentoDto } from './dto/createPagamentoRequest.dto';
-import {
-  CreateBillingData,
-  CreateBillingResponse,
-} from 'abacatepay-nodejs-sdk/dist/types';
+import { CreateBillingData, CreateBillingResponse } from 'abacatepay-nodejs-sdk/dist/types';
 import { PessoaService } from '../pessoa/pessoa.service';
-import { AbacateService } from 'src/infra/service/abacate.service';
+import AbacatePay from 'abacatepay-nodejs-sdk';
 import { PagamentoResponseDto } from './dto/pagamentoResponse.dto';
 import { ServicoService } from '../servico/servico.service';
+import { AbacateService } from 'src/infra/service/abacate.service';
 
 @Injectable()
 export class PagamentoService {
   constructor(
     @Inject('PAGAMENTO_REPOSITORY')
     private pagamentoRepository: Repository<Pagamento>,
-    private readonly abacateService: AbacateService,
     private readonly pessoaService: PessoaService,
     private readonly servicoService: ServicoService,
-  ) { }
+    private readonly abacateService: AbacateService
+  ) {
+  }
 
   /**
    * Realiza um novo pagamento, integrando com o AbacatePay e salvando no banco de dados.
@@ -44,44 +43,41 @@ export class PagamentoService {
       );
     }
 
-    // Busca a Pessoa para obter o abacate_id (ID do cliente no AbacatePay)
+    // Busca a Pessoa para obter os dados do cliente
     const pessoa = await this.pessoaService.findById(id_pessoa);
-    if (!pessoa || !pessoa.abacate_id) {
-      throw new NotFoundException(
-        'Pessoa não encontrada ou sem ID de cliente AbacatePay. Certifique-se de que a pessoa foi criada com sucesso no AbacatePay.',
-      );
+    if (!pessoa) {
+      throw new NotFoundException('Pessoa não encontrada.');
     }
 
     // Cria a cobrança no AbacatePay
-    let abacatePayBillingResponse;
+    let abacatePayBillingResponse: CreateBillingResponse;
     try {
-      abacatePayBillingResponse = await this.abacateService
-        .getClient()
-        .billing.create({
-          customerId: pessoa.abacate_id,
-          frequency: 'ONE_TIME', // Assumindo pagamento único
-          methods: ['PIX'], // Métodos de pagamento aceitos
-          products: [
-            {
-              externalId: id_servico, // ID do seu serviço
-              name: `Pagamento do Serviço ${id_servico}`, // Nome do produto na fatura
-              description: `Pagamento do serviço com ID ${id_servico} para ${pessoa.nome}.`, // Descrição do produto
-              quantity: 1,
-              price: Math.round(valor * 100), // AbacatePay espera o valor em centavos
-            },
-          ],
-          // URLs de retorno após o pagamento, ajuste para o seu frontend
-          returnUrl: `https://seusite.com/pagamento/sucesso?id_pagamento=${id_servico}`,
-          completionUrl: `https://seusite.com/pagamento/completo?id_pagamento=${id_servico}`,
-          // notificationUrl: `https://suaapi.com/webhooks/abacatepay`, // URL para receber notificações de status (importante para atualizar o status do pagamento)
-        });
+      const billingData: CreateBillingData = {
+        frequency: 'ONE_TIME',
+        methods: ['PIX'],
+        products: [
+          {
+            externalId: id_servico,
+            name: `Pagamento do Serviço ${id_servico}`,
+            description: `Pagamento do serviço com ID ${id_servico} para ${pessoa.nome}.`,
+            quantity: 1,
+            price: Math.round(valor * 100), // Convert to cents
+          },
+        ],
+        returnUrl: `https://seusite.com/pagamento/sucesso?id_pagamento=${id_servico}`,
+        completionUrl: `https://seusite.com/pagamento/completo?id_pagamento=${id_servico}`,
+        customerId: pessoa.abacate_id,
+      };
 
-      if (
-        !abacatePayBillingResponse ||
-        !abacatePayBillingResponse.data ||
-        !abacatePayBillingResponse.data.id ||
-        !abacatePayBillingResponse.data.paymentUrl
-      ) {
+      console.log('Dados enviados para AbacatePay:', JSON.stringify(billingData, null, 2));
+      console.log('pessoa id ' + pessoa.abacate_id)
+
+      abacatePayBillingResponse = await this.abacateService.getClient().billing.create(billingData);
+
+      // Log da resposta completa para debugging
+      console.log('Resposta do AbacatePay:', JSON.stringify(abacatePayBillingResponse, null, 2));
+
+      if (!abacatePayBillingResponse.data?.id || !abacatePayBillingResponse?.data.url) {
         console.error(
           'Resposta inesperada do AbacatePay na criação da cobrança:',
           abacatePayBillingResponse,
@@ -101,15 +97,16 @@ export class PagamentoService {
       );
     }
 
-    // 4. Salvar o registro do pagamento no seu banco de dados
+    // Salvar o registro do pagamento no banco de dados
     const novoPagamento = this.pagamentoRepository.create({
-      id_abacate: abacatePayBillingResponse.data.id, // ID da cobrança no AbacatePay
+      id_abacate: abacatePayBillingResponse.data.id,
       valor: valor,
       data: new Date(),
-      status: PaymentStatus.PENDING, // O status inicial é PENDENTE
+      status: PaymentStatus.PENDING,
       id_pessoa: id_pessoa,
+      id_negociacao: request.negociacao_id,
       id_servico: id_servico,
-      paymentUrl: abacatePayBillingResponse.data.paymentUrl,
+      paymentUrl: abacatePayBillingResponse.data.url,
     });
 
     await this.pagamentoRepository.save(novoPagamento);
@@ -131,7 +128,7 @@ export class PagamentoService {
   ): Promise<{ message: string; pagamentos: PagamentoResponseDto[] }> {
     const pagamentos = await this.pagamentoRepository.find({
       where: { id_pessoa: id_pessoa },
-      order: { data: 'DESC' }, // Ordena por data mais recente
+      order: { data: 'DESC' },
     });
 
     if (!pagamentos || pagamentos.length === 0) {
@@ -165,28 +162,6 @@ export class PagamentoService {
       throw new NotFoundException(`Pagamento com ID "${id}" não encontrado.`);
     }
 
-    // Opcional: Atualizar o status do pagamento consultando o AbacatePay antes de retornar
-    // Isso é útil para ter o status mais atualizado, mas pode gerar latência.
-    // O ideal para atualizações de status é usar webhooks do AbacatePay.
-    /*
-    const abacatePayStatusResponse = await this.abacateService
-      .getClient()
-      .billing.get(pagamento.id_abacate); // Assumindo que billing.get existe no SDK
-    if (
-      abacatePayStatusResponse &&
-      abacatePayStatusResponse.data &&
-      abacatePayStatusResponse.data.status
-    ) {
-      // Mapear o status do AbacatePay para seu PaymentStatus enum se necessário
-      // Exemplo:
-      // if (abacatePayStatusResponse.data.status === 'PAID') {
-      //   pagamento.status = PaymentStatus.PAGO;
-      //   await this.pagamentoRepository.save(pagamento); // Salvar a atualização do status
-      // }
-      console.log(`Status AbacatePay para ${pagamento.id_abacate}:`, abacatePayStatusResponse.data.status);
-    }
-    */
-
     return {
       message: 'Pagamento encontrado',
       pagamento: new PagamentoResponseDto(pagamento),
@@ -195,18 +170,13 @@ export class PagamentoService {
 
   /**
    * Cria uma cobrança diretamente no AbacatePay sem salvar no DB local.
-   * (Método auxiliar, pode ser removido se não for usado diretamente por outros serviços/controllers).
    * @param data Dados da cobrança para o AbacatePay.
    * @returns Resposta da API do AbacatePay.
    */
   async createBilling(data: CreateBillingData): Promise<CreateBillingResponse> {
     try {
-      console.log('Tentando criar cobrança no AbacatePay com:', data);
-      const response = await this.abacateService
-        .getClient()
-        .billing.create(data);
-      console.log('Resposta de Cobrança do AbacatePay:', response);
-      if (!response || response.error) {
+      const response = await this.abacateService.getClient().billing.create(data);
+      if (!response) {
         throw new InternalServerErrorException(
           'Resposta inválida do AbacatePay ao criar cobrança.',
         );
@@ -225,7 +195,7 @@ export class PagamentoService {
   }
 
   /**
-   * Retorna todos os pagamentos (método genérico findAll).
+   * Retorna todos os pagamentos.
    * @returns Lista de todos os pagamentos.
    */
   async findAll(): Promise<PagamentoResponseDto[]> {
@@ -234,7 +204,7 @@ export class PagamentoService {
   }
 
   /**
-   * Retorna um pagamento específico por ID (método genérico findOne).
+   * Retorna um pagamento específico por ID.
    * @param id ID do pagamento.
    * @returns Detalhes do pagamento.
    */
@@ -261,9 +231,7 @@ export class PagamentoService {
       throw new NotFoundException(`Pagamento com ID "${id}" não encontrado.`);
     }
 
-    // Aplica as atualizações do DTO ao objeto do pagamento
     Object.assign(pagamento, dto);
-
     await this.pagamentoRepository.save(pagamento);
     return new PagamentoResponseDto(pagamento);
   }
@@ -274,7 +242,9 @@ export class PagamentoService {
    */
   async remove(id: string): Promise<void> {
     const pagamento = await this.pagamentoRepository.findOne({ where: { id } });
-    if (!pagamento) throw new NotFoundException(`Pagamento ${id} não encontrado`);
+    if (!pagamento) {
+      throw new NotFoundException(`Pagamento com ID "${id}" não encontrado`);
+    }
     await this.pagamentoRepository.remove(pagamento);
   }
 }

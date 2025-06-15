@@ -9,10 +9,9 @@ import { AuthGuard } from '@nestjs/passport';
 /**
  * Controller apenas para testes do service do AbacatePay - NÃO DEVE SER UTILIZADO
  */
-@UseGuards(AuthGuard('jwt'))
 @Controller('abacate')
 export class AbacateController {
-  constructor(private readonly abacateService: AbacateService) {}
+  constructor(private readonly abacateService: AbacateService) { }
 
   @Post('pessoa')
   @HttpCode(200)
@@ -42,7 +41,7 @@ export class AbacateController {
       ],
       returnUrl: 'https://example.com/billing',
       completionUrl: 'https://example.com/completion',
-      customerId: 'cust_GYSMaHMz4jG0JjyQpgTRyAgT',
+      customerId: 'cust_w2XUsApAWdA0XAgeDNDGS3re',
     });
   }
 }

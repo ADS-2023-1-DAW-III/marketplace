@@ -4,9 +4,13 @@ import {
   PrimaryGeneratedColumn,
   JoinColumn,
   ManyToOne,
+  PrimaryColumn,
+  Generated,
+  OneToOne,
 } from 'typeorm';
 import { Pessoa } from '../pessoa/pessoa.entity';
 import { Servico } from '../servico/servico.entity';
+import { Negociacao } from '../negociacao/negociacao.entity';
 
 export enum PaymentStatus {
   PENDING = 'PENDENTE',
@@ -29,8 +33,11 @@ export class Pagamento {
   valor: number
 
   @OneToOne(() => Negociacao, (negociacao) => negociacao.pagamento)
+  @JoinColumn({ name: 'id_negociacao' })
   negociacao: Negociacao;
 
+  @Column({ name: 'id_negociacao', type: 'varchar' })
+  id_negociacao: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   data: Date;
