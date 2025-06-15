@@ -31,8 +31,6 @@ export class PessoaService {
   ): Promise<PessoaResponseDTO> {
     const newPessoa: Pessoa = this.pessoaRepository.create(request);
 
-    console.log(profileImage?.originalname);
-
     const existingUser = await this.pessoaRepository.findOne({
       where: { username: request.username },
     });
