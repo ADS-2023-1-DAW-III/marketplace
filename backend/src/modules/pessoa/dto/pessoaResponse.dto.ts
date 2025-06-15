@@ -33,12 +33,22 @@ export class PessoaResponseDTO {
   })
   profileImageUrl?: string;
 
-  constructor(pessoa: Pessoa, profileImageUrl?: string) {
+  constructor(pessoa: Pessoa) {
     this.username = pessoa.username;
     this.abacate_id = pessoa.abacate_id;
     this.nome = pessoa.nome;
     this.contato = pessoa.contato;
     this.email = pessoa.email;
-    this.profileImageUrl = profileImageUrl;
+    this.profileImageUrl = this.generateUrlImage(
+      this.username,
+      pessoa.profileImageName,
+    );
+  }
+
+  private generateUrlImage(username: string, filename: string): string {
+    if (filename == null) {
+      return '';
+    }
+    return `/uploads/${username}/${filename}`;
   }
 }

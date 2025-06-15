@@ -24,6 +24,9 @@ export class Pessoa {
   @Column({ type: 'varchar', length: 100, nullable: true })
   contato: string;
 
+  @Column({ nullable: true })
+  profileImageName: string;
+
   @OneToMany(() => Historico, (historico) => historico.pessoa)
   historico: Historico[];
 }

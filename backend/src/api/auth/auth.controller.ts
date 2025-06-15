@@ -13,6 +13,7 @@ import { LoginRequestDTO } from 'src/modules/auth/dto/authRequest.dto';
 import { AuthResponseDTO } from '../../modules/auth/authResponse.dto';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { storageImageProfile } from 'src/lib/multer/diskStorage';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
@@ -27,13 +28,14 @@ export class AuthController {
     type: CreatePessoaRequestDTO,
   })
   @Post('signup')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', { storage: storageImageProfile }))
   @HttpCode(201)
   async signup(
     @Body() request: CreatePessoaRequestDTO,
     @UploadedFile(
       new ParseFilePipeBuilder()
-        .addFileTypeValidator({ fileType: /(jpg|jpeg|png)$/ })
+        // .addFileTypeValidator({ fileType: 'image/jpeg' })
+        // .addFileTypeValidator({ fileType: 'image/png' })
         .build({
           fileIsRequired: false,
         }),

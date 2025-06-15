@@ -15,7 +15,6 @@ import { HistoricoResponseDto } from 'src/modules/historico/dto/createHistoricoR
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-
 @ApiTags('historico')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
@@ -23,11 +22,10 @@ import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 export class HistoricoController {
   constructor(private readonly historicoService: HistoricoService) {}
 
-
   @ApiResponse({
     status: 201,
     description: 'Histórico criado com sucesso',
-    type: HistoricoResponseDto ,
+    type: HistoricoResponseDto,
   })
   @Post()
   async create(
@@ -35,7 +33,7 @@ export class HistoricoController {
   ): Promise<HistoricoResponseDto> {
     return this.historicoService.create(dto);
   }
-  
+
   @ApiResponse({
     status: 200,
     description: 'Lista todos os históricos',

@@ -12,7 +12,7 @@ export class AuthService {
 
   async signup(
     dto: CreatePessoaRequestDTO,
-    profileImage?: Express.Multer.File,
+    file?: Express.Multer.File,
   ): Promise<AuthResponseDTO> {
     const hashedPassword = await bcrypt.hash(dto.senha, 10);
 
@@ -21,7 +21,7 @@ export class AuthService {
         ...dto,
         senha: hashedPassword,
       },
-      profileImage,
+      file,
     );
 
     const token = generateJWT({

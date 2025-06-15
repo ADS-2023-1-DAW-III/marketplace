@@ -20,7 +20,7 @@ import { Servico } from 'src/modules/servico/servico.entity';
 @UseGuards(AuthGuard('jwt'))
 @Controller('servico')
 export class ServicoController {
-  constructor(private readonly servicoService: ServicoService) { }
+  constructor(private readonly servicoService: ServicoService) {}
 
   @ApiResponse({
     status: 201,
