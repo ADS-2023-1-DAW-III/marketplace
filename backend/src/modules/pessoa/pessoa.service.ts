@@ -16,7 +16,7 @@ export class PessoaService {
     @Inject('PESSOA_REPOSITORY')
     private pessoaRepository: Repository<Pessoa>,
     private readonly abacateService: AbacateService,
-  ) {}
+  ) { }
 
   async findAll(): Promise<PessoaResponseDTO[]> {
     const pessoas = await this.pessoaRepository.find();
@@ -24,8 +24,6 @@ export class PessoaService {
   }
 
   async create(request: CreatePessoaRequestDTO): Promise<PessoaResponseDTO> {
-    const newPessoa: Pessoa = this.pessoaRepository.create(request);
-
     const existingUser = await this.pessoaRepository.findOne({
       where: { username: request.username },
     });
@@ -36,24 +34,74 @@ export class PessoaService {
       );
     }
 
-    // o codigo será descomentado para os teste de integração com a api do AbacatePay
-    // const response = await this.abacateService.getClient().customer.create({
-    //   name: newPessoa.nome,
-    //   email: newPessoa.email,
-    //   cellphone: newPessoa.contato,
-    //   taxId: newPessoa.cpf,
-    // });
+    // 2. Criar a pessoa no seu banco de dados local primeiro
+    // Note que CreatePessoaRequestDTO não tem 'cpf' e 'nome' no DTO que você me mandou,
+    // mas a entidade Pessoa tem. Ajustei para usar o que está na entidade Pessoa.
+    const newPessoa: Pessoa = this.pessoaRepository.create({
+      username: request.username,
+      nome: request.nome, // Certifique-se de que 'nome' está no DTO ou mapeie de 'username'
+      email: request.email,
+      senha: request.senha, // Lembre-se de fazer hash da senha antes de salvar em produção!
+      contato: request.contato,
+      cpf: request.cpf, // <-- Adicione 'cpf' ao CreatePessoaRequestDTO se for obrigatório
+    });
 
-    // const abacate_id = response.data?.id;
+    // O `abacate_id` deve ser gerado pelo AbacatePay. Não deve ser 'null' no DTO.
+    // Remover `abacate_id: 'null'` do CreatePessoaRequestDTO ou torná-lo opcional e não enviar.
+    newPessoa.abacate_id = '1223'; // Inicializa como null, será preenchido pelo AbacatePay
 
-    //  if (abacate_id) {
-    //    newPessoa.abacate_id = abacate_id;
-    //  }
-    newPessoa.abacate_id = '1223';
+    // 3. Criar o cliente no AbacatePay
+    try {
+      const abacatePayResponse = await this.abacateService
+        .getClient()
+        .customer.create({
+          name: newPessoa.nome,
+          email: newPessoa.email,
+          cellphone: newPessoa.contato,
+          taxId: newPessoa.cpf, // <-- É crucial que o CPF esteja presente e validado
+        });
+
+      // 4. Se a criação no AbacatePay for bem-sucedida, capture o ID
+      if (
+        abacatePayResponse &&
+        abacatePayResponse.data &&
+        abacatePayResponse.data.id
+      ) {
+        newPessoa.abacate_id = abacatePayResponse.data.id;
+        console.log(
+          'Cliente criado no AbacatePay com ID:',
+          newPessoa.abacate_id,
+        );
+      } else {
+        // Log ou tratamento de erro caso o AbacatePay não retorne um ID.
+        // Isso pode significar que o cliente não foi criado lá, mas a pessoa será salva localmente.
+        console.warn(
+          'Falha ao obter customer ID do AbacatePay ou resposta inesperada:',
+          abacatePayResponse,
+        );
+        if (abacatePayResponse && abacatePayResponse.error) {
+          console.error(
+            'Erro detalhado do AbacatePay:',
+            abacatePayResponse.error,
+          );
+        }
+      }
+    } catch (error) {
+      console.error(
+        'Erro ao integrar com AbacatePay para criar cliente:',
+        error.message,
+        error.stack,
+      );
+      // Você pode escolher se quer lançar um erro aqui (e não salvar a pessoa)
+      // ou se quer salvar a pessoa mesmo sem o ID do AbacatePay.
+      // Por enquanto, vamos salvar a pessoa e logar o erro do AbacatePay.
+      // throw new InternalServerErrorException('Falha ao criar cliente no AbacatePay.');
+    }
+
+    // 5. Salvar a pessoa no seu banco de dados
     await this.pessoaRepository.save(newPessoa);
 
     const pessoaResponse: PessoaResponseDTO = new PessoaResponseDTO(newPessoa);
-
     return pessoaResponse;
   }
 

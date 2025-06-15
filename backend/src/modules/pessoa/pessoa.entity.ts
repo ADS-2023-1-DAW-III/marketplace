@@ -1,14 +1,14 @@
 import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 import { Historico } from '../historico/historico.entity';
-import { Avaliacao } from '../avaliacao/avaliacao.entity';
+import { Pagamento } from '../pagamento/pagamento.entity';
 
 @Entity('pessoa')
 export class Pessoa {
   @PrimaryColumn({ type: 'varchar', length: 50 })
   username: string;
 
-  @Column({ type: 'varchar', length: 36 })
-  abacate_id: string;
+  @Column({ type: 'varchar', length: 36, nullable: true })
+  abacate_id: string; // Sem valor padrão, será preenchido após a API do AbacatePay
 
   @Column({ type: 'varchar', length: 100 })
   nome: string;
@@ -16,7 +16,7 @@ export class Pessoa {
   @Column({ type: 'varchar', length: 100, unique: true })
   email: string;
 
-  @Column({ type: 'varchar', length: 100, unique: true })
+  @Column({ type: 'varchar', length: 100, unique: true }) // CPF parece ser um campo único e obrigatório
   cpf: string;
 
   @Column({ type: 'varchar', length: 255 })
@@ -27,7 +27,7 @@ export class Pessoa {
 
   @OneToMany(() => Historico, (historico) => historico.pessoa)
   historico: Historico[];
-  
-  @OneToMany(() => Avaliacao, (avaliacao) => avaliacao.pessoa)
-  avaliacao: Avaliacao[];
+
+  @OneToMany(() => Pagamento, (pagamento) => pagamento.pessoa) // <-- ADICIONADO: Relação com Pagamento
+  pagamentosRealizados: Pagamento[]; // <-- ADICIONADO
 }

@@ -1,20 +1,21 @@
 import {
   Entity,
   Column,
-  PrimaryColumn,
   ManyToOne,
   OneToMany,
   ManyToMany,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { Pessoa } from '../pessoa/pessoa.entity';
 import { Historico } from '../historico/historico.entity';
 import { Categoria } from '../categoria/categoria.entity';
-import { Avaliacao } from '../avaliacao/avaliacao.entity';
+import { Pagamento } from '../pagamento/pagamento.entity';
+import { Negociacao } from '../negociacao/negociacao.entity';
 
 @Entity('servico')
 export class Servico {
-  @PrimaryColumn({ type: 'varchar', length: 50 })
-  id: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string
 
   @Column({ nullable: false })
   caminhoImagem: string;
@@ -42,7 +43,10 @@ export class Servico {
 
   @ManyToMany(() => Categoria, (categoria) => categoria.servicos)
   categorias: Categoria[];
-  
-  @ManyToOne(() => Avaliacao, (avaliacao) => avaliacao.servico)
-  avaliacao: Avaliacao[];
+
+  @OneToMany(() => Pagamento, (pagamento) => pagamento.servico) // <-- ADICIONADO: Relação com Pagamento
+  pagamentosRecebidos: Pagamento[]; // <-- ADICIONADO
+
+  @OneToMany(() => Negociacao, (negociacao) => negociacao.servico)
+  negociacoes: Negociacao[];
 }
