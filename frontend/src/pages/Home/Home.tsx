@@ -1,8 +1,7 @@
 import Header from "../../components/ui/Header";
-import CategoryFilter from "src/components/CategoryFilter";
 import ServiceCard from "../../components/ServiceCard";
 import Hero from "../../components/ui/Hero";
-import Sidebar from "../../components/ui/Sidebar";
+import SearchFilter from '../../components/SearchFilter';
 
 export default function Home() {
   return (
@@ -13,17 +12,10 @@ export default function Home() {
       </div>
       
       <main className="container mx-auto px-4 py-8">
-        {/* Seção Hero */}
-        <section className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">EXPLORADOR</h1>
-          <p className="text-muted-foreground mt-2">
-            Encontre soluções para o dia a dia, divulgue seus serviços e crie uma rede de contatos.
-          </p>
-        </section>
 
-        {/* Filtros */}
-        <div className="bg-white border rounded-lg p-4 mb-6">
-          <CategoryFilter />
+        {/* Sua listagem de serviços aqui */}
+        <div className="container mx-auto px-4 py-8">
+          <SearchFilter />
         </div>
 
         {/* Listagem de Serviços */}
