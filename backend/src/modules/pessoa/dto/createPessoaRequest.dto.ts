@@ -42,11 +42,6 @@ export class CreatePessoaRequestDTO {
 
   @ApiProperty({
     type: 'string',
-    description: 'Cpf do usuário'
-  })
-  cpf: string;
-  @ApiProperty({
-    type: 'string',
     description: 'Senha de usuário',
   })
   @IsString()
