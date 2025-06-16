@@ -3,18 +3,42 @@ import { Repository } from 'typeorm';
 import { Avaliacao } from './avaliacao.entity';
 import { AvaliacaoRequestDTO } from './dto/AvaliacaoRequest.dto';
 import { AvaliacaoResponseDTO } from './dto/AvaliacaoResponse.dto';
+import { PessoaService } from '../pessoa/pessoa.service';
+import { ServicoService } from '../servico/servico.service';
 
 @Injectable()
 export class AvaliacaoService {
   constructor(
     @Inject('AVALIACAO_REPOSITORY')
     private avaliacaoRepository: Repository<Avaliacao>,
+    private readonly pessoaService: PessoaService,
+    private readonly servicoService: ServicoService,
   ) {}
 
-  async create(createDto: AvaliacaoRequestDTO): Promise<AvaliacaoResponseDTO> {
+  async create(
+    createDto: AvaliacaoRequestDTO,
+    id_pessoa: string,
+    id_servico: string,
+  ): Promise<AvaliacaoResponseDTO> {
+    const pessoa = await this.pessoaService.findById(id_pessoa);
+    const servico = await this.servicoService.findById(id_servico);
+
+    if (!pessoa) {
+      throw new NotFoundException(
+        `Pessoa não encontrada com o ID: ${id_pessoa}`,
+      );
+    }
+
+    if (!servico) {
+      throw new NotFoundException(
+        `Serviço não encontrado com o ID: ${id_servico}`,
+      );
+    }
+
     const novoAvaliacao = this.avaliacaoRepository.create({
-      id: 'abc-234',
-      ...createDto
+      ...createDto,
+      pessoa: pessoa,
+      servico: servico,
     });
 
     const avaliacaoSalvo = await this.avaliacaoRepository.save(novoAvaliacao);
