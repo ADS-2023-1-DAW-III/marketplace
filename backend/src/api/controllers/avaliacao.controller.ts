@@ -7,6 +7,7 @@ import {
   Put,
   Delete,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { AvaliacaoService } from 'src/modules/avaliacao/avaliacao.service';
 import { AvaliacaoRequestDTO } from 'src/modules/avaliacao/dto/AvaliacaoRequest.dto';
@@ -21,8 +22,10 @@ export class AvaliacaoController {
   @Post()
   async create(
     @Body() dto: AvaliacaoRequestDTO,
+    @Request() req,
+    @Param('id_servico') id_servico: string,
   ): Promise<AvaliacaoResponseDTO> {
-    return this.avaliacaoService.create(dto);
+    return this.avaliacaoService.create(dto, req.user.username, id_servico);
   }
 
   @Get()
