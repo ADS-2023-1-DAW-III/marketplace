@@ -4,6 +4,7 @@ import { Servico } from './servico.entity';
 import { CreateServicoRequestDto } from './dto/createServicoRequest.dto';
 import { UpdateServicoRequestDto } from './dto/updateServicoRequest.dto';
 import { ServicoResponseDto } from './dto/createServicoResponse.dto';
+import { extname } from 'path';
 
 @Injectable()
 export class ServicoService {
@@ -14,9 +15,16 @@ export class ServicoService {
 
   async create(
     createDto: CreateServicoRequestDto,
+    file?: Express.Multer.File,
   ): Promise<ServicoResponseDto> {
-    const novoServico = this.servicoRepository.create(createDto);
-    const servicoSalvo = await this.servicoRepository.save(novoServico);
+    const newServico = this.servicoRepository.create(createDto);
+
+    if (file) {
+      // Exemplo: "servico_imagem_1234567890.jpg"
+      newServico.caminhoImagem = `servico_imagem_${Date.now()}${extname(file.originalname)}`;
+    }
+
+    const servicoSalvo = await this.servicoRepository.save(newServico);
     return new ServicoResponseDto(servicoSalvo);
   }
 

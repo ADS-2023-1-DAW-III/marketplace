@@ -43,11 +43,18 @@ export class ServicoResponseDto {
 
   constructor(servico: Servico) {
     this.id = servico.id;
-    this.caminhoImagem = servico.caminhoImagem;
     this.titulo = servico.titulo;
     this.eh_negociavel = servico.eh_negociavel;
     this.descricao = servico.descricao;
     this.preco = servico.preco;
     this.duracao = servico.duracao;
+    this.caminhoImagem = this.generateUrlImage(this.id, servico.caminhoImagem);
+  }
+
+  private generateUrlImage(servico: string, filename: string): string {
+    if (filename == null) {
+      return '';
+    }
+    return `/uploads/${servico}/${filename}`;
   }
 }

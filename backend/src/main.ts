@@ -40,7 +40,7 @@ async function bootstrap() {
     .addTag('negociacao', 'API referente a CRUD de negociação')
     .addTag('pagamento', 'API referente a CRUD de pagamento')
     .addTag('servico', 'API referente a CRUD de serviço')
-    .addTag('historico', 'API referente a CRUD de serviço')
+    .addTag('historico', 'API referente a CRUD de historico')
     .addTag('pessoa', 'API referente a CRUD de pessoa')
     .addGlobalResponse({
       status: 401,
