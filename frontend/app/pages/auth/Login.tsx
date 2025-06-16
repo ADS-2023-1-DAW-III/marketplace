@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardFooter } from "~/components/ui/card";
-import { type MetaArgs, useNavigate } from "react-router";
-import { useState } from "react";
+import { useNavigate, type MetaArgs } from "react-router";
+import { useContext } from "react";
 import {
   Form,
   FormControl,
@@ -14,6 +14,8 @@ import {
 } from "~/components/ui/form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AuthContext } from "~/hooks/context/AuthContext";
+import { ErrorAlert, SuccessAlert } from "~/components/ui/alertMessages";
 
 export function meta(_args: MetaArgs) {
   return [
@@ -31,7 +33,7 @@ const formSchema = z.object({
 });
 
 const Login = () => {
-  const [loginError, setLoginError] = useState("");
+  const { setToken } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,10 +49,11 @@ const Login = () => {
     const mockSenha = "12345";
 
     if (data.email == mockEmail && data.password == mockSenha) {
-      alert("Login bem sucedido! Redirecionando...");
-      //navigate("/tela-inicial")
+      SuccessAlert("Login bem sucedido! Redirecionando...");
+      setToken("mock-token-12345"); //Simula o armazenamento do token
+      navigate("/");
     } else {
-      setLoginError("Email ou senha inválidos.");
+      ErrorAlert("Email ou senha inválidos.");
     }
   };
 
@@ -96,21 +99,10 @@ const Login = () => {
                 </FormItem>
               )}
             />
-
-            {loginError && (
-              <div className="text-red-500 text-sm text-center">
-                {loginError}
-              </div>
-            )}
           </CardContent>
 
           <CardFooter className="gap-2 mt-4">
-            <Button
-              type="submit"
-              //onClick={() => navigate("/tela-inicial")}
-            >
-              Entrar
-            </Button>
+            <Button type="submit">Entrar</Button>
           </CardFooter>
         </form>
       </Form>

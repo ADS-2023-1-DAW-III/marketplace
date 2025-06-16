@@ -1,4 +1,4 @@
-import type { MetaArgs } from "react-router";
+import { type MetaArgs } from "react-router";
 import {
   Form,
   FormControl,
@@ -6,12 +6,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/RegisterForm";
+} from "~/components/ui/form";
 import camera from "~/assets/camera.png";
 import { useForm } from "react-hook-form";
 import { Input } from "~/components/ui/input";
-import { useState } from "react";
-import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "~/hooks/context/AuthContext";
+import { useApi } from "~/hooks/services/api";
+import { ErrorAlert, SuccessAlert } from "~/components/ui/alertMessages";
 
 export function meta(_args: MetaArgs) {
   return [
@@ -23,13 +25,48 @@ export function meta(_args: MetaArgs) {
   ];
 }
 
+interface RegisterFormData {
+  username: string;
+  email: string;
+  contato: string;
+  senha: string;
+  habilidade: string;
+  confirmarSenha?: string;
+}
+
 const Register = () => {
-  const [isLogin, setIsLogin] = useState(false);
-  const form = useForm();
+  const form = useForm<RegisterFormData>();
   const senha = form.watch("senha");
+  const { setToken } = useContext(AuthContext);
+  const api = useApi();
 
   const handleClick = () => {
     console.log("Imagem clicada!");
+  };
+
+  const handleSubmit = (data: RegisterFormData) => {
+    const payload = {
+      username: data.username,
+      nome: data.username,
+      email: data.email,
+      contato: data.contato,
+      senha: data.senha,
+      habilidade: data.habilidade,
+    };
+
+    api
+      .post("/auth/signup", payload)
+      .then((response) => {
+        SuccessAlert("Cadastro realizado com sucesso!");
+        setToken(response.data.token);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 400) {
+          ErrorAlert("Usuário já cadastrado!");
+        } else {
+          ErrorAlert("Erro ao cadastrar, tente novamente.");
+        }
+      });
   };
 
   return (
@@ -38,26 +75,7 @@ const Register = () => {
       className="w-[450px] h-auto rounded-md shadow-md flex flex-col items-center justify-center p-5"
     >
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit((data) => {
-            const payload = {
-              username: data.username,
-              nome: data.username,
-              email: data.email,
-              senha: data.senha,
-            };
-
-            axios
-              .post("/auth/signup", payload)
-              .then((response) => {
-                console.log("Usuário criado:", response.data);
-                localStorage.setItem("token", response.data.token);
-              })
-              .catch((error) => {
-                console.error("Erro ao cadastrar:", error);
-              });
-          })}
-        >
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
           {/* Nome */}
           <FormField
             control={form.control}
@@ -145,7 +163,11 @@ const Register = () => {
               <FormItem>
                 <FormLabel>Senha</FormLabel>
                 <FormControl>
-                  <Input type="password" className="w-full py-5 text-lg" {...field} />
+                  <Input
+                    type="password"
+                    className="w-full py-5 text-lg"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -158,14 +180,17 @@ const Register = () => {
             name="confirmarSenha"
             rules={{
               required: "Campo obrigatório",
-              validate: (value) =>
-                value === senha || "As senhas não coincidem",
+              validate: (value) => value === senha || "As senhas não coincidem",
             }}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Confirmar senha</FormLabel>
                 <FormControl>
-                  <Input type="password" className="w-full py-5 text-lg" {...field} />
+                  <Input
+                    type="password"
+                    className="w-full py-5 text-lg"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
