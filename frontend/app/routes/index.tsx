@@ -17,7 +17,6 @@ export default function Index() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Token mudou para:", token);
     if (!token) {
       navigate("/login", { replace: true });
     }
