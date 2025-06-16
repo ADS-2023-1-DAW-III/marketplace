@@ -48,6 +48,10 @@ export class CreatePessoaRequestDTO {
   @IsNotEmpty()
   @Length(6, 20, { message: 'A senha deve ter entre 6 e 20 caracteres.' })
   senha: string;
+  @ApiProperty({
+    type: 'string',
+    description: 'Contato da pessoa',
+  })
 
   @ApiProperty({
     type: 'string',
@@ -68,4 +72,9 @@ export class CreatePessoaRequestDTO {
   @IsNotEmpty()
   @IsCpfFormat({ message: 'CPF inválido.' })
   cpf: string;
+  @ApiProperty({
+    type: 'string',
+    description: 'Habilidades da pessoa',
+  })
+  habilidades: string;
 }

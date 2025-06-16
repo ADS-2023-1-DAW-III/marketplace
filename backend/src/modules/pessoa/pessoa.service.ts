@@ -44,6 +44,7 @@ export class PessoaService {
       senha: request.senha, // Lembre-se de fazer hash da senha antes de salvar em produção!
       contato: request.contato,
       cpf: request.cpf, // <-- Adicione 'cpf' ao CreatePessoaRequestDTO se for obrigatório
+      habilidades: request.habilidades
     });
 
     // O `abacate_id` deve ser gerado pelo AbacatePay. Não deve ser 'null' no DTO.

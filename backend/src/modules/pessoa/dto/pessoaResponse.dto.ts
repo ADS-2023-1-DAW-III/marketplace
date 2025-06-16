@@ -26,12 +26,21 @@ export class PessoaResponseDTO {
     type: 'string',
     description: 'Contato da pessoa',
   })
+  @ApiProperty({
+    type: 'string',
+    description: 'Contato da pessoa',
+  })
   contato: string;
   @ApiProperty({
     type: 'string',
     description: 'Contato da pessoa',
   })
   cpf: string;
+  @ApiProperty({
+    type: 'string',
+    description: 'Habilidades da pessoa',
+  })
+  habilidades: string;
 
   constructor(pessoa: Pessoa) {
     this.username = pessoa.username;
@@ -40,5 +49,6 @@ export class PessoaResponseDTO {
     this.contato = pessoa.contato;
     this.email = pessoa.email;
     this.cpf = pessoa.cpf
+    this.habilidades = pessoa.habilidades;
   }
 }
