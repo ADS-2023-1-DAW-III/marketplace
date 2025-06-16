@@ -1,4 +1,4 @@
-import { Avaliacao } from "../avaliacao.entity";
+import { Avaliacao } from '../avaliacao.entity';
 
 export class AvaliacaoResponseDTO {
   id: string;

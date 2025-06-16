@@ -1,10 +1,10 @@
-import { Entity, Column, PrimaryColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Pessoa } from '../pessoa/pessoa.entity';
 import { Servico } from '../servico/servico.entity';
 
 @Entity('avaliacao')
 export class Avaliacao {
-  @PrimaryColumn({ type: 'varchar', length: 50 })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar', length: 100, nullable: false })
@@ -13,9 +13,9 @@ export class Avaliacao {
   @Column({ type: 'integer', nullable: false })
   estrelas: number;
 
-  @ManyToOne(() => Pessoa, (pessoa) => pessoa.avaliacao)
+  @ManyToOne(() => Pessoa, (pessoa) => pessoa.avaliacoes)
   pessoa: Pessoa;
 
-  @ManyToOne(() => Servico, (servico) => servico.avaliacao)
+  @ManyToOne(() => Servico, (servico) => servico.avaliacoes)
   servico: Servico;
 }
