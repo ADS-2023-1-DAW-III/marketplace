@@ -1,6 +1,10 @@
 .DS_Store
 /node_modules/
+<<<<<<< HEAD
 .idea/*
+=======
+.idea
+>>>>>>> dev
 
 # React Router
 /.react-router/

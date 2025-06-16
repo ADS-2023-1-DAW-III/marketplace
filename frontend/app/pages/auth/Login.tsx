@@ -1,14 +1,19 @@
 import { useForm } from "react-hook-form";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
-import { Label } from "~/components/ui/label";
+import { Card, CardContent, CardFooter } from "~/components/ui/card";
+import { type MetaArgs, useNavigate } from "react-router";
+import { useState } from "react";
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "~/components/ui/card";
-import type { MetaArgs } from "react-router";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "~/components/ui/form";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export function meta(_args: MetaArgs) {
   return [
@@ -20,38 +25,95 @@ export function meta(_args: MetaArgs) {
   ];
 }
 
+const formSchema = z.object({
+  email: z.string().min(1, "Digite seu email.").email("Email inválido."),
+  password: z.string().min(1, "Digite sua senha."),
+});
+
 const Login = () => {
-  const form = useForm();
+  const [loginError, setLoginError] = useState("");
+  const navigate = useNavigate();
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    const mockEmail = "usuario@teste.com";
+    const mockSenha = "12345";
+
+    if (data.email == mockEmail && data.password == mockSenha) {
+      alert("Login bem sucedido! Redirecionando...");
+      //navigate("/tela-inicial")
+    } else {
+      setLoginError("Email ou senha inválidos.");
+    }
+  };
 
   return (
     <Card className="w-full max-w-sm">
-      <CardHeader>
-      </CardHeader>
-      <CardContent>
-        <form>
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Senha</Label>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <CardContent className="space-y-4">
+            <FormField
+              control={form.control}
+              name="email"
+              rules={{ required: "Digite seu email." }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="Digite seu email"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="password"
+              rules={{ required: "Digite sua senha." }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Senha</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Digite sua senha"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {loginError && (
+              <div className="text-red-500 text-sm text-center">
+                {loginError}
               </div>
-              <Input id="password" type="password" required />
-            </div>
-          </div>
+            )}
+          </CardContent>
+
+          <CardFooter className="gap-2 mt-4">
+            <Button
+              type="submit"
+              //onClick={() => navigate("/tela-inicial")}
+            >
+              Entrar
+            </Button>
+          </CardFooter>
         </form>
-      </CardContent>
-      <CardFooter className="gap-2">
-        <Button type="submit">Entrar</Button>
-        <Button variant="outline">Esqueci minha senha</Button>
-      </CardFooter>
+      </Form>
     </Card>
   );
 };
