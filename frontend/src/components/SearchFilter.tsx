@@ -1,117 +1,51 @@
 // components/SearchFilter.tsx
 import { useState } from 'react';
-
-type FilterOptions = {
-  searchTerm: string;
-  category: string;
-  priceRange: string;
-  rating: string;
-};
+import { Search } from 'lucide-react';
 
 export default function SearchFilter() {
-  const [filters, setFilters] = useState<FilterOptions>({
-    searchTerm: '',
-    category: '',
-    priceRange: '',
-    rating: ''
-  });
-
-  const categories = [
-    'Suporte Técnico',
-    'Motoristas e Entregadores',
-    'Organização de Eventos',
-    'Design Gráfico'
-  ];
-
-  const ratings = ['5 estrelas', '4 estrelas', '3 estrelas', '2 estrelas', '1 estrela'];
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFilters(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Filtros aplicados:', filters);
-    // Aqui você pode adicionar a lógica para filtrar os serviços
-  };
+  const [searchTerm, setSearchTerm] = useState('');
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Busque aqui!</h2>
-      
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {/* Campo de Busca */}
-        <div>
-          <input
-            type="text"
-            name="searchTerm"
-            placeholder="Digite aqui..."
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#307B8E] focus:border-transparent"
-            value={filters.searchTerm}
-            onChange={handleInputChange}
-          />
-        </div>
+    <div className="bg-[#307B8E] rounded-2xl p-6 text-white w-full max-w-4xl mx-auto space-y-6">
+      <h1 className="text-center text-2xl font-bold">Busque aqui!</h1>
 
-        {/* Seletor de Categoria */}
-        <div>
-          <select
-            name="category"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#307B8E] focus:border-transparent"
-            value={filters.category}
-            onChange={handleInputChange}
-          >
-            <option value="">Categoria</option>
-            {categories.map((cat, index) => (
-              <option key={index} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </div>
+      {/* Campo de busca com ícone */}
+      <div className="flex items-center bg-[#2a6a7c] rounded px-4 py-2">
+        <input
+          type="text"
+          placeholder="Digite aqui..."
+          className="flex-1 bg-transparent text-white placeholder-white outline-none border-none"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <Search className="text-white" size={20} />
+      </div>
 
-        {/* Filtro de Preço */}
-        <div>
-          <input
-            type="text"
-            name="priceRange"
-            placeholder="Valor máximo"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#307B8E] focus:border-transparent"
-            value={filters.priceRange}
-            onChange={handleInputChange}
-          />
-        </div>
+      {/* Filtros em linha */}
+      <div className="flex flex-col md:flex-row justify-between gap-4">
+        {/* Categoria */}
+        <select className="flex-1 bg-transparent border border-white rounded px-4 py-2 text-white placeholder-white outline-none">
+          <option className="text-black">Categoria</option>
+          <option className="text-black">Suporte Técnico</option>
+          <option className="text-black">Motoristas</option>
+          <option className="text-black">Eventos</option>
+        </select>
 
-        {/* Filtro de Avaliação */}
-        <div>
-          <select
-            name="rating"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#307B8E] focus:border-transparent"
-            value={filters.rating}
-            onChange={handleInputChange}
-          >
-            <option value="">Avaliação</option>
-            {ratings.map((rating, index) => (
-              <option key={index} value={rating}>
-                {rating}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Valor */}
+        <input
+          type="text"
+          placeholder="Valor"
+          className="flex-1 bg-white text-black rounded shadow px-4 py-2 outline-none"
+        />
 
-        {/* Botão de Ação (opcional) */}
-        <div className="md:col-span-4 flex justify-end">
-          <button
-            type="submit"
-            className="px-6 py-3 bg-[#307B8E] text-white rounded-lg hover:bg-[#1a5f6e] transition-colors"
-          >
-            Aplicar Filtros
-          </button>
-        </div>
-      </form>
+        {/* Avaliação */}
+        <select className="flex-1 bg-transparent border border-white rounded px-4 py-2 text-white placeholder-white outline-none">
+          <option className="text-black">Avaliação</option>
+          <option className="text-black">5 estrelas</option>
+          <option className="text-black">4 estrelas</option>
+          <option className="text-black">3 estrelas</option>
+        </select>
+      </div>
     </div>
   );
 }
