@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ServicoService } from '../../modules/servico/servico.service';
 import { CreateServicoRequestDto } from '../../modules/servico/dto/createServicoRequest.dto';
@@ -15,6 +16,8 @@ import { ServicoResponseDto } from '../../modules/servico/dto/createServicoRespo
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Servico } from 'src/modules/servico/servico.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { storageImageServico } from 'src/lib/multer/diskStorageServico';
 
 @ApiTags('servico')
 @UseGuards(AuthGuard('jwt'))
@@ -28,6 +31,7 @@ export class ServicoController {
     type: ServicoResponseDto,
   })
   @Post()
+  @UseInterceptors(FileInterceptor('file', { storage: storageImageServico }))
   async create(
     @Body() dto: CreateServicoRequestDto,
   ): Promise<ServicoResponseDto> {
