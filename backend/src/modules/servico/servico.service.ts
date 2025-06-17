@@ -18,7 +18,7 @@ export class ServicoService {
     private readonly pessoaService: PessoaService,
   ) { }
 
-  async create(createDto: CreateServicoRequestDto): Promise<ServicoDetailedResponseDto> {
+  async create(createDto: CreateServicoRequestDto): Promise<ServicoResponseDto> {
     const categorias = await Promise.all(
       createDto.categorias.map(nome => this.categoriaService.findOne(nome)),
     );
@@ -31,9 +31,7 @@ export class ServicoService {
     });
     const salvo = await this.servicoRepository.save(novo);
 
-    const response = new ServicoDetailedResponseDto();
-    response.message = 'Serviço criado com sucesso';
-    response.servicos = [new ServicoResponseDto(salvo)];
+    const response = new ServicoResponseDto(salvo);
     return response;
   }
 
@@ -47,6 +45,11 @@ export class ServicoService {
     response.message = 'Serviços prestados retornados com sucesso';
     response.servicos = servicos.map(s => new ServicoResponseDto(s));
     return response;
+  }
+
+  async save(service: Servico): Promise<boolean> {
+    this.servicoRepository.save(service)
+    return true;
   }
 
   async findServicesContractedByUser(username: string): Promise<ServicoDetailedResponseDto> {
@@ -136,7 +139,7 @@ export class ServicoService {
       throw new BadRequestException('O serviço só pode ser movido para CONCLUIDO a partir do estado EM ANDAMENTO');
     }
     
-    servico.status = ServicoStatus.EMANDAMENTO;
+    servico.status = ServicoStatus.CONCLUIDO;
     await this.servicoRepository.save(servico);
 
     return servico;

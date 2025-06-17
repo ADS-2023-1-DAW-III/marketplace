@@ -17,6 +17,7 @@ export enum ServicoStatus {
   PENDENTE = 'PENDENTE',
   EMANDAMENTO = 'EM ANDAMENTO',
   CONCLUIDO = 'CONCLUIDO',
+  NEGADO = 'NEGADO'
 }
 
 @Entity('servico')

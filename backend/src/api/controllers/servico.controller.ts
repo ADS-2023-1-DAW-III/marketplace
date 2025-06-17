@@ -36,7 +36,7 @@ export class ServicoController {
   async create(
     @Body() dto: CreateServicoRequestDto,
     @Request() req,
-  ): Promise<ServicoDetailedResponseDto> {
+  ): Promise<ServicoResponseDto> {
     dto.id_prestador = req.user.username;
     return this.servicoService.create(dto);
   }
