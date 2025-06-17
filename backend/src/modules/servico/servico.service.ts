@@ -20,7 +20,10 @@ export class ServicoService {
     const newServico = this.servicoRepository.create(createDto);
 
     if (file) {
-      newServico.caminhoImagem = saveServiceImage(crypto.randomUUID(), file);
+      newServico.caminhoImagem = saveServiceImage(
+        crypto.randomUUID(),
+        file,
+      ).replace('.', '');
     }
 
     const servicoSalvo = await this.servicoRepository.save(newServico);

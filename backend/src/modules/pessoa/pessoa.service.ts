@@ -40,7 +40,10 @@ export class PessoaService {
     }
 
     if (file) {
-      newPessoa.profileImageName = savePersonImage(newPessoa.username, file);
+      newPessoa.profileImageName = savePersonImage(
+        newPessoa.username,
+        file,
+      ).replace('.', '');
     }
 
     // o codigo será descomentado para os teste de integração com a api do AbacatePay
