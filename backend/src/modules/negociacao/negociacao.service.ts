@@ -17,6 +17,9 @@ import { ServicoService } from '../servico/servico.service';
 import { GetNegociacaoQueryDto } from './dto/getNegociacaoQuery.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { NegociacaoDto } from './dto/negociacao.dto';
+import type { Historico } from '../historico/historico.entity';
+import { HistoricoService } from '../historico/historico.service';
+import type { CreateHistoricoRequestDto } from '../historico/dto/createHistoricoRequest.dto';
 
 @Injectable()
 export class NegociacaoService {
@@ -25,6 +28,7 @@ export class NegociacaoService {
     private negociacaoRepository: Repository<Negociacao>,
     private readonly pessoaService: PessoaService,
     private readonly servicoService: ServicoService,
+    private readonly historicoService: HistoricoService,
   ) {}
 
   private async paginate(
@@ -79,6 +83,15 @@ export class NegociacaoService {
     });
   }
 
+  async findById(id: string): Promise<Negociacao> {
+    const negociacao = await this.negociacaoRepository.findOne({
+      where: { id },
+      relations: ['pessoa', 'servico', 'pagamento'],
+    });
+    if (!negociacao) throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
+    return negociacao;
+  }
+
   async verifyStatus(
     pessoaId: string,
     negociacaoId: string,
@@ -123,9 +136,19 @@ export class NegociacaoService {
     if (!servico) {
       throw new NotFoundException('Serviço não encontrado');
     }
+    
+    const historico: CreateHistoricoRequestDto = {
+      data: new Date(),
+      id_servico: servico.id,
+      id_pessoa: pessoa.username
+    }
+
+    this.historicoService.create(historico)
 
     const negociacao: Negociacao = this.negociacaoRepository.create({
       ...request,
+      houve_negociacao: request.novo_valor ? true : false,
+      aceito: false,
       pessoa,
       servico,
     });

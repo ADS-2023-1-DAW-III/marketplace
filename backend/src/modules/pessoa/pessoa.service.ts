@@ -106,6 +106,16 @@ export class PessoaService {
     return pessoaResponse;
   }
 
+  async findOne(username: string) {
+    const pessoa = await this.pessoaRepository.findOne({ where: { username } });
+    if (!pessoa) {
+      throw new NotFoundException(
+        `Pessoa não encontrada com o username: ${username}`,
+      );
+    }
+    return pessoa;
+  }
+
   async update(
     username: string,
     pessoa: Partial<CreatePessoaRequestDTO>,

@@ -13,6 +13,12 @@ import { Pagamento } from '../pagamento/pagamento.entity';
 import { Negociacao } from '../negociacao/negociacao.entity';
 import { Avaliacao } from '../avaliacao/avaliacao.entity';
 
+export enum ServicoStatus {
+  PENDENTE = 'PENDENTE',
+  EMANDAMENTO = 'EM ANDAMENTO',
+  CONCLUIDO = 'CONCLUIDO',
+}
+
 @Entity('servico')
 export class Servico {
   @PrimaryGeneratedColumn("uuid")
@@ -35,6 +41,9 @@ export class Servico {
 
   @Column({ type: 'int' })
   duracao: number;
+
+  @Column({ type: 'enum', enum: ServicoStatus, default: ServicoStatus.PENDENTE })
+  status: ServicoStatus;
 
   @ManyToOne(() => Pessoa, (pessoa) => pessoa.username)
   pessoa: Pessoa;
