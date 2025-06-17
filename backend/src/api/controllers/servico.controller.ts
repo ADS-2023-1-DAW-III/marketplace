@@ -19,7 +19,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Servico } from 'src/modules/servico/servico.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { storageImageServico } from 'src/lib/multer/diskStorageServico';
 
 @ApiTags('servico')
 @UseGuards(AuthGuard('jwt'))
@@ -33,13 +32,14 @@ export class ServicoController {
     type: ServicoResponseDto,
   })
   @Post()
-  @UseInterceptors(FileInterceptor('file', { storage: storageImageServico }))
+  @UseInterceptors(FileInterceptor('file'))
   async create(
     @Body() dto: CreateServicoRequestDto,
     @UploadedFile(
       new ParseFilePipeBuilder()
-        // .addFileTypeValidator({ fileType: 'image/jpeg' })
-        // .addFileTypeValidator({ fileType: 'image/png' })
+        .addFileTypeValidator({
+          fileType: new RegExp('^(image\\/jpeg|image\\/png|image\\/jpg)$'),
+        })
         .build({
           fileIsRequired: false,
         }),

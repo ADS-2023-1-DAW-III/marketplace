@@ -39,16 +39,6 @@ export class PessoaResponseDTO {
     this.nome = pessoa.nome;
     this.contato = pessoa.contato;
     this.email = pessoa.email;
-    this.profileImageUrl = this.generateUrlImage(
-      this.username,
-      pessoa.profileImageName,
-    );
-  }
-
-  private generateUrlImage(username: string, filename: string): string {
-    if (filename == null) {
-      return '';
-    }
-    return `/uploads/${username}/${filename}`;
+    this.profileImageUrl = pessoa.profileImageName;
   }
 }

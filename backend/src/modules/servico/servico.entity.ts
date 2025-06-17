@@ -1,10 +1,10 @@
 import {
   Entity,
   Column,
-  PrimaryColumn,
   ManyToOne,
   OneToMany,
   ManyToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Pessoa } from '../pessoa/pessoa.entity';
 import { Historico } from '../historico/historico.entity';
@@ -12,7 +12,7 @@ import { Categoria } from '../categoria/categoria.entity';
 
 @Entity('servico')
 export class Servico {
-  @PrimaryColumn({ type: 'varchar', length: 50 })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ nullable: false })

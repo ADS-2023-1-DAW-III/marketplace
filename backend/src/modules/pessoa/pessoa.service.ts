@@ -9,8 +9,7 @@ import { Pessoa } from './pessoa.entity';
 import { CreatePessoaRequestDTO } from './dto/createPessoaRequest.dto';
 import { PessoaResponseDTO } from './dto/pessoaResponse.dto';
 import { AbacateService } from 'src/infra/service/abacate.service';
-import { extname } from 'path';
-import { generatedPersonFileName } from 'src/lib/multer/diskStoragePessoa';
+import { savePersonImage } from 'src/lib/uploadsFiles/uploadFilePessoa';
 
 @Injectable()
 export class PessoaService {
@@ -41,9 +40,7 @@ export class PessoaService {
     }
 
     if (file) {
-      newPessoa.profileImageName = generatedPersonFileName(
-        extname(file.originalname),
-      );
+      newPessoa.profileImageName = savePersonImage(newPessoa.username, file);
     }
 
     // o codigo será descomentado para os teste de integração com a api do AbacatePay

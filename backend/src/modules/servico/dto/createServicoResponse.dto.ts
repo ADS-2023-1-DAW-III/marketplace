@@ -48,13 +48,6 @@ export class ServicoResponseDto {
     this.descricao = servico.descricao;
     this.preco = servico.preco;
     this.duracao = servico.duracao;
-    this.caminhoImagem = this.generateUrlImage(this.id, servico.caminhoImagem);
-  }
-
-  private generateUrlImage(servico: string, filename: string): string {
-    if (filename == null) {
-      return '';
-    }
-    return `/uploads/${servico}/${filename}`;
+    this.caminhoImagem = servico.caminhoImagem;
   }
 }

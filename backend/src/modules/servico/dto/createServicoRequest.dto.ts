@@ -3,12 +3,6 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateServicoRequestDto {
   @ApiProperty({
     type: 'string',
-    description: 'Caminho da imagem do serviço',
-    nullable: false,
-  }) // @IsNotEmpty()
-  caminhoImagem: string;
-  @ApiProperty({
-    type: 'string',
     description: 'Título do serviço',
     nullable: false,
   })
