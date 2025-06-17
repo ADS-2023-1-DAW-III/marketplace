@@ -8,6 +8,8 @@ import {
   Delete,
   UseGuards,
   UseInterceptors,
+  ParseFilePipeBuilder,
+  UploadedFile,
 } from '@nestjs/common';
 import { ServicoService } from '../../modules/servico/servico.service';
 import { CreateServicoRequestDto } from '../../modules/servico/dto/createServicoRequest.dto';
@@ -34,8 +36,17 @@ export class ServicoController {
   @UseInterceptors(FileInterceptor('file', { storage: storageImageServico }))
   async create(
     @Body() dto: CreateServicoRequestDto,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        // .addFileTypeValidator({ fileType: 'image/jpeg' })
+        // .addFileTypeValidator({ fileType: 'image/png' })
+        .build({
+          fileIsRequired: false,
+        }),
+    )
+    file?: Express.Multer.File,
   ): Promise<ServicoResponseDto> {
-    return this.servicoService.create(dto);
+    return this.servicoService.create(dto, file);
   }
 
   @ApiResponse({
