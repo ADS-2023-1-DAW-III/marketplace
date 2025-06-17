@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Servico } from '../servico.entity';
+import { Servico, type ServicoStatus } from '../servico.entity';
 import { CreateCategoriaResponseDto } from '../../categoria/dto/createCategoriaResponse.dto';
 import { CreateNegociacaoResponseDto } from '../../negociacao/dto/createNegociacaoResponse.dto';
 import { PagamentoResponseDto } from '../../pagamento/dto/pagamentoResponse.dto';
@@ -57,6 +57,12 @@ export class ServicoResponseDto {
   id_prestador: string;
 
   @ApiProperty({
+    type: 'string',
+    description: 'status do servico',
+  })
+  status: ServicoStatus;
+
+  @ApiProperty({
     type: [CreateCategoriaResponseDto],
     description: 'Categorias associadas ao serviço',
   })
@@ -81,6 +87,7 @@ export class ServicoResponseDto {
     this.eh_negociavel = servico.eh_negociavel;
     this.descricao = servico.descricao;
     this.preco = servico.preco;
+    this.status = servico.status;
     this.duracao = servico.duracao;
     this.id_prestador = servico.pessoa.username || '';
     this.categorias = servico.categorias?.map((c) => ({

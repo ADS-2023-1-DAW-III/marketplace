@@ -3,20 +3,6 @@ import { IsBoolean, IsNotEmpty, IsNumber, IsString, Min } from 'class-validator'
 
 export class CreateNegociacaoDto {
   @ApiProperty({
-    type: 'boolean',
-    description: 'Houve negociação no serviço',
-  })
-  @IsBoolean()
-  houve_negociacao: boolean;
-
-  @ApiProperty({
-    type: 'boolean',
-    description: 'A negociação foi Aceita?',
-  })
-  @IsBoolean()
-  aceito: boolean;
-
-  @ApiProperty({
     type: 'number',
     description: 'Novo valor do serviço',
   })

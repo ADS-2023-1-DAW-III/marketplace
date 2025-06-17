@@ -92,17 +92,15 @@ export class NegociacaoController {
     description: 'Busca uma negociação pelo id',
     type: [CreateNegociacaoResponseDto],
   })
-  @Get(':id')
+  @Get('/:id')
   async findOne(
     @Req() request: { user: { userId: string } },
     @Param('id') id: string,
   ) {
-    const negociacao = await this.negociacaoService.verifyStatus(
+    const negociacao = await this.negociacaoService.findById(
       request.user.userId,
-      id,
     );
     return {
-      message: 'Status da negociação atualizado',
       negociacao,
     };
   }

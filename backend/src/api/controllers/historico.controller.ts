@@ -15,14 +15,12 @@ import { HistoricoResponseDto } from 'src/modules/historico/dto/createHistoricoR
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-
 @ApiTags('historico')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
 @Controller('historico')
 export class HistoricoController {
   constructor(private readonly historicoService: HistoricoService) {}
-
 
   @ApiResponse({
     status: 201,
