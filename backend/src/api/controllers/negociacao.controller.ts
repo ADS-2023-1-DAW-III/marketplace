@@ -131,13 +131,27 @@ export class NegociacaoController {
     status: 200,
     description: 'Retorna a negociação aceita',
   })
-  @Put(':id/accept')
+  @Put(':id/aceitar')
   @HttpCode(HttpStatus.OK)
-  acceptNegotiation(@Param('id') id: string, @Req() req: any) {
+  aceitarNegociacao(@Param('id') id: string, @Req() req: any) {
     const userId = req.user?.username;
     if (!userId) {
       throw new UnauthorizedException('Usuário não autenticado');
     }
-    return this.negociacaoService.acceptNegotiation(id, userId);
+    return this.negociacaoService.aceitarNegociacao(id, userId);
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna a negociação negada',
+  })
+  @Put(':id/negar')
+  @HttpCode(HttpStatus.OK)
+  negarNegociacao(@Param('id') id: string, @Req() req: any) {
+    const userId = req.user?.username;
+    if (!userId) {
+      throw new UnauthorizedException('Usuário não autenticado');
+    }
+    return this.negociacaoService.negarNegociacao(id, userId);
   }
 }

@@ -4,6 +4,12 @@ import { Negociacao } from '../negociacao.entity';
 export class CreateNegociacaoResponseDto {
   @ApiProperty({
     type: 'string',
+    description: 'ID da negociação',
+  })
+  id: string
+
+  @ApiProperty({
+    type: 'string',
     description: 'ID da Pessoa que realizou o serviço',
   })
   pessoaId: string;
@@ -29,6 +35,7 @@ export class CreateNegociacaoResponseDto {
   novo_valor: number;
 
   constructor(negociacao: Negociacao) {
+    this.id = negociacao.id;
     this.pessoaId = negociacao.pessoa?.username;
     this.servicoId = negociacao.servico?.id;
     this.houve_negociacao = negociacao.houve_negociacao;
