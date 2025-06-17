@@ -5,5 +5,6 @@ export default [
     layout("routes/LayoutAuth.tsx", [
         route("/login","pages/auth/Login.tsx"),
         route("/register", "pages/auth/Register.tsx")
-    ])
+    ]),
+    route("contratados", "routes/contratados.tsx") // TODO: Add leiaute para contratados 
 ] satisfies RouteConfig;
