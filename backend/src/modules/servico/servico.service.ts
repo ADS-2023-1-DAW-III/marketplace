@@ -20,8 +20,7 @@ export class ServicoService {
     const newServico = this.servicoRepository.create(createDto);
 
     if (file) {
-      // Exemplo: "servico_imagem_1234567890.jpg"
-      newServico.caminhoImagem = `servico_imagem_${Date.now()}${extname(file.originalname)}`;
+      newServico.caminhoImagem = `serviceImage${extname(file.originalname)}`;
     }
 
     const servicoSalvo = await this.servicoRepository.save(newServico);
