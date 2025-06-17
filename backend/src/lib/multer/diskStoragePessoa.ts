@@ -28,8 +28,8 @@ export const storageImageProfile = diskStorage({
   },
   filename: (_req, file, cb) => {
     try {
-      const extension = extname(file.originalname);
-      cb(null, `profileImage${extension}`);
+      const fileName = generatedPersonFileName(extname(file.originalname));
+      cb(null, fileName);
     } catch (error) {
       cb(
         error instanceof Error ? error : new Error('Erro ao processar arquivo'),
@@ -38,3 +38,5 @@ export const storageImageProfile = diskStorage({
     }
   },
 });
+
+export const generatedPersonFileName = (ext: string) => `profileImage${ext}`;

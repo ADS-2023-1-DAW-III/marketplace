@@ -5,6 +5,7 @@ import { CreateServicoRequestDto } from './dto/createServicoRequest.dto';
 import { UpdateServicoRequestDto } from './dto/updateServicoRequest.dto';
 import { ServicoResponseDto } from './dto/createServicoResponse.dto';
 import { extname } from 'path';
+import { generatedServiceFileName } from 'src/lib/multer/diskStorageServico';
 
 @Injectable()
 export class ServicoService {
@@ -20,7 +21,9 @@ export class ServicoService {
     const newServico = this.servicoRepository.create(createDto);
 
     if (file) {
-      newServico.caminhoImagem = `serviceImage${extname(file.originalname)}`;
+      newServico.caminhoImagem = generatedServiceFileName(
+        extname(file.originalname),
+      );
     }
 
     const servicoSalvo = await this.servicoRepository.save(newServico);

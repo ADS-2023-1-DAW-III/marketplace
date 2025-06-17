@@ -25,8 +25,8 @@ export const storageImageServico = diskStorage({
   },
   filename: (_req, file, cb) => {
     try {
-      const extension = extname(file.originalname);
-      cb(null, `serviceImage${extension}`);
+      const fileName = generatedServiceFileName(extname(file.originalname));
+      cb(null, `serviceImage${fileName}`);
     } catch (error) {
       cb(
         error instanceof Error ? error : new Error('Erro ao processar arquivo'),
@@ -35,3 +35,5 @@ export const storageImageServico = diskStorage({
     }
   },
 });
+
+export const generatedServiceFileName = (ext: string) => `profileImage${ext}`;
