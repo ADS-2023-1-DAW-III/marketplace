@@ -27,7 +27,6 @@ export function EmptyState({
         transition: 'box-shadow 0.3s ease'
       }}
     >
-      {/* Container da imagem com dimensões fixas */}
       <div 
         className="mb-8" 
         style={{
@@ -44,7 +43,6 @@ export function EmptyState({
         />
       </div>
       
-      {/* Título (agora usando a prop) */}
       <div 
         className="mb-3"
         style={{
@@ -60,7 +58,6 @@ export function EmptyState({
         {title}
       </div>
       
-      {/* Descrição (agora usando a prop) */}
       <div 
         className="mb-8"
         style={{
@@ -76,7 +73,6 @@ export function EmptyState({
         {description}
       </div>
       
-      {/* Botão (agora usando a prop buttonText) */}
       <div style={{ width: '416.444px' }}>
         <Button 
           onClick={onButtonClick}
@@ -91,9 +87,7 @@ export function EmptyState({
             fontWeight: 500,
             fontSize: '23.82px',
             lineHeight: '40.83px',
-            letterSpacing: '0%',
-            color: '#FFFFFF',
-            cursor: 'pointer'
+            letterSpacing: '0%'
           }}
         >
           {buttonText}

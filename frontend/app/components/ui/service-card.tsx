@@ -6,6 +6,7 @@ interface ServiceCardProps {
   price: string;
   duration: string;
   serviceType: string;
+  imageUrl: string;
   className?: string;
   onEdit?: () => void;
   onDelete?: () => void;
@@ -17,6 +18,7 @@ export default function ServiceCard({
   price,
   duration,
   serviceType,
+  imageUrl,
   className = '',
   onEdit,
   onDelete,
@@ -37,80 +39,87 @@ export default function ServiceCard({
     };
   }, []);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <div className={`bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden max-w-6xl mx-auto p-6 ${className}`}>
-      <div className="flex justify-between items-start">
-        <h3 className="text-xl font-bold text-gray-800 mb-3">{title}</h3>
-        <div className="relative" ref={menuRef}>
-          <button 
-            className="text-gray-500 hover:text-gray-700 p-1"
-            onClick={toggleMenu}
-            aria-label="Abrir menu"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="6" r="1.5" fill="currentColor"/>
-              <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
-              <circle cx="12" cy="18" r="1.5" fill="currentColor"/>
-            </svg>
-          </button>
-          
-          {isMenuOpen && (
-            <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-10 border border-gray-200">
-              <div className="py-1">
-                <button
-                  onClick={() => {
-                    onEdit?.();
-                    setIsMenuOpen(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={() => {
-                    onDelete?.();
-                    setIsMenuOpen(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Excluir
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-      
-      <p className="text-gray-600 mb-4">{description}</p>
-      
-      <div className="border-t border-gray-200 my-4"></div>
-      
-      <div className="space-y-2">
-        <div className="flex justify-between items-center">
-          <span className="font-semibold text-gray-800">{price}</span>
-          <span className="text-gray-600">{duration}</span>
-        </div>
-        
-        <div className="flex justify-between items-center mt-4">
-          <span className="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-md text-sm font-medium">
-            {serviceType}
-          </span>
-          
-          <button 
-            className="flex items-center justify-center text-white font-medium rounded-[10.21px] gap-[17.01px]"
-            style={{
-              width: '155.44px',
-              height: '35px',
-              background: '#366B2B',
-              padding: '13.61px 27.22px'
-            }}
+    <div
+      className={`bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden mx-auto ${className}`}
+      style={{ width: '1010px', height: '247px', marginTop: '20px' }}
+    >
+      <div className="flex h-full">
+        <div className="w-2/3 m-4 p-4 flex flex-col justify-between items-center text-center">
+          <div>
+            <h3 className="font-poppins font-semibold text-[20px] leading-[100%] text-[#103A57] text-center">
+              {title}
+            </h3>
+            <p className="font-inter font-normal text-[18px] leading-[100%] text-[#103A57] mt-2 text-center">
+              {description}
+            </p>
+          </div>
+
+          <button
+            className="text-white font-inter font-medium text-[23.82px] leading-[40.83px] rounded-md px-6 py-0.9 mt-2"
+            style={{ backgroundColor: '#366B2B' }}
           >
             Detalhes
           </button>
+
+          <div className="flex items-center justify-between w-full text-[#103A57] mt-4">
+            <div className="flex gap-2 font-poppins font-semibold text-[20px] leading-[100%] text-left">
+              <span>{price}</span>
+              <span className="text-sm align-text-top-xs">{duration}</span>
+            </div>
+            <span className="font-poppins font-semibold text-[20px] leading-[100%] text-center">
+              {serviceType}
+            </span>
+          </div>
+        </div>
+
+        <div className="m-4 flex flex-col items-end">
+          <div className="flex">
+            <img
+              src={imageUrl}
+              alt="Imagem do serviço"
+              className="w-[364px] h-[214px] object-cover rounded-md"
+            />
+
+            <div className="ml-2 relative" ref={menuRef}>
+              <button
+                className="text-black bg-white/50 hover:bg-black/20 rounded-full p-1"
+                onClick={toggleMenu}
+                aria-label="Abrir menu"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
+                  <circle cx="12" cy="6" r="1.5" />
+                  <circle cx="12" cy="12" r="1.5" />
+                  <circle cx="12" cy="18" r="1.5" />
+                </svg>
+              </button>
+
+              {isMenuOpen && (
+                <div className="absolute right-0 mt-2 w-36 bg-white rounded-md shadow-lg z-10 border border-gray-200">
+                  <button
+                    onClick={() => {
+                      onEdit?.();
+                      setIsMenuOpen(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => {
+                      onDelete?.();
+                      setIsMenuOpen(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Excluir
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
