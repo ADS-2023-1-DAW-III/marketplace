@@ -1,11 +1,19 @@
 import { Button } from "~/components/ui/button";
+import { EmptyState } from "~/components/ui/Empty-State";
 import { Input } from "~/components/ui/input";
+import { useState } from 'react';
 import SearchInput from "~/components/ui/search-input";
 import SectionCard from "~/components/ui/section-card";
 import SelectInput from "~/components/ui/select-input";
 import ServiceCard from "~/components/ui/service-card";
 
 export default function MyServices() {
+  const [services, setServices] = useState<any[]>([]); 
+  
+  const handleAddFirstService = () => {
+    console.log("Cadastrar primeiro serviço");
+  };
+  
   return (
     <div>
       <SectionCard title="Meus Serviços">
@@ -23,6 +31,10 @@ export default function MyServices() {
               { value: "marketing", label: "Marketing" },
             ]}
           />
+
+        <Button className="bg-[#103A57] text-white" size="lg">
+          Cadastrar Novo Serviço
+        </Button>
         </div>
       </SectionCard>
 
@@ -31,9 +43,6 @@ export default function MyServices() {
           Serviços Recentes
         </h2>
 
-        <Button className="bg-[#103A57] text-white" size="lg">
-          Cadastrar Novo Serviço
-        </Button>
       </div>
 
       <ServiceCard
@@ -43,16 +52,28 @@ export default function MyServices() {
         duration="30min"
         serviceType="Manutenção"
         className="mb-4"
-      />
-
+      />    
       <ServiceCard
-        title="Suporte Técnico (Hardware e Software)"
-        description="Lorem ipsum dolor sit amet. Quo nobis soluta qui rerum dolore cum quasi laudantium et autem aperiam aut nemo..."
-        price="R$100.00"
+        title="Suporte Técnico"
+        description="Descrição do serviço..."
+        price="R$100,00"
         duration="30min"
         serviceType="Manutenção"
-        className="mb-4"
+        onEdit={() => console.log("Editar serviço")}
+        onDelete={() => console.log("Excluir serviço")}
+      />
+   
+    <div className="flex h-full items-center justify-center p-4">
+      <EmptyState
+        title="Você ainda não cadastrou nenhum serviço"
+        description="Clique em 'Cadastrar Meu Primeiro Serviço' para começar"
+        buttonText="Cadastrar Meu Primeiro Serviço"
+        onButtonClick={handleAddFirstService}
       />
     </div>
+
+    </div>
+
+
   );
 }

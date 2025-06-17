@@ -20,7 +20,6 @@ export default function SearchInput({
   const [query, setQuery] = useState(initialValue);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Atualiza a busca quando o query muda (com debounce)
   useEffect(() => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
