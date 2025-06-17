@@ -15,7 +15,7 @@ export const storageImageProfile = diskStorage({
 
       const username = req.body.username;
 
-      const userUploadPath = `../uploads/pessoas/${username}`;
+      const userUploadPath = `./uploads/pessoas/${username}`;
 
       if (!existsSync(userUploadPath)) {
         mkdirSync(userUploadPath, { recursive: true, mode: 0o755 });
