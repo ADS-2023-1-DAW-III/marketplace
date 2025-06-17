@@ -3,6 +3,7 @@ import { Servico } from '../servico.entity';
 import { CreateCategoriaResponseDto } from '../../categoria/dto/createCategoriaResponse.dto';
 import { CreateNegociacaoResponseDto } from '../../negociacao/dto/createNegociacaoResponse.dto';
 import { PagamentoResponseDto } from '../../pagamento/dto/pagamentoResponse.dto';
+import { AvaliacaoResponseDTO } from 'src/modules/avaliacao/dto/AvaliacaoResponse.dto';
 
 export class ServicoResponseDto {
   @ApiProperty({
@@ -74,6 +75,12 @@ export class ServicoResponseDto {
   })
   pagamentos: PagamentoResponseDto[];
 
+  @ApiProperty({
+    type: [AvaliacaoResponseDTO],
+    description: 'Avaliações relacionadas ao serviço',
+  })
+  avaliacoes: AvaliacaoResponseDTO[];
+
   constructor(servico: Servico) {
     this.id = servico.id;
     this.caminhoImagem = servico.caminhoImagem;
@@ -83,15 +90,22 @@ export class ServicoResponseDto {
     this.preco = servico.preco;
     this.duracao = servico.duracao;
     this.id_prestador = servico.pessoa.username || '';
+
     this.categorias = servico.categorias?.map((c) => ({
       nome: c.nome,
       descricao: c.descricao,
     }));
+
     this.negociacoes = servico.negociacoes?.map(
       (n) => new CreateNegociacaoResponseDto(n),
     );
+
     this.pagamentos = servico.negociacoes
       ?.filter((n) => n.pagamento)
       ?.map((n) => new PagamentoResponseDto(n.pagamento!));
+
+    this.avaliacoes = servico.avaliacoes?.map(
+      (a) => new AvaliacaoResponseDTO(a),
+    );
   }
 }
