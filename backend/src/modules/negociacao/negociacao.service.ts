@@ -4,7 +4,6 @@ import {
   NotFoundException,
   BadRequestException,
   InternalServerErrorException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { FindManyOptions, Repository } from 'typeorm';
 import { Negociacao } from './negociacao.entity';
@@ -17,10 +16,10 @@ import { ServicoService } from '../servico/servico.service';
 import { GetNegociacaoQueryDto } from './dto/getNegociacaoQuery.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { NegociacaoDto } from './dto/negociacao.dto';
-import type { Historico } from '../historico/historico.entity';
 import { HistoricoService } from '../historico/historico.service';
 import type { CreateHistoricoRequestDto } from '../historico/dto/createHistoricoRequest.dto';
 import { ServicoStatus } from '../servico/servico.entity';
+import { CreateServicoRequestDto } from '../servico/dto/createServicoRequest.dto';
 
 @Injectable()
 export class NegociacaoService {
@@ -145,7 +144,7 @@ export class NegociacaoService {
       id_pessoa: pessoa.username,
     };
 
-    this.historicoService.create(historico);
+    await this.historicoService.create(historico);
 
     const negociacao: Negociacao = this.negociacaoRepository.create({
       ...request,
@@ -224,7 +223,7 @@ export class NegociacaoService {
     try {
       negociacao.aceito = false;
       negociacao.servico.status = ServicoStatus.NEGADO;
-      this.servicoService.save(negociacao.servico);
+      await this.servicoService.create(new CreateServicoRequestDto());
       return await this.negociacaoRepository.save(negociacao);
     } catch (error) {
       console.error('Erro ao aceitar a negociação:', error);
