@@ -26,7 +26,13 @@ export class ServicoService {
     createDto: CreateServicoRequestDto,
     file?: Express.Multer.File,
   ): Promise<ServicoResponseDto> {
-    const newServico = this.servicoRepository.create(createDto);
+    const categorias = await this.categoriaService.findAllByNome(
+      createDto.categorias,
+    );
+    const newServico = this.servicoRepository.create({
+      ...createDto,
+      categorias,
+    });
 
     if (file) {
       newServico.caminhoImagem = saveServiceImage(
