@@ -2,11 +2,12 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { extname } from 'path';
 import { InternalServerErrorException } from '@nestjs/common';
 
-const generatedServiceFileName = (ext: string) => `serviceImage${ext}`;
+const generatedServiceFileName = (ext: string, complement: string) =>
+  `serviceImage${complement}${ext}`;
 
-export const saveServiceImage = (
+export const saveServiceImages = (
   serviceId: string,
-  file: Express.Multer.File,
+  files: Array<Express.Multer.File>,
 ): string => {
   try {
     if (!serviceId) {
@@ -18,10 +19,17 @@ export const saveServiceImage = (
     if (!existsSync(uploadPath)) {
       mkdirSync(uploadPath, { recursive: true, mode: 0o755 });
     }
-    const fileName = generatedServiceFileName(extname(file.originalname));
-    const filePath = `${uploadPath}/${fileName}`;
-    writeFileSync(filePath, file.buffer);
-    return filePath;
+    let complement = 1;
+    files.map((file) => {
+      const fileName = generatedServiceFileName(
+        extname(file.originalname),
+        complement.toString(),
+      );
+      const filePath = `${uploadPath}/${fileName}`;
+      writeFileSync(filePath, file.buffer);
+      complement += 1;
+    });
+    return uploadPath;
   } catch (error) {
     throw new InternalServerErrorException(
       'Não foi possível fazer o upload do arquivo: ' +

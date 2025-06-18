@@ -7,10 +7,11 @@ import {
   UseGuards,
   UseInterceptors,
   ParseFilePipeBuilder,
-  UploadedFile,
   Request,
   HttpCode,
   Put,
+  UploadedFiles,
+  HttpStatus,
 } from '@nestjs/common';
 import { ServicoService } from '../../modules/servico/servico.service';
 import { CreateServicoRequestDto } from '../../modules/servico/dto/createServicoRequest.dto';
@@ -19,7 +20,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Servico } from 'src/modules/servico/servico.entity';
 import { ServicoDetailedResponseDto } from 'src/modules/servico/dto/servicoDetailedResponse.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('servico')
 @UseGuards(AuthGuard('jwt'))
@@ -33,21 +34,22 @@ export class ServicoController {
     type: ServicoResponseDto,
   })
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FilesInterceptor('files', 6))
   async create(
     @Body() dto: CreateServicoRequestDto,
-    @UploadedFile(
+    @UploadedFiles(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
           fileType: new RegExp('^(image\\/jpeg|image\\/png|image\\/jpg)$'),
         })
         .build({
           fileIsRequired: false,
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
         }),
     )
-    file?: Express.Multer.File,
+    files?: Array<Express.Multer.File>,
   ): Promise<ServicoResponseDto> {
-    return this.servicoService.create(dto, file);
+    return this.servicoService.create(dto, files);
   }
 
   @ApiResponse({

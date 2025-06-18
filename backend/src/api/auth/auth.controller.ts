@@ -6,6 +6,7 @@ import {
   UseInterceptors,
   UploadedFile,
   ParseFilePipeBuilder,
+  HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from '../../modules/auth/auth.service';
 import { CreatePessoaRequestDTO } from '../../modules/pessoa/dto/createPessoaRequest.dto';
@@ -38,6 +39,7 @@ export class AuthController {
         })
         .build({
           fileIsRequired: false,
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
         }),
     )
     file?: Express.Multer.File,

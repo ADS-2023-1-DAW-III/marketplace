@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { Servico, ServicoStatus } from './servico.entity';
 import { CreateServicoRequestDto } from './dto/createServicoRequest.dto';
 import { ServicoResponseDto } from './dto/createServicoResponse.dto';
-import { saveServiceImage } from 'src/lib/uploadsFiles/uploadFileServico';
+import { saveServiceImages } from 'src/lib/uploadsFiles/uploadFileServico';
 import { ServicoDetailedResponseDto } from './dto/servicoDetailedResponse.dto';
 import { CategoriaService } from '../categoria/categoria.service';
 import { PessoaService } from '../pessoa/pessoa.service';
@@ -24,7 +24,7 @@ export class ServicoService {
 
   async create(
     createDto: CreateServicoRequestDto,
-    file?: Express.Multer.File,
+    files?: Array<Express.Multer.File>,
   ): Promise<ServicoResponseDto> {
     const categorias = await this.categoriaService.findAllByNome(
       createDto.categorias,
@@ -46,10 +46,12 @@ export class ServicoService {
       pessoa,
     });
 
-    if (file) {
-      newServico.caminhoImagem = saveServiceImage(
-        crypto.randomUUID(),
-        file,
+    const uploadServiceFolderName = crypto.randomUUID();
+
+    if (files) {
+      newServico.caminhoImagem = saveServiceImages(
+        uploadServiceFolderName,
+        files,
       ).replace('.', '');
     }
 
