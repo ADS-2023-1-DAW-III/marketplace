@@ -4,19 +4,17 @@ import {
   Post,
   Body,
   Param,
-  Patch,
-  Delete,
   UseGuards,
   Request,
   HttpCode,
+  Query,
   Put,
 } from '@nestjs/common';
 import { ServicoService } from '../../modules/servico/servico.service';
 import { CreateServicoRequestDto } from '../../modules/servico/dto/createServicoRequest.dto';
-import { UpdateServicoRequestDto } from '../../modules/servico/dto/updateServicoRequest.dto';
 import { ServicoResponseDto } from '../../modules/servico/dto/createServicoResponse.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Servico } from 'src/modules/servico/servico.entity';
 import { ServicoDetailedResponseDto } from 'src/modules/servico/dto/servicoDetailedResponse.dto';
 
@@ -24,7 +22,7 @@ import { ServicoDetailedResponseDto } from 'src/modules/servico/dto/servicoDetai
 @UseGuards(AuthGuard('jwt'))
 @Controller('servicos')
 export class ServicoController {
-  constructor(private readonly servicoService: ServicoService) { }
+  constructor(private readonly servicoService: ServicoService) {}
 
   @ApiResponse({
     status: 201,
@@ -36,7 +34,7 @@ export class ServicoController {
   async create(
     @Body() dto: CreateServicoRequestDto,
     @Request() req,
-  ): Promise<ServicoResponseDto> {
+  ): Promise<ServicoDetailedResponseDto> {
     dto.id_prestador = req.user.username;
     return this.servicoService.create(dto);
   }
@@ -50,8 +48,20 @@ export class ServicoController {
   @HttpCode(200)
   async findServicesProvided(
     @Request() req,
+    @Query('query') query?: string,
+    @Query('categoria') categoria?: string,
+    @Query('valorMin') valorMin?: number,
+    @Query('valorMax') valorMax?: number,
+    @Query('avaliacao') avaliacao?: number,
   ): Promise<ServicoDetailedResponseDto> {
-    return this.servicoService.findServicesProvidedByUser(req.user.username);
+    return this.servicoService.findServicesProvidedByUser(
+      req.user.username,
+      query,
+      categoria,
+      valorMin,
+      valorMax,
+      avaliacao,
+    );
   }
 
   @ApiResponse({
@@ -63,8 +73,20 @@ export class ServicoController {
   @HttpCode(200)
   async findServicesContracted(
     @Request() req,
+    @Query('query') query?: string,
+    @Query('categoria') categoria?: string,
+    @Query('valorMin') valorMin?: number,
+    @Query('valorMax') valorMax?: number,
+    @Query('avaliacao') avaliacao?: number,
   ): Promise<ServicoDetailedResponseDto> {
-    return this.servicoService.findServicesContractedByUser(req.user.username);
+    return this.servicoService.findServicesContractedByUser(
+      req.user.username,
+      query,
+      categoria,
+      valorMin,
+      valorMax,
+      avaliacao,
+    );
   }
 
   @ApiResponse({
@@ -74,8 +96,20 @@ export class ServicoController {
   })
   @Get()
   @HttpCode(200)
-  async findAll(): Promise<ServicoDetailedResponseDto> {
-    return this.servicoService.findAll();
+  async findAll(
+    @Query('query') query?: string,
+    @Query('categoria') categoria?: string,
+    @Query('valorMin') valorMin?: number,
+    @Query('valorMax') valorMax?: number,
+    @Query('avaliacao') avaliacao?: number,
+  ): Promise<ServicoDetailedResponseDto> {
+    return this.servicoService.findAll(
+      query,
+      categoria,
+      valorMin,
+      valorMax,
+      avaliacao,
+    );
   }
 
   @ApiResponse({

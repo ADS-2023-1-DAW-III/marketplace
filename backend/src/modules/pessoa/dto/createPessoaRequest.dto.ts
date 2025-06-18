@@ -72,6 +72,9 @@ export class CreatePessoaRequestDTO {
   @IsNotEmpty()
   @IsCpfFormat({ message: 'CPF inválido.' })
   cpf: string;
+  
+  @IsString()
+  @IsNotEmpty()
   @ApiProperty({
     type: 'string',
     description: 'Habilidades da pessoa',
