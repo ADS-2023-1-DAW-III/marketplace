@@ -33,7 +33,7 @@ export class ServicoController {
   async create(
     @Body() dto: CreateServicoRequestDto,
     @Request() req,
-  ): Promise<ServicoDetailedResponseDto> {
+  ): Promise<ServicoResponseDto> {
     dto.id_prestador = req.user.username;
     return this.servicoService.create(dto);
   }
@@ -118,7 +118,29 @@ export class ServicoController {
   })
   @Get(':id')
   @HttpCode(200)
-  async findOne(@Param('id') id: string): Promise<ServicoDetailedResponseDto> {
-    return this.servicoService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<Servico> {
+    return this.servicoService.findById(id);
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'Atualiza o status do serviço para EM ANDAMENTO',
+    type: ServicoResponseDto,
+  })
+  @Put('/andamento/:id')
+  @HttpCode(200)
+  async toEmAndamento(@Param('id') id: string): Promise<Servico> {
+    return this.servicoService.toEmAndamento(id);
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'Atualiza o status do serviço para CONCLUIDO',
+    type: ServicoResponseDto,
+  })
+  @Put('/concluido/:id')
+  @HttpCode(200)
+  async toConcluido(@Param('id') id: string): Promise<Servico> {
+    return this.servicoService.toConcluido(id);
   }
 }

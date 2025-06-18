@@ -17,6 +17,10 @@ import { ServicoService } from '../servico/servico.service';
 import { GetNegociacaoQueryDto } from './dto/getNegociacaoQuery.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { NegociacaoDto } from './dto/negociacao.dto';
+import type { Historico } from '../historico/historico.entity';
+import { HistoricoService } from '../historico/historico.service';
+import type { CreateHistoricoRequestDto } from '../historico/dto/createHistoricoRequest.dto';
+import { ServicoStatus } from '../servico/servico.entity';
 
 @Injectable()
 export class NegociacaoService {
@@ -25,6 +29,7 @@ export class NegociacaoService {
     private negociacaoRepository: Repository<Negociacao>,
     private readonly pessoaService: PessoaService,
     private readonly servicoService: ServicoService,
+    private readonly historicoService: HistoricoService,
   ) {}
 
   private async paginate(
@@ -79,6 +84,15 @@ export class NegociacaoService {
     });
   }
 
+  async findById(id: string): Promise<Negociacao> {
+    const negociacao = await this.negociacaoRepository.findOne({
+      where: { id },
+      relations: ['pessoa', 'servico', 'pagamento'],
+    });
+    if (!negociacao) throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
+    return negociacao;
+  }
+
   async verifyStatus(
     pessoaId: string,
     negociacaoId: string,
@@ -123,9 +137,19 @@ export class NegociacaoService {
     if (!servico) {
       throw new NotFoundException('Serviço não encontrado');
     }
+    
+    const historico: CreateHistoricoRequestDto = {
+      data: new Date(),
+      id_servico: servico.id,
+      id_pessoa: pessoa.username
+    }
+
+    this.historicoService.create(historico)
 
     const negociacao: Negociacao = this.negociacaoRepository.create({
       ...request,
+      houve_negociacao: false,
+      aceito: false,
       pessoa,
       servico,
     });
@@ -155,7 +179,34 @@ export class NegociacaoService {
     }
   }
 
-  async acceptNegotiation(id: string, userId: string): Promise<Negociacao> {
+  async aceitarNegociacao(id: string, userId: string): Promise<Negociacao> {
+    const negociacao = await this.negociacaoRepository.findOne({
+      where: { id },
+      relations: ['servico', 'pessoa'],
+    });
+
+    if (!negociacao) {
+      throw new NotFoundException('Negociação não encontrada');
+    }
+
+    if (!negociacao.servico || !negociacao.servico.id) {
+      throw new BadRequestException('Serviço inválido ou sem criador');
+    }
+
+    try {
+      if(negociacao.novo_valor > 0) {
+        negociacao.houve_negociacao = true;
+      }
+
+      negociacao.aceito = true;
+      return await this.negociacaoRepository.save(negociacao);
+    } catch (error) {
+      console.error('Erro ao aceitar a negociação:', error);
+      throw new InternalServerErrorException('Erro ao aceitar a negociação');
+    }
+  }
+
+  async negarNegociacao(id: string, userId: string): Promise<Negociacao> {
     const negociacao = await this.negociacaoRepository.findOne({
       where: { id },
       relations: ['servico'],
@@ -169,15 +220,10 @@ export class NegociacaoService {
       throw new BadRequestException('Serviço inválido ou sem criador');
     }
 
-    if (negociacao.servico.id !== userId) {
-      throw new UnauthorizedException(
-        'Você não tem permissão para aceitar esta negociação',
-      );
-    }
-
     try {
-      negociacao.houve_negociacao = true;
-      negociacao.aceito = true;
+      negociacao.aceito = false;
+      negociacao.servico.status = ServicoStatus.NEGADO
+      this.servicoService.save(negociacao.servico);
       return await this.negociacaoRepository.save(negociacao);
     } catch (error) {
       console.error('Erro ao aceitar a negociação:', error);
