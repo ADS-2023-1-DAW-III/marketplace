@@ -1,4 +1,3 @@
-// pages/Home.tsx
 import Header from "../../components/ui/Header";
 import ServiceCard from "../../components/ServiceCard";
 import Hero from "../../components/ui/Hero";

@@ -1,5 +1,4 @@
 import { Command, CommandInput, CommandEmpty, CommandGroup, CommandItem } from "cmdk";
-// Altere o import para:
 import { Popover, PopoverTrigger, PopoverContent } from "../../app/components/ui/popover"
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
