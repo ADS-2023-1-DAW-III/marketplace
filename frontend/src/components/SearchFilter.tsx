@@ -1,4 +1,3 @@
-// components/SearchFilter.tsx
 import { useState } from 'react';
 import { Search } from 'lucide-react';
 
