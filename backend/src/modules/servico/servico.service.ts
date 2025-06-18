@@ -29,9 +29,21 @@ export class ServicoService {
     const categorias = await this.categoriaService.findAllByNome(
       createDto.categorias,
     );
+
+    const pessoa = await this.pessoaService.findInternalPessoaByLogin(
+      createDto.id_prestador,
+    );
+
+    if (!pessoa) {
+      throw new NotFoundException(
+        `Pessoa não encontrado com o id ${createDto.id_prestador}`,
+      );
+    }
+
     const newServico = this.servicoRepository.create({
       ...createDto,
       categorias,
+      pessoa,
     });
 
     if (file) {
