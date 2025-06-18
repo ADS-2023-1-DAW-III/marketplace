@@ -6,8 +6,6 @@ import { ServicoResponseDto } from './dto/createServicoResponse.dto';
 import { ServicoDetailedResponseDto } from './dto/servicoDetailedResponse.dto';
 import { CategoriaService } from '../categoria/categoria.service';
 import { PessoaService } from '../pessoa/pessoa.service';
-import type { NegociacaoService } from '../negociacao/negociacao.service';
-import type { CreateNegociacaoDto } from '../negociacao/dto/createNegociacaoRequest.dto';
 
 @Injectable()
 export class ServicoService {
@@ -31,9 +29,12 @@ export class ServicoService {
       pessoa,
       categorias,
     });
+
     const salvo = await this.servicoRepository.save(novo);
 
-    const response = new ServicoResponseDto(salvo);
+    const response = new ServicoDetailedResponseDto();
+    response.message = 'Serviço criado com sucesso';
+    response.servicos = [new ServicoResponseDto(salvo)];
     return response;
   }
 
@@ -114,6 +115,11 @@ export class ServicoService {
         : 'Nenhum serviço encontrado para os filtros informados.';
     response.servicos = servicos.map((s) => new ServicoResponseDto(s));
     return response;
+  }
+
+  async save(service: Servico): Promise<boolean> {
+    this.servicoRepository.save(service)
+    return true;
   }
 
   async findServicesContractedByUser(

@@ -8,6 +8,7 @@ import {
   Request,
   HttpCode,
   Query,
+  Put,
 } from '@nestjs/common';
 import { ServicoService } from '../../modules/servico/servico.service';
 import { CreateServicoRequestDto } from '../../modules/servico/dto/createServicoRequest.dto';
@@ -33,7 +34,7 @@ export class ServicoController {
   async create(
     @Body() dto: CreateServicoRequestDto,
     @Request() req,
-  ): Promise<ServicoResponseDto> {
+  ): Promise<ServicoDetailedResponseDto> {
     dto.id_prestador = req.user.username;
     return this.servicoService.create(dto);
   }
