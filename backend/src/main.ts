@@ -37,9 +37,8 @@ async function bootstrap() {
       transformOptions: {
         enableImplicitConversion: true,
       },
-
-    })
-  )
+    }),
+  );
 
   app.useGlobalPipes(new ValidationPipe());
 

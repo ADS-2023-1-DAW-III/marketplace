@@ -89,7 +89,8 @@ export class NegociacaoService {
       where: { id },
       relations: ['pessoa', 'servico', 'pagamento'],
     });
-    if (!negociacao) throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
+    if (!negociacao)
+      throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
     return negociacao;
   }
 
@@ -137,14 +138,14 @@ export class NegociacaoService {
     if (!servico) {
       throw new NotFoundException('Serviço não encontrado');
     }
-    
+
     const historico: CreateHistoricoRequestDto = {
       data: new Date(),
       id_servico: servico.id,
-      id_pessoa: pessoa.username
-    }
+      id_pessoa: pessoa.username,
+    };
 
-    this.historicoService.create(historico)
+    this.historicoService.create(historico);
 
     const negociacao: Negociacao = this.negociacaoRepository.create({
       ...request,
@@ -194,7 +195,7 @@ export class NegociacaoService {
     }
 
     try {
-      if(negociacao.novo_valor > 0) {
+      if (negociacao.novo_valor > 0) {
         negociacao.houve_negociacao = true;
       }
 
@@ -222,7 +223,7 @@ export class NegociacaoService {
 
     try {
       negociacao.aceito = false;
-      negociacao.servico.status = ServicoStatus.NEGADO
+      negociacao.servico.status = ServicoStatus.NEGADO;
       this.servicoService.save(negociacao.servico);
       return await this.negociacaoRepository.save(negociacao);
     } catch (error) {

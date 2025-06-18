@@ -6,7 +6,7 @@ export class CreateNegociacaoResponseDto {
     type: 'string',
     description: 'ID da negociação',
   })
-  id: string
+  id: string;
 
   @ApiProperty({
     type: 'string',

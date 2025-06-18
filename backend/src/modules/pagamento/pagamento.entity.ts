@@ -1,7 +1,6 @@
 import {
   Entity,
   Column,
-  PrimaryGeneratedColumn,
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
@@ -24,13 +23,13 @@ export enum PaymentStatus {
 export class Pagamento {
   @PrimaryColumn({ type: 'uuid' })
   @Generated('uuid')
-  id: string
+  id: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   id_abacate: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  valor: number
+  valor: number;
 
   @OneToOne(() => Negociacao, (negociacao) => negociacao.pagamento)
   @JoinColumn({ name: 'id_negociacao' })
