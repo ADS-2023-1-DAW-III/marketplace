@@ -1,24 +1,38 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator';
 
 export class CreatePagamentoDto {
   @ApiProperty({
     type: 'string',
-    description: 'Id do pagamento',
+    description: 'ID da pessoa contratante.',
+    example: 'abc123',
   })
-  id_abacte: string;
-  @ApiProperty({
-    type: Date,
-    description: 'Data que ocorreu o pagamento',
-  })
-  data: Date;
-  @ApiProperty({
-    type: 'boolean',
-    description: 'Status do pagamento',
-  })
-  status: boolean;
+  @IsString()
+  @IsNotEmpty()
+  id_pessoa: string;
+
   @ApiProperty({
     type: 'number',
     description: 'Valor do pagamento',
   })
+  @IsNumber()
   valor: number;
+
+  @ApiProperty({
+    type: 'string',
+    description: 'ID do serviço contratado',
+    example: 'servico123',
+  })
+  @IsString()
+  @IsNotEmpty()
+  id_servico: string;
+
+  @ApiProperty({
+    type: 'string',
+    description: 'ID da negociação associada (se houver)',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  negociacao_id?: string;
 }

@@ -1,27 +1,30 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsPhoneNumber,
+  IsString,
+  Length,
+} from 'class-validator';
 import { IsCpfFormat } from '../decorators/is-cpf-format.decorator';
 
 export class CreatePessoaRequestDTO {
   @ApiProperty({
     type: 'string',
-    description: 'Nome de usuário',
+    description: 'Nome de usuário (único para login)',
   })
   @IsNotEmpty({ message: 'O nome de usuário não pode estar vazio.' })
   @IsString()
   username: string;
+
   @ApiProperty({
     type: 'string',
-    description: 'ID cliente Abacatepay',
-  })
-  abacate_id: 'null'; // ALTERAR AO CRIAR FLUXO DA CRiAÇÃO DO USER NO ABACATE
-  @ApiProperty({
-    type: 'string',
-    description: 'Nome da pessoa',
+    description: 'Nome completo da pessoa',
   })
   @IsNotEmpty({ message: 'O nome completo é obrigatório.' })
   @IsString()
   nome: string;
+
   @ApiProperty({
     type: 'string',
     description: 'Email da pessoa',
@@ -35,12 +38,15 @@ export class CreatePessoaRequestDTO {
   )
   @IsString()
   email: string;
+
   @ApiProperty({
     type: 'string',
     description: 'Senha de usuário',
   })
   @IsNotEmpty({ message: 'A senha não pode estar vazia.' })
   @IsString()
+  @IsNotEmpty()
+  @Length(6, 20, { message: 'A senha deve ter entre 6 e 20 caracteres.' })
   senha: string;
   @ApiProperty({
     type: 'string',
@@ -52,7 +58,18 @@ export class CreatePessoaRequestDTO {
   })
   @IsString()
   contato: string;
-  @IsCpfFormat()
+
+  @ApiProperty({
+    type: 'string',
+    description: 'CPF da pessoa (apenas números ou formatado)',
+  })
   @IsString()
+  @IsNotEmpty()
+  @IsCpfFormat({ message: 'CPF inválido.' })
   cpf: string;
+  @ApiProperty({
+    type: 'string',
+    description: 'Habilidades da pessoa',
+  })
+  habilidades: string;
 }

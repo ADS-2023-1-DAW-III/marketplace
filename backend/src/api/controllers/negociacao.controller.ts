@@ -92,17 +92,15 @@ export class NegociacaoController {
     description: 'Busca uma negociação pelo id',
     type: [CreateNegociacaoResponseDto],
   })
-  @Get(':id')
+  @Get('/:id')
   async findOne(
     @Req() request: { user: { userId: string } },
     @Param('id') id: string,
   ) {
-    const negociacao = await this.negociacaoService.verifyStatus(
+    const negociacao = await this.negociacaoService.findById(
       request.user.userId,
-      id,
     );
     return {
-      message: 'Status da negociação atualizado',
       negociacao,
     };
   }
@@ -133,13 +131,27 @@ export class NegociacaoController {
     status: 200,
     description: 'Retorna a negociação aceita',
   })
-  @Put(':id/accept')
+  @Put(':id/aceitar')
   @HttpCode(HttpStatus.OK)
-  acceptNegotiation(@Param('id') id: string, @Req() req: any) {
+  aceitarNegociacao(@Param('id') id: string, @Req() req: any) {
     const userId = req.user?.username;
     if (!userId) {
       throw new UnauthorizedException('Usuário não autenticado');
     }
-    return this.negociacaoService.acceptNegotiation(id, userId);
+    return this.negociacaoService.aceitarNegociacao(id, userId);
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna a negociação negada',
+  })
+  @Put(':id/negar')
+  @HttpCode(HttpStatus.OK)
+  negarNegociacao(@Param('id') id: string, @Req() req: any) {
+    const userId = req.user?.username;
+    if (!userId) {
+      throw new UnauthorizedException('Usuário não autenticado');
+    }
+    return this.negociacaoService.negarNegociacao(id, userId);
   }
 }

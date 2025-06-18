@@ -4,25 +4,26 @@ import {
   Post,
   Body,
   Param,
-  Patch,
-  Delete,
   UseGuards,
   UseInterceptors,
   ParseFilePipeBuilder,
   UploadedFile,
+  Request,
+  HttpCode,
+  Put,
 } from '@nestjs/common';
 import { ServicoService } from '../../modules/servico/servico.service';
 import { CreateServicoRequestDto } from '../../modules/servico/dto/createServicoRequest.dto';
-import { UpdateServicoRequestDto } from '../../modules/servico/dto/updateServicoRequest.dto';
 import { ServicoResponseDto } from '../../modules/servico/dto/createServicoResponse.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Servico } from 'src/modules/servico/servico.entity';
+import { ServicoDetailedResponseDto } from 'src/modules/servico/dto/servicoDetailedResponse.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('servico')
 @UseGuards(AuthGuard('jwt'))
-@Controller('servico')
+@Controller('servicos')
 export class ServicoController {
   constructor(private readonly servicoService: ServicoService) {}
 
@@ -51,11 +52,42 @@ export class ServicoController {
 
   @ApiResponse({
     status: 200,
-    description: 'Lista todas os serviços',
+    description: 'Lista os serviços prestados pelo usuário autenticado',
+    type: ServicoDetailedResponseDto,
+  })
+  @Get('prestados')
+  @HttpCode(200)
+  async findServicesProvided(
+    @Request() req,
+  ): Promise<ServicoDetailedResponseDto> {
+    return this.servicoService.findServicesProvidedByUser(
+      String(req.user.username),
+    );
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'Lista os serviços contratados pelo usuário autenticado',
+    type: ServicoDetailedResponseDto,
+  })
+  @Get('contratados')
+  @HttpCode(200)
+  async findServicesContracted(
+    @Request() req,
+  ): Promise<ServicoDetailedResponseDto> {
+    return this.servicoService.findServicesContractedByUser(
+      String(req.user.username),
+    );
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'Lista todos os serviços',
     type: [Servico],
   })
   @Get()
-  async findAll(): Promise<ServicoResponseDto[]> {
+  @HttpCode(200)
+  async findAll(): Promise<ServicoDetailedResponseDto> {
     return this.servicoService.findAll();
   }
 
@@ -65,32 +97,30 @@ export class ServicoController {
     type: ServicoResponseDto,
   })
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<ServicoResponseDto> {
-    return this.servicoService.findOne(id);
+  @HttpCode(200)
+  async findOne(@Param('id') id: string): Promise<Servico> {
+    return this.servicoService.findById(id);
   }
 
   @ApiResponse({
     status: 200,
-    description: 'Atualiza um serviço pelo id',
-    type: [ServicoResponseDto],
+    description: 'Atualiza o status do serviço para EM ANDAMENTO',
+    type: ServicoResponseDto,
   })
-  @ApiBody({
-    type: UpdateServicoRequestDto,
-  })
-  @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() dto: UpdateServicoRequestDto,
-  ): Promise<ServicoResponseDto> {
-    return this.servicoService.update(id, dto);
+  @Put('/andamento/:id')
+  @HttpCode(200)
+  async toEmAndamento(@Param('id') id: string): Promise<Servico> {
+    return this.servicoService.toEmAndamento(id);
   }
 
   @ApiResponse({
-    status: 204,
-    description: 'Remoção do serviço com sucesso',
+    status: 200,
+    description: 'Atualiza o status do serviço para CONCLUIDO',
+    type: ServicoResponseDto,
   })
-  @Delete(':id')
-  async remove(@Param('id') id: string): Promise<void> {
-    return this.servicoService.remove(id);
+  @Put('/concluido/:id')
+  @HttpCode(200)
+  async toConcluido(@Param('id') id: string): Promise<Servico> {
+    return this.servicoService.toConcluido(id);
   }
 }

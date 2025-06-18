@@ -9,6 +9,16 @@ import {
 import { Pessoa } from '../pessoa/pessoa.entity';
 import { Historico } from '../historico/historico.entity';
 import { Categoria } from '../categoria/categoria.entity';
+import { Pagamento } from '../pagamento/pagamento.entity';
+import { Negociacao } from '../negociacao/negociacao.entity';
+import { Avaliacao } from '../avaliacao/avaliacao.entity';
+
+export enum ServicoStatus {
+  PENDENTE = 'PENDENTE',
+  EMANDAMENTO = 'EM ANDAMENTO',
+  CONCLUIDO = 'CONCLUIDO',
+  NEGADO = 'NEGADO',
+}
 
 @Entity('servico')
 export class Servico {
@@ -33,6 +43,13 @@ export class Servico {
   @Column({ type: 'int' })
   duracao: number;
 
+  @Column({
+    type: 'enum',
+    enum: ServicoStatus,
+    default: ServicoStatus.PENDENTE,
+  })
+  status: ServicoStatus;
+
   @ManyToOne(() => Pessoa, (pessoa) => pessoa.username)
   pessoa: Pessoa;
 
@@ -41,4 +58,13 @@ export class Servico {
 
   @ManyToMany(() => Categoria, (categoria) => categoria.servicos)
   categorias: Categoria[];
+
+  @OneToMany(() => Pagamento, (pagamento) => pagamento.servico) // <-- ADICIONADO: Relação com Pagamento
+  pagamentosRecebidos: Pagamento[]; // <-- ADICIONADO
+
+  @OneToMany(() => Negociacao, (negociacao) => negociacao.servico)
+  negociacoes: Negociacao[];
+
+  @OneToMany(() => Avaliacao, (avaliacao) => avaliacao.servico)
+  avaliacoes: Avaliacao[];
 }
