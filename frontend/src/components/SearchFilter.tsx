@@ -5,7 +5,7 @@ export default function SearchFilter() {
   const [searchTerm, setSearchTerm] = useState('');
 
   return (
-      <div className="container bg-[#307B8E] rounded-2xl py-8 px-16 text-white w-full max-w-4xl mx-auto mt-20 space-y-6 mb-36">
+      <div className="w-full bg-[#307B8E] rounded-2xl py-8 px-10 text-white max-w-7xl mx-auto mt-20 space-y-6 mb-36">
         <h1 className="text-center text-[36px] font-bold">Busque aqui!</h1>
 
         {/* Campo de busca com ícone */}
