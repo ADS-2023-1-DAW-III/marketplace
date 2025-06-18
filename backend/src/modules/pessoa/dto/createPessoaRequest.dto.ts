@@ -71,5 +71,7 @@ export class CreatePessoaRequestDTO {
     type: 'string',
     description: 'Habilidades da pessoa',
   })
+  @IsString()
+  @IsNotEmpty()
   habilidades: string;
 }
