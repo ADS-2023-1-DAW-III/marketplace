@@ -6,10 +6,10 @@ import {useEffect, useState} from "react";
 
 export function meta(_args: MetaArgs) {
     return [
-        { title: "Cadastro" },
+        { title: "Home" },
         {
             name: "Marketplace",
-            content: "Bem vindo a tela de cadastro do Marketplace",
+            content: "Bem vindo ao Home do Marketplace",
         },
     ];
 }
