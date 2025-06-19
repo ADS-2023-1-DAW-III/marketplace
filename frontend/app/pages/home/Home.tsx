@@ -2,6 +2,7 @@ import ServiceCard from "~/components/ui/ServiceCard";
 import Hero from "~/components/ui/Hero";
 import SearchFilter from '~/components/ui/SearchFilter';
 import type {MetaArgs} from "react-router";
+import {useEffect, useState} from "react";
 
 export function meta(_args: MetaArgs) {
     return [
@@ -13,33 +14,36 @@ export function meta(_args: MetaArgs) {
     ];
 }
 
+type Service = {
+    id: string;
+    titulo: string;
+    preco: number;
+    duracao: number;
+    id_imagem: string;
+    eh_negociavel: boolean;
+    categoria: {
+        nome: string;
+        descricao: string;
+    };
+};
+
 export default function Home() {
-    const services = [
-        {
-            title: "Suporte Técnico (Hardware e Software)",
-            description: "Manutenção de computadores e instalação de software profissional com garantia.",
-            price: 100,
-            duration: "30min",
-            isNegotiable: false,
-            rating: 5
-        },
-        {
-            title: "Motorista Particular",
-            description: "Transporte seguro para qualquer destino na cidade com veículo confortável.",
-            price: 200,
-            duration: "1h",
-            isNegotiable: true,
-            rating: 4
-        },
-        {
-            title: "Organização de Casamentos",
-            description: "Planejamento completo desde a decoração até o buffet.",
-            price: 1500,
-            duration: "Personalizado",
-            isNegotiable: true,
-            rating: 5
-        }
-    ];
+    const [services, setServices] = useState<Service[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch("http://localhost:8080/servicos")
+            .then(res => res.json())
+            .then(data => {
+                setServices(data.servicos);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error("Erro ao buscar serviços:", error);
+                setLoading(false);
+            });
+    }, []);
+
 
     return (
         <div className="min-h-screen bg-white">
@@ -52,18 +56,22 @@ export default function Home() {
                     <SearchFilter/>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {services.map((service, index) => (
-                        <ServiceCard
-                            key={index}
-                            title={service.title}
-                            description={service.description}
-                            price={service.price}
-                            duration={service.duration}
-                            isNegotiable={service.isNegotiable}
-                        />
-                    ))}
-                </div>
+                {loading ? (
+                    <p className="text-center text-lg font-poppins text-[#307B8E] font-bold">Carregando serviços...</p>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {services.map((service) => (
+                            <ServiceCard
+                                key={service.id}
+                                title={service.titulo}
+                                description={service.categoria.descricao}
+                                price={service.preco}
+                                duration={`${service.duracao}min`}
+                                isNegotiable={service.eh_negociavel}
+                            />
+                        ))}
+                    </div>
+                )}
             </main>
         </div>
     );

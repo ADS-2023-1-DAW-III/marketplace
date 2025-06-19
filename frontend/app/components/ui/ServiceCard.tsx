@@ -17,9 +17,7 @@ export default function ServiceCard({
 }: ServiceCardProps) {
   return (
     <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between h-full">
-      {/* Seção Superior */}
       <div className="px-4 pt-4 pb-2 flex flex-col items-center">
-        {/* Tags superiores */}
         <div className="flex justify-between items-center text-xs font-semibold w-full mb-2">
           <span
             className={`${
@@ -31,25 +29,21 @@ export default function ServiceCard({
           <span className="text-[#366B2B]">{duration}</span>
         </div>
 
-        {/* Título com altura fixa */}
         <h3 className="text-center text-[#103A57] font-bold text-base px-2 leading-tight h-[48px] flex items-center justify-center mb-3">
           {title}
         </h3>
 
-        {/* Imagem com altura fixa */}
         <img
           src="app/assets/CardImg.png"
           alt={title}
           className="rounded-md w-full h-[160px] object-cover mb-4"
         />
 
-        {/* Descrição */}
         <p className="text-[#103A57] text-center font-inter text-sm mx-4 h-[72px] overflow-hidden">
           {description}
         </p>
       </div>
 
-      {/* Seção Inferior */}
       <div className="flex items-center justify-between px-4 py-4 mt-auto">
         <span className="text-[#103A57] text-lg font-bold font-poppins">
           R${" "}
