@@ -1,5 +1,5 @@
 import { Command, CommandInput, CommandEmpty, CommandGroup, CommandItem } from "cmdk";
-import { Popover, PopoverTrigger, PopoverContent } from "../../app/components/ui/popover"
+import { Popover, PopoverTrigger, PopoverContent } from "~/components/ui/popover"
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
