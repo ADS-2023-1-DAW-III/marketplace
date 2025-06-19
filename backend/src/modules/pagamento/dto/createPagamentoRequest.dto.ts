@@ -1,15 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsDate,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  IsUUID,
-  IsEnum,
-  IsOptional,
-} from 'class-validator';
-import { Type } from 'class-transformer';
-import { PaymentStatus } from '../../pagamento/pagamento.entity';
+import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator';
 
 export class CreatePagamentoDto {
   @ApiProperty({

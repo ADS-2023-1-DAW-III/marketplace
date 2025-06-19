@@ -1,8 +1,14 @@
-import { Injectable, NotFoundException, Inject, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  Inject,
+  BadRequestException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Servico, ServicoStatus } from './servico.entity';
 import { CreateServicoRequestDto } from './dto/createServicoRequest.dto';
 import { ServicoResponseDto } from './dto/createServicoResponse.dto';
+import { saveServiceImages } from 'src/lib/uploadsFiles/uploadFileServico';
 import { ServicoDetailedResponseDto } from './dto/servicoDetailedResponse.dto';
 import { CategoriaService } from '../categoria/categoria.service';
 import { PessoaService } from '../pessoa/pessoa.service';
@@ -18,23 +24,41 @@ export class ServicoService {
 
   async create(
     createDto: CreateServicoRequestDto,
+    files?: Array<Express.Multer.File>,
   ): Promise<ServicoDetailedResponseDto> {
-    const categorias = await Promise.all(
-      createDto.categorias.map((nome) => this.categoriaService.findOne(nome)),
+    const categorias = await this.categoriaService.findAllByNome(
+      createDto.categorias,
     );
-    const pessoa = await this.pessoaService.findById(createDto.id_prestador);
 
-    const novo = this.servicoRepository.create({
+    const pessoa = await this.pessoaService.findInternalPessoaByLogin(
+      createDto.id_prestador,
+    );
+
+    if (!pessoa) {
+      throw new NotFoundException(
+        `Pessoa não encontrado com o id ${createDto.id_prestador}`,
+      );
+    }
+
+    const newServico = this.servicoRepository.create({
       ...createDto,
-      pessoa,
       categorias,
+      pessoa,
     });
+    const uploadServiceFolderName = crypto.randomUUID();
 
-    const salvo = await this.servicoRepository.save(novo);
+    if (files) {
+      newServico.caminhoImagem = saveServiceImages(
+        uploadServiceFolderName,
+        files,
+      ).replace('.', '');
+    }
+
+    const servicoSalvo = await this.servicoRepository.save(newServico);
 
     const response = new ServicoDetailedResponseDto();
     response.message = 'Serviço criado com sucesso';
-    response.servicos = [new ServicoResponseDto(salvo)];
+    response.servicos = [new ServicoResponseDto(servicoSalvo)];
     return response;
   }
 
@@ -92,9 +116,9 @@ export class ServicoService {
 
     if (categoria) {
       servicos = servicos.filter((servico) => {
-        const nomes_categoria = servico.categorias.map(c => c.nome);
+        const nomes_categoria = servico.categorias.map((c) => c.nome);
         return nomes_categoria.includes(categoria);
-      })
+      });
     }
 
     if (avaliacaoMin !== undefined) {
@@ -117,11 +141,6 @@ export class ServicoService {
     return response;
   }
 
-  async save(service: Servico): Promise<boolean> {
-    this.servicoRepository.save(service)
-    return true;
-  }
-
   async findServicesContractedByUser(
     username: string,
     query?: string,
@@ -138,7 +157,7 @@ export class ServicoService {
       .leftJoinAndSelect('servico.negociacoes', 'negociacoes')
       .leftJoinAndSelect('negociacoes.pessoa', 'cliente')
       .leftJoinAndSelect('negociacoes.pagamento', 'pagamento')
-      .leftJoinAndSelect('servico.avaliacoes', 'avaliacoes') 
+      .leftJoinAndSelect('servico.avaliacoes', 'avaliacoes')
       .where('cliente.username = :uname', { uname: cliente.username });
 
     if (query) {
@@ -257,7 +276,6 @@ export class ServicoService {
       servicos.length > 0
         ? 'Serviços retornados com sucesso'
         : 'Nenhum serviço encontrado para os filtros informados.';
-    response.servicos = servicos.map((s) => new ServicoResponseDto(s));
     return response;
   }
 
@@ -272,11 +290,9 @@ export class ServicoService {
         'negociacoes.pagamento',
       ],
     });
-
     if (!servico) {
       throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
     }
-
     const response = new ServicoDetailedResponseDto();
     response.message = 'Serviço encontrado';
     response.servicos = [new ServicoResponseDto(servico)];
@@ -298,23 +314,33 @@ export class ServicoService {
     if (!servico) {
       throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
     }
-
     return servico;
   }
 
   async toEmAndamento(id: string): Promise<Servico> {
     const servico = await this.servicoRepository.findOne({
       where: { id },
-      relations: ['pessoa', 'categorias', 'negociacoes', 'negociacoes.pessoa', 'negociacoes.pagamento'],
+      relations: [
+        'pessoa',
+        'categorias',
+        'negociacoes',
+        'negociacoes.pessoa',
+        'negociacoes.pagamento',
+      ],
     });
-    if (!servico) throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
+    if (!servico)
+      throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
 
-    if(servico.status !== ServicoStatus.PENDENTE) {
-      throw new BadRequestException('O serviço só pode ser movido para EM ANDAMENTO a partir do estado pendente');
+    if (servico.status !== ServicoStatus.PENDENTE) {
+      throw new BadRequestException(
+        'O serviço só pode ser movido para EM ANDAMENTO a partir do estado pendente',
+      );
     }
 
-    if(servico.pessoa.username !== id) {
-      throw new BadRequestException('Só o criador do serviço pode alterar seu status para EM PROGRESSO');
+    if (servico.pessoa.username !== id) {
+      throw new BadRequestException(
+        'Só o criador do serviço pode alterar seu status para EM PROGRESSO',
+      );
     }
 
     servico.status = ServicoStatus.EMANDAMENTO;
@@ -326,14 +352,23 @@ export class ServicoService {
   async toConcluido(id: string): Promise<Servico> {
     const servico = await this.servicoRepository.findOne({
       where: { id },
-      relations: ['pessoa', 'categorias', 'negociacoes', 'negociacoes.pessoa', 'negociacoes.pagamento'],
+      relations: [
+        'pessoa',
+        'categorias',
+        'negociacoes',
+        'negociacoes.pessoa',
+        'negociacoes.pagamento',
+      ],
     });
-    if (!servico) throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
+    if (!servico)
+      throw new NotFoundException(`Serviço com ID ${id} não encontrado`);
 
-    if(servico.status !== ServicoStatus.EMANDAMENTO) {
-      throw new BadRequestException('O serviço só pode ser movido para CONCLUIDO a partir do estado EM ANDAMENTO');
+    if (servico.status !== ServicoStatus.EMANDAMENTO) {
+      throw new BadRequestException(
+        'O serviço só pode ser movido para CONCLUIDO a partir do estado EM ANDAMENTO',
+      );
     }
-    
+
     servico.status = ServicoStatus.CONCLUIDO;
     await this.servicoRepository.save(servico);
 

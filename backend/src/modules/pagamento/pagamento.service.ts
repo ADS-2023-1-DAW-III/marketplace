@@ -9,7 +9,10 @@ import { Repository } from 'typeorm';
 import { Pagamento, PaymentStatus } from './pagamento.entity';
 import { UpdatePagamentoDto } from './dto/updatePagamentoRequest.dto';
 import { CreatePagamentoDto } from './dto/createPagamentoRequest.dto';
-import { CreateBillingData, CreateBillingResponse } from 'abacatepay-nodejs-sdk/dist/types';
+import {
+  CreateBillingData,
+  CreateBillingResponse,
+} from 'abacatepay-nodejs-sdk/dist/types';
 import { PessoaService } from '../pessoa/pessoa.service';
 import AbacatePay from 'abacatepay-nodejs-sdk';
 import { PagamentoResponseDto } from './dto/pagamentoResponse.dto';
@@ -23,9 +26,8 @@ export class PagamentoService {
     private pagamentoRepository: Repository<Pagamento>,
     private readonly pessoaService: PessoaService,
     private readonly servicoService: ServicoService,
-    private readonly abacateService: AbacateService
-  ) {
-  }
+    private readonly abacateService: AbacateService,
+  ) {}
 
   /**
    * Realiza um novo pagamento, integrando com o AbacatePay e salvando no banco de dados.
@@ -69,15 +71,26 @@ export class PagamentoService {
         customerId: pessoa.abacate_id,
       };
 
-      console.log('Dados enviados para AbacatePay:', JSON.stringify(billingData, null, 2));
-      console.log('pessoa id ' + pessoa.abacate_id)
+      console.log(
+        'Dados enviados para AbacatePay:',
+        JSON.stringify(billingData, null, 2),
+      );
+      console.log('pessoa id ' + pessoa.abacate_id);
 
-      abacatePayBillingResponse = await this.abacateService.getClient().billing.create(billingData);
+      abacatePayBillingResponse = await this.abacateService
+        .getClient()
+        .billing.create(billingData);
 
       // Log da resposta completa para debugging
-      console.log('Resposta do AbacatePay:', JSON.stringify(abacatePayBillingResponse, null, 2));
+      console.log(
+        'Resposta do AbacatePay:',
+        JSON.stringify(abacatePayBillingResponse, null, 2),
+      );
 
-      if (!abacatePayBillingResponse.data?.id || !abacatePayBillingResponse?.data.url) {
+      if (
+        !abacatePayBillingResponse.data?.id ||
+        !abacatePayBillingResponse?.data.url
+      ) {
         console.error(
           'Resposta inesperada do AbacatePay na criação da cobrança:',
           abacatePayBillingResponse,
@@ -175,7 +188,9 @@ export class PagamentoService {
    */
   async createBilling(data: CreateBillingData): Promise<CreateBillingResponse> {
     try {
-      const response = await this.abacateService.getClient().billing.create(data);
+      const response = await this.abacateService
+        .getClient()
+        .billing.create(data);
       if (!response) {
         throw new InternalServerErrorException(
           'Resposta inválida do AbacatePay ao criar cobrança.',

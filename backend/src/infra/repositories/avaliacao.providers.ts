@@ -1,7 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Avaliacao } from '../../modules/avaliacao/avaliacao.entity';
 
-
 export const AvaliacaoProviders = [
   {
     provide: 'AVALIACAO_REPOSITORY',

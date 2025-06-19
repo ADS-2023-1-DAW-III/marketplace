@@ -15,5 +15,4 @@ import { NotFoundFilter } from './not.found.exception.filter';
     },
   ],
 })
-export class commonModule {
-}
+export class commonModule {}

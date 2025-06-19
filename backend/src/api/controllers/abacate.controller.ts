@@ -11,7 +11,7 @@ import { AuthGuard } from '@nestjs/passport';
  */
 @Controller('abacate')
 export class AbacateController {
-  constructor(private readonly abacateService: AbacateService) { }
+  constructor(private readonly abacateService: AbacateService) {}
 
   @Post('pessoa')
   @HttpCode(200)

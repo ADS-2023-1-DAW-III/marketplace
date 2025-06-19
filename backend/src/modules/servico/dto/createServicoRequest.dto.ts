@@ -45,15 +45,6 @@ export class CreateServicoRequestDto {
   duracao: number;
 
   @ApiProperty({
-    type: 'string',
-    description: 'Caminho da imagem do serviço',
-    nullable: false,
-  })
-  @IsString()
-  @IsNotEmpty()
-  caminhoImagem: string;
-
-  @ApiProperty({
     type: 'boolean',
     description: 'Indica se o serviço é negociável',
   })
