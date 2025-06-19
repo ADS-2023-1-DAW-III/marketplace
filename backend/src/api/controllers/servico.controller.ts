@@ -9,6 +9,7 @@ import {
   ParseFilePipeBuilder,
   Request,
   HttpCode,
+  Query,
   Put,
   UploadedFiles,
   HttpStatus,
@@ -48,7 +49,9 @@ export class ServicoController {
         }),
     )
     files?: Array<Express.Multer.File>,
-  ): Promise<ServicoResponseDto> {
+    @Request() req,
+  ): Promise<ServicoDetailedResponseDto> {
+    dto.id_prestador = req.user.username;
     return this.servicoService.create(dto, files);
   }
 
@@ -61,9 +64,19 @@ export class ServicoController {
   @HttpCode(200)
   async findServicesProvided(
     @Request() req,
+    @Query('query') query?: string,
+    @Query('categoria') categoria?: string,
+    @Query('valorMin') valorMin?: number,
+    @Query('valorMax') valorMax?: number,
+    @Query('avaliacao') avaliacao?: number,
   ): Promise<ServicoDetailedResponseDto> {
     return this.servicoService.findServicesProvidedByUser(
       String(req.user.username),
+      query,
+      categoria,
+      valorMin,
+      valorMax,
+      avaliacao,
     );
   }
 
@@ -76,9 +89,19 @@ export class ServicoController {
   @HttpCode(200)
   async findServicesContracted(
     @Request() req,
+    @Query('query') query?: string,
+    @Query('categoria') categoria?: string,
+    @Query('valorMin') valorMin?: number,
+    @Query('valorMax') valorMax?: number,
+    @Query('avaliacao') avaliacao?: number,
   ): Promise<ServicoDetailedResponseDto> {
     return this.servicoService.findServicesContractedByUser(
       String(req.user.username),
+      query,
+      categoria,
+      valorMin,
+      valorMax,
+      avaliacao,
     );
   }
 
@@ -89,8 +112,20 @@ export class ServicoController {
   })
   @Get()
   @HttpCode(200)
-  async findAll(): Promise<ServicoDetailedResponseDto> {
-    return this.servicoService.findAll();
+  async findAll(
+    @Query('query') query?: string,
+    @Query('categoria') categoria?: string,
+    @Query('valorMin') valorMin?: number,
+    @Query('valorMax') valorMax?: number,
+    @Query('avaliacao') avaliacao?: number,
+  ): Promise<ServicoDetailedResponseDto> {
+    return this.servicoService.findAll(
+      query,
+      categoria,
+      valorMin,
+      valorMax,
+      avaliacao,
+    );
   }
 
   @ApiResponse({

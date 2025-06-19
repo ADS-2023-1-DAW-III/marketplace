@@ -9,7 +9,7 @@ export class CreateCategoriaDto {
   @IsString()
   @IsNotEmpty()
   nome: string;
-
+  
   @ApiProperty({
     type: 'string',
     description: 'Descrição da Categoria',
