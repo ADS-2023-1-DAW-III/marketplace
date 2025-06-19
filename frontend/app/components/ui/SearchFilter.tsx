@@ -43,6 +43,8 @@ export default function SearchFilter() {
             <option className="text-black">5 estrelas</option>
             <option className="text-black">4 estrelas</option>
             <option className="text-black">3 estrelas</option>
+            <option className="text-black">2 estrelas</option>
+            <option className="text-black">1 estrelas</option>
           </select>
         </div>
       </div>
