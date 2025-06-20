@@ -1,3 +1,13 @@
+import Header from "~/components/ui/Header";
+import {Outlet} from "react-router";
+
 export default function LayoutHome() {
-  return <h1>HOME</h1>;
+  return (
+    <main>
+      <div className="bg-[#307B8E]">
+          <Header />
+          <Outlet />
+      </div>
+    </main>
+);
 }
