@@ -3,6 +3,8 @@ import Hero from "~/components/ui/Hero";
 import SearchFilter from '~/components/ui/SearchFilter';
 import type {MetaArgs} from "react-router";
 import {useEffect, useState} from "react";
+import {useApi} from "~/hooks/services/api";
+import {ErrorAlert} from "~/components/ui/alertMessages";
 
 export function meta(_args: MetaArgs) {
     return [
@@ -30,20 +32,23 @@ type Service = {
 export default function Home() {
     const [services, setServices] = useState<Service[]>([]);
     const [loading, setLoading] = useState(true);
+    const api = useApi();
 
     useEffect(() => {
-        fetch("http://localhost:8080/servicos")
-            .then(res => res.json())
-            .then(data => {
-                setServices(data.servicos);
-                setLoading(false);
-            })
-            .catch(error => {
+        async function fetchServices() {
+            try {
+                const response = await api.get("/servicos");
+                setServices(response.data);
+            } catch (error) {
                 console.error("Erro ao buscar serviços:", error);
+                ErrorAlert("Erro ao buscar serviços. Tente novamente.");
+            } finally {
                 setLoading(false);
-            });
-    }, []);
+            }
+        }
 
+        fetchServices();
+    }, []);
 
     return (
         <div className="min-h-screen bg-white">
