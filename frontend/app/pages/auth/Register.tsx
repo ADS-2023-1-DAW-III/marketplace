@@ -10,7 +10,7 @@ import {
 import camera from "~/assets/camera.png";
 import { useForm } from "react-hook-form";
 import { Input } from "~/components/ui/input";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "~/hooks/context/AuthContext";
 import { useApi } from "~/hooks/services/api";
 import { ErrorAlert, SuccessAlert } from "~/components/ui/alertMessages";
@@ -40,22 +40,32 @@ const Register = () => {
   const { setToken } = useContext(AuthContext);
   const api = useApi();
 
+  const [foto, setFoto] = useState<File | null>(null);
+
   const handleClick = () => {
-    console.log("Imagem clicada!");
+    const input = document.getElementById("fotoInput");
+    input?.click();
   };
 
   const handleSubmit = (data: RegisterFormData) => {
-    const payload = {
-      username: data.username,
-      nome: data.username,
-      email: data.email,
-      contato: data.contato,
-      senha: data.senha,
-      habilidade: data.habilidade,
-    };
+    const formData = new FormData();
+    formData.append("username", data.username);
+    formData.append("nome", data.username);
+    formData.append("email", data.email);
+    formData.append("contato", data.contato);
+    formData.append("senha", data.senha);
+    formData.append("habilidade", data.habilidade);
+
+    if (foto) {
+      formData.append("foto", foto);
+    }
 
     api
-      .post("/auth/signup", payload)
+      .post("/auth/signup", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((response) => {
         SuccessAlert("Cadastro realizado com sucesso!");
         setToken(response.data.token);
@@ -76,7 +86,7 @@ const Register = () => {
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
-          {/* Nome */}
+          {/* Nome + Imagem */}
           <FormField
             control={form.control}
             name="username"
@@ -103,16 +113,33 @@ const Register = () => {
                         onClick={handleClick}
                       />
                     </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          setFoto(e.target.files[0]);
+                        }
+                      }}
+                      id="fotoInput"
+                      style={{ display: "none" }}
+                    />
                     <span className="text-xs mt-1">
                       <a href="#">Adicionar foto</a>
                     </span>
+                    {foto && (
+                      <img
+                        src={URL.createObjectURL(foto)}
+                        alt="Preview"
+                        className="w-[40px] h-[40px] rounded-full mt-1"
+                      />
+                    )}
                   </div>
                 </div>
               </FormItem>
             )}
           />
 
-          {/* Email */}
           <FormField
             control={form.control}
             name="email"
@@ -134,11 +161,16 @@ const Register = () => {
             )}
           />
 
-          {/* Contato */}
           <FormField
             control={form.control}
             name="contato"
-            rules={{ required: "Campo obrigatório" }}
+            rules={{
+                required: "Campo obrigatório",
+                pattern: {
+                  value: /^\d{2}\d{9}$/,
+                  message: "Digite um número válido: DDD + 9 dígitos",
+                },
+            }}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Contato</FormLabel>
@@ -154,7 +186,6 @@ const Register = () => {
             )}
           />
 
-          {/* Senha */}
           <FormField
             control={form.control}
             name="senha"
@@ -174,7 +205,6 @@ const Register = () => {
             )}
           />
 
-          {/* Confirmar senha */}
           <FormField
             control={form.control}
             name="confirmarSenha"
@@ -197,11 +227,9 @@ const Register = () => {
             )}
           />
 
-          {/* Habilidades - agora é textarea */}
           <FormField
             control={form.control}
             name="habilidade"
-            rules={{ required: "Digite uma habilidade" }}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Habilidades</FormLabel>
