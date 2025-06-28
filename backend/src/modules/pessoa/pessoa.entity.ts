@@ -9,7 +9,7 @@ export class Pessoa {
   username: string;
 
   @Column({ type: 'varchar', length: 36, nullable: true })
-  abacate_id: string; // Sem valor padrão, será preenchido após a API do AbacatePay
+  abacate_id: string;
 
   @Column({ type: 'varchar', length: 100 })
   nome: string;
@@ -17,7 +17,7 @@ export class Pessoa {
   @Column({ type: 'varchar', length: 100, unique: true })
   email: string;
 
-  @Column({ type: 'varchar', length: 100, unique: true }) // CPF parece ser um campo único e obrigatório
+  @Column({ type: 'varchar', length: 100, unique: true })
   cpf: string;
 
   @Column({ type: 'varchar', length: 255 })
@@ -26,14 +26,17 @@ export class Pessoa {
   @Column({ type: 'varchar', length: 100, nullable: true })
   contato: string;
 
+  @Column({ nullable: true })
+  profileImageName: string;
+
   @Column({ type: 'varchar', length: 100, nullable: true })
   habilidades: string;
 
   @OneToMany(() => Historico, (historico) => historico.pessoa)
   historico: Historico[];
 
-  @OneToMany(() => Pagamento, (pagamento) => pagamento.pessoa) // <-- ADICIONADO: Relação com Pagamento
-  pagamentosRealizados: Pagamento[]; // <-- ADICIONADO
+  @OneToMany(() => Pagamento, (pagamento) => pagamento.pessoa)
+  pagamentosRealizados: Pagamento[];
 
   @OneToMany(() => Avaliacao, (avaliacao) => avaliacao.pessoa)
   avaliacoes: Avaliacao[];

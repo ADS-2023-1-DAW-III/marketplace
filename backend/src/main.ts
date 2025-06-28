@@ -1,9 +1,13 @@
 import { BaseExceptionFilter, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
-import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ArgumentsHost, Catch, ConflictException } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ConflictException,
+  ValidationPipe,
+} from '@nestjs/common';
 import { QueryFailedError } from 'typeorm';
 
 dotenv.config();
@@ -32,9 +36,10 @@ async function bootstrap() {
       transformOptions: {
         enableImplicitConversion: true,
       },
+    }),
+  );
 
-    })
-  )
+  app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
     .setTitle('Marketplace')
@@ -45,7 +50,7 @@ async function bootstrap() {
     .addTag('negociacao', 'API referente a CRUD de negociação')
     .addTag('pagamento', 'API referente a CRUD de pagamento')
     .addTag('servico', 'API referente a CRUD de serviço')
-    .addTag('historico', 'API referente a CRUD de serviço')
+    .addTag('historico', 'API referente a CRUD de historico')
     .addTag('pessoa', 'API referente a CRUD de pessoa')
     .addGlobalResponse({
       status: 401,

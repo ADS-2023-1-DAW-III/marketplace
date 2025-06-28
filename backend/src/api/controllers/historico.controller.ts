@@ -25,7 +25,7 @@ export class HistoricoController {
   @ApiResponse({
     status: 201,
     description: 'Histórico criado com sucesso',
-    type: HistoricoResponseDto ,
+    type: HistoricoResponseDto,
   })
   @Post()
   async create(
@@ -33,7 +33,7 @@ export class HistoricoController {
   ): Promise<HistoricoResponseDto> {
     return this.historicoService.create(dto);
   }
-  
+
   @ApiResponse({
     status: 200,
     description: 'Lista todos os históricos',

@@ -5,10 +5,14 @@ import {
   Body,
   Param,
   UseGuards,
+  UseInterceptors,
+  ParseFilePipeBuilder,
   Request,
   HttpCode,
   Query,
   Put,
+  UploadedFiles,
+  HttpStatus,
 } from '@nestjs/common';
 import { ServicoService } from '../../modules/servico/servico.service';
 import { CreateServicoRequestDto } from '../../modules/servico/dto/createServicoRequest.dto';
@@ -17,6 +21,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Servico } from 'src/modules/servico/servico.entity';
 import { ServicoDetailedResponseDto } from 'src/modules/servico/dto/servicoDetailedResponse.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('servico')
 @UseGuards(AuthGuard('jwt'))
@@ -30,13 +35,24 @@ export class ServicoController {
     type: ServicoResponseDto,
   })
   @Post()
-  @HttpCode(201)
+  @UseInterceptors(FilesInterceptor('files', 6))
   async create(
     @Body() dto: CreateServicoRequestDto,
+    @UploadedFiles(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: new RegExp('^(image\\/jpeg|image\\/png|image\\/jpg)$'),
+        })
+        .build({
+          fileIsRequired: false,
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    files?: Array<Express.Multer.File>,
     @Request() req,
   ): Promise<ServicoDetailedResponseDto> {
     dto.id_prestador = req.user.username;
-    return this.servicoService.create(dto);
+    return this.servicoService.create(dto, files);
   }
 
   @ApiResponse({
@@ -55,7 +71,7 @@ export class ServicoController {
     @Query('avaliacao') avaliacao?: number,
   ): Promise<ServicoDetailedResponseDto> {
     return this.servicoService.findServicesProvidedByUser(
-      req.user.username,
+      String(req.user.username),
       query,
       categoria,
       valorMin,
@@ -80,7 +96,7 @@ export class ServicoController {
     @Query('avaliacao') avaliacao?: number,
   ): Promise<ServicoDetailedResponseDto> {
     return this.servicoService.findServicesContractedByUser(
-      req.user.username,
+      String(req.user.username),
       query,
       categoria,
       valorMin,

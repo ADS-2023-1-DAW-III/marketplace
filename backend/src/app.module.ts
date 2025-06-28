@@ -14,12 +14,32 @@ import { HistoricoModule } from './modules/historico/historico.module';
 import { ServicoController } from './api/controllers/servico.controller';
 import { HistoricoController } from './api/controllers/historico.controller';
 import { AuthModule } from './modules/auth/auth.module';
-import { commonModule } from './modules/filters/common.module';
-import { AvaliacaoModule } from './modules/avaliacao/avaliacao.module';
-import { AvaliacaoController } from './api/controllers/avaliacao.controller';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  imports: [commonModule, PessoaModule, AbacateModule, PagamentoModule, NegociacaoModule, CategoriaModule, ServicoModule, HistoricoModule, AuthModule, AvaliacaoModule],
-  controllers: [AbacateController, PessoaController, PagamentoController, NegociacaoController, CategoriaController, ServicoController, HistoricoController, AvaliacaoController],
+  imports: [
+    PessoaModule,
+    AbacateModule,
+    PagamentoModule,
+    NegociacaoModule,
+    CategoriaModule,
+    ServicoModule,
+    HistoricoModule,
+    AuthModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+    }),
+  ],
+  controllers: [
+    AbacateController,
+    PessoaController,
+    PagamentoController,
+    NegociacaoController,
+    CategoriaController,
+    ServicoController,
+    HistoricoController,
+  ],
 })
-export class AppModule { }
+export class AppModule {}

@@ -89,13 +89,13 @@ export class ServicoResponseDto {
 
   constructor(servico: Servico) {
     this.id = servico.id;
-    this.caminhoImagem = servico.caminhoImagem;
     this.titulo = servico.titulo;
     this.eh_negociavel = servico.eh_negociavel;
     this.descricao = servico.descricao;
     this.preco = servico.preco;
     this.status = servico.status;
     this.duracao = servico.duracao;
+    this.caminhoImagem = servico.caminhoImagem;
     this.id_prestador = servico.pessoa.username || '';
 
     this.categorias = servico.categorias?.map((c) => ({
@@ -109,7 +109,7 @@ export class ServicoResponseDto {
 
     this.pagamentos = servico.negociacoes
       ?.filter((n) => n.pagamento)
-      ?.map((n) => new PagamentoResponseDto(n.pagamento!));
+      ?.map((n) => new PagamentoResponseDto(n.pagamento));
 
     this.avaliacoes = servico.avaliacoes?.map(
       (a) => new AvaliacaoResponseDTO(a),

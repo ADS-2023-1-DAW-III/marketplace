@@ -4,7 +4,7 @@ import {
   ManyToOne,
   OneToMany,
   ManyToMany,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Pessoa } from '../pessoa/pessoa.entity';
 import { Historico } from '../historico/historico.entity';
@@ -17,13 +17,13 @@ export enum ServicoStatus {
   PENDENTE = 'PENDENTE',
   EMANDAMENTO = 'EM ANDAMENTO',
   CONCLUIDO = 'CONCLUIDO',
-  NEGADO = 'NEGADO'
+  NEGADO = 'NEGADO',
 }
 
 @Entity('servico')
 export class Servico {
-  @PrimaryGeneratedColumn("uuid")
-  id: string
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ nullable: false })
   caminhoImagem: string;
@@ -43,7 +43,11 @@ export class Servico {
   @Column({ type: 'int' })
   duracao: number;
 
-  @Column({ type: 'enum', enum: ServicoStatus, default: ServicoStatus.PENDENTE })
+  @Column({
+    type: 'enum',
+    enum: ServicoStatus,
+    default: ServicoStatus.PENDENTE,
+  })
   status: ServicoStatus;
 
   @ManyToOne(() => Pessoa, (pessoa) => pessoa.username)

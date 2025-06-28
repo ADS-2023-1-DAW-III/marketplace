@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, Inject } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Categoria } from './categoria.entity';
 import { CreateCategoriaDto } from './dto/createCategoriaRequest.dto';
 import { UpdateCategoriaRequestDto } from './dto/updateCategoriaRequest.dto';
@@ -10,7 +10,7 @@ export class CategoriaService {
   constructor(
     @Inject('CATEGORIA_REPOSITORY')
     private categoriaRepository: Repository<Categoria>,
-  ) { }
+  ) {}
 
   async create(dto: CreateCategoriaDto): Promise<CreateCategoriaResponseDto> {
     const categoria = this.categoriaRepository.create(dto);
@@ -60,5 +60,13 @@ export class CategoriaService {
     }
 
     await this.categoriaRepository.remove(categoria);
+  }
+
+  async findAllByNome(categorias: string[]): Promise<Categoria[]> {
+    return this.categoriaRepository.find({
+      where: {
+        nome: In(categorias),
+      },
+    });
   }
 }

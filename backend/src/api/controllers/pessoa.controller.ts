@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Post,
   HttpCode,
   UseGuards,
   HttpStatus,
@@ -35,21 +34,6 @@ export class PessoaController {
   @Get()
   async findAll(): Promise<PessoaResponseDTO[]> {
     return this.pessoaService.findAll();
-  }
-
-  @ApiResponse({
-    status: 201,
-    description: 'Pessoa criada com sucesso',
-    type: PessoaResponseDTO,
-  })
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  async createPessoa(
-    @Body() request: CreatePessoaRequestDTO,
-  ): Promise<PessoaResponseDTO> {
-    const response: PessoaResponseDTO =
-      await this.pessoaService.create(request);
-    return response;
   }
 
   @Get('username/:username')

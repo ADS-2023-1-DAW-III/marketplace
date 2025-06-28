@@ -33,9 +33,9 @@ export class PessoaResponseDTO {
   contato: string;
   @ApiProperty({
     type: 'string',
-    description: 'Contato da pessoa',
+    description: 'Url de acessoa imagem de perfil da pessoa',
   })
-  cpf: string;
+  profileImageUrl?: string;
   @ApiProperty({
     type: 'string',
     description: 'Habilidades da pessoa',
@@ -48,7 +48,7 @@ export class PessoaResponseDTO {
     this.nome = pessoa.nome;
     this.contato = pessoa.contato;
     this.email = pessoa.email;
-    this.cpf = pessoa.cpf
+    this.profileImageUrl = pessoa.profileImageName;
     this.habilidades = pessoa.habilidades;
   }
 }
