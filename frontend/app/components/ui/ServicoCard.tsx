@@ -46,12 +46,14 @@ export function ServicoCard({ servico }: Props) {
 
         <div className="flex items-center gap-3">
           <img
-            src={servico.avatar}
-            alt={`${servico.nome} avatar`}
+            src={servico.avatar_prestador}
+            alt={`${servico.nome_prestador} avatar`}
             className="rounded-full w-12 h-12 object-cover"
           />
           <div>
-            <p className="font-semibold text-gray-800">{servico.nome}</p>
+            <p className="font-semibold text-gray-800">
+              {servico.nome_prestador}
+            </p>
             <p className="text-sm text-gray-500">Contato: {servico.contato}</p>
           </div>
         </div>
@@ -63,7 +65,10 @@ export function ServicoCard({ servico }: Props) {
           <p className="text-sm text-gray-500">Valor: R${servico.preco}</p>
           <div className="flex justify-between items-center text-sm mt-1">
             <p className="text-gray-500">
-              Data: {format(servico.data, "dd/MM/yyyy")}
+              Data:{" "}
+              {servico.data
+                ? format(servico.data, "dd/MM/yyyy")
+                : "Data indisponível"}
             </p>
             <p className="text-gray-500">Valor pago: R${servico.valorPago}</p>
           </div>

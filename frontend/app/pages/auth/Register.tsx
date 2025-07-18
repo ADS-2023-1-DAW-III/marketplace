@@ -57,7 +57,7 @@ const Register = () => {
   const maskedPhone = useMask("contato", "(99) 99999-9999");
   const senha = form.watch("senha");
   const selectedFile = form.watch("foto") as File | null;
-  const { setToken } = useContext(AuthContext);
+  const { setToken, setUsername } = useContext(AuthContext);
   const navigate = useNavigate();
   const api = useApi();
 
@@ -83,6 +83,7 @@ const Register = () => {
       .then((response) => {
         SuccessAlert("Cadastro realizado com sucesso!");
         setToken(response.data.token);
+        setUsername(response.data.userId);
         navigate("/", { replace: true });
       })
       .catch((error) => {

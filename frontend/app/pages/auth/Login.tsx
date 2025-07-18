@@ -34,7 +34,7 @@ interface LoginForm {
 }
 
 const Login = () => {
-  const { token, setToken } = useContext(AuthContext);
+  const { setToken, setUsername } = useContext(AuthContext);
   const navigate = useNavigate();
   const api = useApi();
 
@@ -48,6 +48,7 @@ const Login = () => {
       .then((response) => {
         SuccessAlert("Login bem-sucedido! Redirecionando...");
         setToken(response.data.token);
+        setUsername(response.data.userId);
         navigate("/", { replace: true });
       })
       .catch((error) => {

@@ -13,5 +13,9 @@ export default [
   layout("routes/index.tsx", [
     index("pages/home/Home.tsx"),
     route("contratados", "pages/servicos_contratados/Contratados.tsx"),
+    route(
+      "historico_pagamento",
+      "pages/historico_pagamento/HistoricoPagamento.tsx"
+    ),
   ]),
 ] satisfies RouteConfig;

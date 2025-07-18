@@ -82,11 +82,11 @@ export default function ServicosContratadosPage(): JSX.Element {
             descricao: servico.descricao,
             preco: servico.preco,
             valorPago: servico.negociacoes?.[0]?.novo_valor,
-            nome: pessoa.data.nome,
+            nome_prestador: pessoa.data.nome,
             contato: pessoa.data.contato,
             data: new Date(), // mudar
             imagem: servico.imagem,
-            avatar: pessoa.data.avatar,
+            avatar_prestador: pessoa.data.avatar,
           };
 
           return newServico;
