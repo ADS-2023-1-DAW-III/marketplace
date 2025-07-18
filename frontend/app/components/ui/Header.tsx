@@ -1,20 +1,15 @@
-import React from 'react';
-import { Menu } from 'lucide-react';
+import { Link } from "react-router-dom";
+import Sidebar from "./Sidebar";
 
-// Cabeçalho
-const Header = () => {
+export default function Header() {
   return (
-    <header 
-      className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-4 h-14" 
-      style={{ backgroundColor: '#307B8E' }}
-    >
-    <button className="text-white focus:outline-none" aria-label="Menu">
-      <Menu size={28} />
-    </button>
-
+    <header>
+      <div className="container mx-auto px-4 py-4 pt-6 flex items-center justify-start">
+        <Sidebar />
+        <Link to="/" className="text-3xl ml-15 font-bold text-white">
+          Market<span className="text-[#307B8E] bg-white">Place</span>
+        </Link>
+      </div>
     </header>
   );
-};
-
-export default Header;
-
+}

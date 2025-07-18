@@ -3,7 +3,7 @@ import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardFooter } from "~/components/ui/card";
 import { useNavigate, type MetaArgs } from "react-router";
-import { useContext } from "react";
+import { use, useContext, useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -14,8 +14,9 @@ import {
 } from "~/components/ui/form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AuthContext } from "~/hooks/context/AuthContext";
+import { AuthContext } from "~/hooks/context/authContext";
 import { ErrorAlert, SuccessAlert } from "~/components/ui/alertMessages";
+import { useApi } from "~/hooks/services/api";
 
 export function meta(_args: MetaArgs) {
   return [
@@ -27,34 +28,37 @@ export function meta(_args: MetaArgs) {
   ];
 }
 
-const formSchema = z.object({
-  email: z.string().min(1, "Digite seu email.").email("Email inválido."),
-  password: z.string().min(1, "Digite sua senha."),
-});
+interface LoginForm {
+  email: string;
+  password: string;
+}
 
 const Login = () => {
-  const { setToken } = useContext(AuthContext);
+  const { token, setToken } = useContext(AuthContext);
   const navigate = useNavigate();
+  const api = useApi();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+  const form = useForm<LoginForm>({
+    defaultValues: { email: "", password: "" },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    const mockEmail = "usuario@teste.com";
-    const mockSenha = "12345";
-
-    if (data.email == mockEmail && data.password == mockSenha) {
-      SuccessAlert("Login bem sucedido! Redirecionando...");
-      setToken("mock-token-12345"); //Simula o armazenamento do token
-      navigate("/");
-    } else {
-      ErrorAlert("Email ou senha inválidos.");
-    }
+  const onSubmit = (data: LoginForm) => {
+    api
+      .post("/auth/login", { login: data.email, senha: data.password })
+      .then((response) => {
+        SuccessAlert("Login bem-sucedido! Redirecionando...");
+        setToken(response.data.token);
+        navigate("/", { replace: true });
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 401) {
+          ErrorAlert(`Email ou senha inválidos. Erro: ${error.message}`);
+        } else {
+          ErrorAlert(
+            `Erro ao fazer login, tente novamente. Erro: ${error.message}`
+          );
+        }
+      });
   };
 
   return (
@@ -65,7 +69,13 @@ const Login = () => {
             <FormField
               control={form.control}
               name="email"
-              rules={{ required: "Digite seu email." }}
+              rules={{
+                required: "Digite seu email.",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Formato de e-mail inválido",
+                },
+              }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
