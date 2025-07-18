@@ -6,13 +6,13 @@ import { cn } from "~/lib/utils";
 import type { Servico } from "~/types/Servico";
 
 const statusColor = {
-  Pendente: "text-red-500",
-  "Em andamento": "text-yellow-500",
-  Concluído: "text-green-600",
+  PENDENTE: "text-red-500",
+  "EM ANDAMENTO": "text-yellow-500",
+  CONCLUIDO: "text-green-600",
 };
 
 type Props = {
-  servico: Servico;
+  readonly servico: Servico;
 };
 
 export function ServicoCard({ servico }: Props) {
@@ -23,12 +23,14 @@ export function ServicoCard({ servico }: Props) {
           <span
             className={cn(
               "text-sm font-semibold",
-              statusColor[servico.status]
+              statusColor[servico.status as keyof typeof statusColor]
             )}
           >
             {servico.status}
           </span>
-          <span className="text-sm text-green-700 font-medium">{servico.tempo}</span>
+          <span className="text-sm text-green-700 font-medium">
+            {servico.duracao}
+          </span>
         </div>
 
         <h3 className="text-lg font-bold text-gray-800">{servico.titulo}</h3>
@@ -38,7 +40,9 @@ export function ServicoCard({ servico }: Props) {
           alt={servico.titulo}
           className="h-44 w-full object-cover rounded-lg"
         />
-        <p className="text-sm text-gray-600 leading-relaxed">{servico.descricao}</p>
+        <p className="text-sm text-gray-600 leading-relaxed">
+          {servico.descricao}
+        </p>
 
         <div className="flex items-center gap-3">
           <img
@@ -53,15 +57,15 @@ export function ServicoCard({ servico }: Props) {
         </div>
 
         <div className="border-t pt-4">
-          <h4 className="font-bold text-gray-800 mb-2">Informações de compra</h4>
-          <p className="text-sm text-gray-500">
-            Valor: R${servico.valor.toFixed(2).replace(".", ",")}
-          </p>
+          <h4 className="font-bold text-gray-800 mb-2">
+            Informações de compra
+          </h4>
+          <p className="text-sm text-gray-500">Valor: R${servico.preco}</p>
           <div className="flex justify-between items-center text-sm mt-1">
-            <p className="text-gray-500">Data: {format(servico.data, "dd/MM/yyyy")}</p>
             <p className="text-gray-500">
-              Valor pago: R${servico.valorPago.toFixed(2).replace(".", ",")}
+              Data: {format(servico.data, "dd/MM/yyyy")}
             </p>
+            <p className="text-gray-500">Valor pago: R${servico.valorPago}</p>
           </div>
         </div>
       </CardContent>

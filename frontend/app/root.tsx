@@ -9,7 +9,7 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import { AuthProvider } from "./hooks/context/AuthContext";
+import { AuthProvider } from "./hooks/context/authContext";
 import { Toaster } from "sonner";
 
 export const links: Route.LinksFunction = () => [

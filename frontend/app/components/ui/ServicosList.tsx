@@ -6,31 +6,21 @@ import { ServicoEmptyState } from "./ServicoEmptyState";
 
 type Props = {
   servicos: Servico[];
-  statusSelecionado: string | null;
-  searchTerm: string;
   isLoading: boolean;
 };
 
-export function ServicosList({
-  servicos,
-  statusSelecionado,
-  searchTerm,
-  isLoading,
-}: Props) {
-  const servicosFiltrados = servicos.filter((servico) => {
-    const statusMatch = !statusSelecionado || servico.status === statusSelecionado;
-    const searchMatch =
-      servico.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      servico.descricao.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      servico.nome.toLowerCase().includes(searchTerm.toLowerCase());
-    return statusMatch && searchMatch;
-  });
+export function ServicosList({ servicos, isLoading }: Readonly<Props>) {
+  if (isLoading) {
+    return <div className="text-center py-8">Carregando serviços...</div>;
+  }
 
-  if (!isLoading && servicosFiltrados.length === 0) return <ServicoEmptyState />;
+  if (!isLoading && servicos.length === 0) {
+    return <ServicoEmptyState />;
+  }
 
   return (
     <div className="flex flex-wrap justify-center gap-8">
-      {servicosFiltrados.map((servico) => (
+      {servicos.map((servico) => (
         <ServicoCard key={servico.id} servico={servico} />
       ))}
     </div>
