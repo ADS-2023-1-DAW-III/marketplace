@@ -38,6 +38,7 @@ export class ServicoController {
   @UseInterceptors(FilesInterceptor('files', 6))
   async create(
     @Body() dto: CreateServicoRequestDto,
+    @Request() req,
     @UploadedFiles(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
@@ -49,7 +50,6 @@ export class ServicoController {
         }),
     )
     files?: Array<Express.Multer.File>,
-    @Request() req,
   ): Promise<ServicoDetailedResponseDto> {
     dto.id_prestador = req.user.username;
     return this.servicoService.create(dto, files);

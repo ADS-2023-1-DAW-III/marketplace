@@ -262,4 +262,25 @@ export class PagamentoService {
     }
     await this.pagamentoRepository.remove(pagamento);
   }
+
+  async confirmarPagamento(
+    id: string,
+  ): Promise<PagamentoResponseDto> {
+    const pagamento = await this.pagamentoRepository.findOne({ where: { id } });
+    if (!pagamento) {
+      throw new NotFoundException(`Pagamento com ID "${id}" não encontrado.`);
+    }
+
+    if (pagamento.status !== PaymentStatus.PENDING) {
+      throw new BadRequestException(
+        'Pagamento já foi confirmado ou cancelado.',
+      );
+    }
+
+    pagamento.status = PaymentStatus.PAID;
+    pagamento.data = new Date();
+
+    await this.pagamentoRepository.save(pagamento);
+    return new PagamentoResponseDto(pagamento);
+  }
 }

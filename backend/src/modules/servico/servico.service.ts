@@ -272,6 +272,7 @@ export class ServicoService {
     }
 
     const response = new ServicoDetailedResponseDto();
+    response.servicos = servicos.map((s) => new ServicoResponseDto(s));
     response.message =
       servicos.length > 0
         ? 'Serviços retornados com sucesso'
