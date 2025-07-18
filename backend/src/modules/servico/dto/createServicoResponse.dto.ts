@@ -70,18 +70,6 @@ export class ServicoResponseDto {
   categorias: CreateCategoriaResponseDto[];
 
   @ApiProperty({
-    type: [CreateNegociacaoResponseDto],
-    description: 'Negociações relacionadas ao serviço',
-  })
-  negociacoes: CreateNegociacaoResponseDto[];
-
-  @ApiProperty({
-    type: [PagamentoResponseDto],
-    description: 'Pagamentos relacionados ao serviço',
-  })
-  pagamentos: PagamentoResponseDto[];
-
-  @ApiProperty({
     type: [AvaliacaoResponseDTO],
     description: 'Avaliações relacionadas ao serviço',
   })
@@ -96,20 +84,12 @@ export class ServicoResponseDto {
     this.status = servico.status;
     this.duracao = servico.duracao;
     this.caminhoImagem = servico.caminhoImagem;
-    this.id_prestador = servico.pessoa.username || '';
+    this.id_prestador = servico.pessoa?.username || '';
 
     this.categorias = servico.categorias?.map((c) => ({
       nome: c.nome,
       descricao: c.descricao,
     }));
-
-    this.negociacoes = servico.negociacoes?.map(
-      (n) => new CreateNegociacaoResponseDto(n),
-    );
-
-    this.pagamentos = servico.negociacoes
-      ?.filter((n) => n.pagamento)
-      ?.map((n) => new PagamentoResponseDto(n.pagamento));
 
     this.avaliacoes = servico.avaliacoes?.map(
       (a) => new AvaliacaoResponseDTO(a),
