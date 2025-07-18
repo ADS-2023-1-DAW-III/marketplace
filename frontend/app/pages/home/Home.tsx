@@ -19,10 +19,11 @@ export function meta(_args: MetaArgs) {
 type Service = {
   id: string;
   titulo: string;
-  preco: number;
+  preco: string;
   duracao: number;
   id_imagem: string;
   eh_negociavel: boolean;
+  descricao: string;
   categoria: {
     nome: string;
     descricao: string;
@@ -52,7 +53,7 @@ export default function Home() {
     async function fetchServices() {
       try {
         const response = await api.get("/servicos");
-        setServices(response.data.sevicos || []);
+        setServices(response.data.servicos || []);
       } catch (error) {
         console.error("Erro ao buscar serviços:", error);
         ErrorAlert("Erro ao buscar serviços. Tente novamente.");
@@ -85,7 +86,7 @@ export default function Home() {
               <ServiceCard
                 key={service.id}
                 title={service.titulo}
-                description={service.categoria.descricao}
+                description={service.descricao}
                 price={service.preco}
                 duration={`${service.duracao}min`}
                 isNegotiable={service.eh_negociavel}
