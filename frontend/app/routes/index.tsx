@@ -4,7 +4,9 @@ import LayoutHome from "./LayoutHome";
 import type { MetaArgs } from "react-router";
 import { useNavigate } from "react-router";
 import { AuthContext } from "~/hooks/context/AuthContext";
+
 import ServiceRegistration from "~/pages/service/registration/ServiceRegistration";
+
 
 export function meta(_args: MetaArgs) {
   return [

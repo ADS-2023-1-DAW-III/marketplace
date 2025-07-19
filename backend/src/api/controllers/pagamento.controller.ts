@@ -205,4 +205,14 @@ export class PagamentoController {
   removePagamento(@Param('id') id: string) {
     return this.pagamentoService.remove(id);
   }
+
+  @ApiResponse({
+    status: 200,
+    description: 'Confimação do pagamento',
+  })
+  @Put(':id/confirmar')
+  @HttpCode(HttpStatus.ACCEPTED)
+  confirmarPagamento(@Param('id') id: string) {
+    return this.pagamentoService.confirmarPagamento(id);
+  }
 }
