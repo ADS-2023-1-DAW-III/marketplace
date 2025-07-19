@@ -1,17 +1,24 @@
+// abacate.service.ts
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import AbacatePay from 'abacatepay-nodejs-sdk';
 
-/**
- * Serviço responsável por fornecer uma instância da SDK do AbacatePay.
- *
- * Veja mais detalhes na documentação externa:
- * @see https://github.com/AbacatePay/abacatepay-nodejs-sdk
- */
 @Injectable()
 export class AbacateService {
-  public getClient() {
-    const abacateClient = AbacatePay('ALTERE AQUI');
+  constructor(private readonly configService: ConfigService) {}
 
+  public getClient() {
+    const apiKey = this.configService.get<string>('ABACATE_TOKEN');
+
+    console.log(apiKey)
+
+    if (!apiKey) {
+      throw new Error('ABACATE_TOKEN is not defined in the environment variables');
+    }
+
+    const abacateClient = AbacatePay(apiKey);
+
+    console.log(abacateClient)
     return abacateClient;
   }
 }

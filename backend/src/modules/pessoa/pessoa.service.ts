@@ -46,20 +46,23 @@ export class PessoaService {
       ).replace('.', '');
     }
 
-    // o codigo será descomentado para os teste de integração com a api do AbacatePay
-    // const response = await this.abacateService.getClient().customer.create({
-    //   name: newPessoa.nome,
-    //   email: newPessoa.email,
-    //   cellphone: newPessoa.contato,
-    //   taxId: newPessoa.cpf,
-    // });
+    const response = await this.abacateService.getClient().customer.create({
+      name: newPessoa.nome,
+      email: newPessoa.email,
+      cellphone: newPessoa.contato,
+      taxId: newPessoa.cpf,
+    });
 
-    // const abacate_id = response.data?.id;
+    console.log(response)
 
-    //  if (abacate_id) {
-    //    newPessoa.abacate_id = abacate_id;
-    //  }
-    newPessoa.abacate_id = '1223';
+    const abacate_id = response.data?.id;
+
+    if (!abacate_id) {
+      throw new ConflictException(
+        'Erro ao criar cliente no Abacate. Tente novamente.',
+      );
+    }
+
     await this.pessoaRepository.save(newPessoa);
 
     const pessoaResponse: PessoaResponseDTO = new PessoaResponseDTO(newPessoa);

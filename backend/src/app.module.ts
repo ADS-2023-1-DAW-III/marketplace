@@ -16,6 +16,7 @@ import { HistoricoController } from './api/controllers/historico.controller';
 import { AuthModule } from './modules/auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -33,6 +34,10 @@ import { join } from 'path';
       serveStaticOptions: {
         index: false, 
       },
+      
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
   ],
   controllers: [
