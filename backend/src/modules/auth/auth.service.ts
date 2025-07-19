@@ -56,7 +56,7 @@ export class AuthService {
 
     return {
       token,
-      userId: pessoa.abacate_id,
+      userId: pessoa.username,
     };
   }
 }
