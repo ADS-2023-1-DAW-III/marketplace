@@ -27,7 +27,6 @@ export default function ServicosContratadosPage(): JSX.Element {
 
   const handleSearch = async (queryParams: URLSearchParams) => {
     setIsLoading(true);
-    console.log("Query Params:", queryParams.toString());
     try {
       const response = await api.get("/servicos/contratados", {
         params: queryParams,

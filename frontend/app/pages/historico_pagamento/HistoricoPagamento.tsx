@@ -32,7 +32,6 @@ export default function HistoricoPagamento() {
         const pagamentosComPessoa: PagamentoInterface[] = await Promise.all(
           pagamentosData.map(async (pagamento) => {
             try {
-              console.log(pagamento);
               const servicoResponse = await api.get(
                 `/servicos/${pagamento.id_servico}`
               );
