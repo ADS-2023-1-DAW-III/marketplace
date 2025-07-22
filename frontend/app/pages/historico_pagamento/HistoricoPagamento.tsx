@@ -76,7 +76,7 @@ export default function HistoricoPagamento() {
   }, [username]);
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 pt-16 pb-8">
+    <div className="bg-gray-50 px-4 pt-16 pb-8">
       <div className="max-w-5xl mx-auto mt-10">
         <h1
           className="text-lg text-center mb-14 w-fit px-50 mx-auto text-white py-1 rounded-full"

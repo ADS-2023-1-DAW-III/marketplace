@@ -13,7 +13,7 @@ import { Input } from "~/components/ui/input";
 import { useContext } from "react";
 import { AuthContext } from "~/hooks/context/authContext";
 import { useApi } from "~/hooks/services/api";
-import { ErrorAlert, SuccessAlert } from "~/components/ui/alertMessages";
+import { ErrorAlert, SuccessAlert } from "~/components/ui/AlertMessages";
 import { CardContent, CardFooter } from "~/components/ui/card";
 import { useHookFormMask } from "use-mask-input";
 

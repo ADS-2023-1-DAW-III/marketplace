@@ -168,7 +168,7 @@ export default function Sidebar() {
             Meus pagamentos
           </Link>
           <Link
-            to="/"
+            to="/perfil"
             className="flex items-center font-poppins font-medium text-lg py-3 pl-10 hover:bg-white hover:text-[#307B8E] hover:stroke-[#307B8E] transition-colors duration-500 stroke-white"
           >
             <svg

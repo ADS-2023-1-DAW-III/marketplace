@@ -137,7 +137,7 @@ export default function SearchFilter({
   );
 
   return (
-    <div className="w-full bg-[#307B8E] rounded-2xl py-8 px-6 md:px-10 text-white max-w-7xl mx-auto mt-20 space-y-6 mb-36">
+    <div className="w-full bg-[#307B8E] rounded-2xl py-8 px-6 md:px-10 text-white max-w-7xl mx-auto space-y-6 mb-24">
       <h1 className="text-center text-[28px] md:text-[36px] font-bold">
         Busque aqui!
       </h1>

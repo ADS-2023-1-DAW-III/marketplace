@@ -1,7 +1,7 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import { AuthContext } from "../context/authContext";
 import { useContext } from "react";
-import { ErrorAlert } from "~/components/ui/alertMessages";
+import { ErrorAlert } from "~/components/ui/AlertMessages";
 
 export function useApi() {
   const { token, setToken } = useContext(AuthContext);

@@ -15,7 +15,7 @@ import {
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthContext } from "~/hooks/context/authContext";
-import { ErrorAlert, SuccessAlert } from "~/components/ui/alertMessages";
+import { ErrorAlert, SuccessAlert } from "~/components/ui/AlertMessages";
 import { useApi } from "~/hooks/services/api";
 
 export function meta(_args: MetaArgs) {
@@ -63,7 +63,7 @@ const Login = () => {
   };
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-md">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="space-y-4">

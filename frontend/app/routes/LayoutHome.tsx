@@ -1,13 +1,15 @@
 import Header from "~/components/ui/Header";
-import {Outlet} from "react-router";
+import { Outlet } from "react-router";
 
 export default function LayoutHome() {
   return (
     <main>
-      <div className="bg-[#307B8E]">
-          <Header />
+      <div className="h-screen">
+        <Header />
+        <div className="h-[92vh]">
           <Outlet />
+        </div>
       </div>
     </main>
-);
+  );
 }

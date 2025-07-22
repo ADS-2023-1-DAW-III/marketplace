@@ -17,5 +17,6 @@ export default [
       "historico_pagamento",
       "pages/historico_pagamento/HistoricoPagamento.tsx"
     ),
+    route("/perfil", "pages/perfil/Perfil.tsx"),
   ]),
 ] satisfies RouteConfig;
