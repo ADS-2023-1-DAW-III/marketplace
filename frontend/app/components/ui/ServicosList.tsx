@@ -11,7 +11,7 @@ type Props = {
 
 export function ServicosList({ servicos, isLoading }: Readonly<Props>) {
   if (isLoading) {
-    return <div className="text-center py-8">Carregando serviços...</div>;
+    return <div className="text-center py-8 h-140">Carregando serviços...</div>;
   }
 
   if (!isLoading && servicos.length === 0) {

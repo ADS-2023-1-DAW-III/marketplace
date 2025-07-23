@@ -21,7 +21,7 @@ type Service = {
   titulo: string;
   preco: string;
   duracao: number;
-  id_imagem: string;
+  caminhoImagem: string;
   eh_negociavel: boolean;
   descricao: string;
   categoria: {
@@ -73,7 +73,13 @@ export default function Home() {
 
       <main className="container mx-auto px-4 py-8 relative z-10 pb-20">
         <div className="mb-12">
-          <SearchFilter onSearch={handleSearch} />
+          <SearchFilter
+            title="Busque aqui!"
+            onSearch={handleSearch}
+            categoria
+            avaliacao
+            valorFiltro
+          />
         </div>
 
         {loading ? (
@@ -90,6 +96,7 @@ export default function Home() {
                 price={service.preco}
                 duration={`${service.duracao}min`}
                 isNegotiable={service.eh_negociavel}
+                image={service.caminhoImagem}
               />
             ))}
           </div>

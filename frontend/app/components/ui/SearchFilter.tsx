@@ -31,15 +31,23 @@ interface ExternalFilter {
 }
 
 interface SearchFilterProps {
+  title: string;
+  categoria?: boolean;
+  avaliacao?: boolean;
+  valorFiltro?: boolean;
   onFiltersChange?: (queryParams: URLSearchParams) => void;
   onSearch?: (queryParams: URLSearchParams) => void;
-  externalFilters?: ExternalFilter[];
+  externalFiltersSelect?: ExternalFilter[];
 }
 
 export default function SearchFilter({
+  title,
+  categoria,
+  avaliacao,
+  valorFiltro,
   onFiltersChange,
   onSearch,
-  externalFilters = [],
+  externalFiltersSelect: externalFilters = [],
 }: Readonly<SearchFilterProps>) {
   const [filters, setFilters] = useState<SearchFilters>({
     query: "",
@@ -139,10 +147,10 @@ export default function SearchFilter({
   return (
     <div className="w-full bg-[#307B8E] rounded-2xl py-8 px-6 md:px-10 text-white max-w-7xl mx-auto space-y-6 mb-24">
       <h1 className="text-center text-[28px] md:text-[36px] font-bold">
-        Busque aqui!
+        {title}
       </h1>
 
-      <div className="flex items-center gap-2 bg-white/10 rounded-md px-4 py-2 border border-white">
+      <div className="flex items-center gap-2 bg-white/10 rounded-md px-4 py-2 border border-white w-full">
         <Input
           type="text"
           placeholder="Digite aqui..."
@@ -158,65 +166,72 @@ export default function SearchFilter({
         />
       </div>
 
-      <div className="flex flex-col md:flex-row justify-between gap-4">
-        <div className="flex-1">
-          <Select
-            value={filters.categoria}
-            onValueChange={(value) => updateFilter("categoria", value)}
-          >
-            <SelectTrigger
-              className="w-full text-violet11 bg-transparent border-white cursor-pointer"
-              style={{ color: "white" }}
+      <div className="flex flex-col md:flex-row justify-between gap-4 w-full">
+        {categoria && (
+          <div className="flex-1 max-w-1/3">
+            <Select
+              value={filters.categoria}
+              onValueChange={(value) => updateFilter("categoria", value)}
             >
-              <SelectValue placeholder="Categoria" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="suporte">Suporte Técnico</SelectItem>
-              <SelectItem value="motoristas">Motoristas</SelectItem>
-              <SelectItem value="eventos">Eventos</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+              <SelectTrigger
+                className="w-full text-violet11 bg-transparent border-white cursor-pointer"
+                style={{ color: "white" }}
+              >
+                <SelectValue placeholder="Categoria" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="suporte">Suporte Técnico</SelectItem>
+                <SelectItem value="motoristas">Motoristas</SelectItem>
+                <SelectItem value="eventos">Eventos</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
-        <div className="flex-1">
-          <Input
-            type="text"
-            placeholder="Valor (ex: 100 ou 100-500)"
-            className="bg-white text-black rounded shadow px-4 py-2"
-            value={
-              filters.valorMin && filters.valorMax
-                ? `${filters.valorMin}-${filters.valorMax}`
-                : filters.valorMin
-            }
-            onChange={(e) => handleValueChange(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-        </div>
+        {valorFiltro && (
+          <div className="flex-1 max-w-1/3">
+            <Input
+              type="text"
+              placeholder="Valor (ex: 100 ou 100-500)"
+              className="bg-white text-black rounded shadow px-4 py-2"
+              value={
+                filters.valorMin && filters.valorMax
+                  ? `${filters.valorMin}-${filters.valorMax}`
+                  : filters.valorMin
+              }
+              onChange={(e) => handleValueChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+          </div>
+        )}
 
-        <div className="flex-1">
-          <Select
-            value={filters.avaliacao}
-            onValueChange={(value) => updateFilter("avaliacao", value)}
-          >
-            <SelectTrigger
-              className="w-full bg-transparent border-white text-white placeholder-white cursor-pointer"
-              style={{ color: "white" }}
+        {avaliacao && (
+          <div className="flex-1 max-w-1/3">
+            <Select
+              value={filters.avaliacao}
+              onValueChange={(value) => updateFilter("avaliacao", value)}
             >
-              <SelectValue placeholder="Avaliação" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="5">5 estrelas</SelectItem>
-              <SelectItem value="4">4 estrelas</SelectItem>
-              <SelectItem value="3">3 estrelas</SelectItem>
-              <SelectItem value="2">2 estrelas</SelectItem>
-              <SelectItem value="1">1 estrela</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+              <SelectTrigger
+                className="w-full bg-transparent border-white text-white placeholder-white cursor-pointer"
+                style={{ color: "white" }}
+              >
+                <SelectValue placeholder="Avaliação" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="5">5 estrelas</SelectItem>
+                <SelectItem value="4">4 estrelas</SelectItem>
+                <SelectItem value="3">3 estrelas</SelectItem>
+                <SelectItem value="2">2 estrelas</SelectItem>
+                <SelectItem value="1">1 estrela</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
         {externalFilters.length > 0 && (
-          <div>
+          <div className="flex-1 max-w-1/3">
             {externalFilters.map((externalFilter) => (
-              <div key={externalFilter.key} className="flex-1">
+              <div key={externalFilter.key}>
                 <Select
                   value={filters[externalFilter.key] || ""}
                   onValueChange={(value) =>

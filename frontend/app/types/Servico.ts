@@ -27,13 +27,13 @@ export interface ServicoDetalhadoInterface {
   titulo: string;
   eh_negociavel: boolean;
   descricao: string;
-  preco: number;
+  preco: string;
   duracao: number;
   status: string;
   pessoa: Pessoa;
-  historico?: HistoricoResponse[];
-  categorias?: Categoria[];
-  pagamentosRecebidos?: Pagamento[];
-  negociacoes?: NegociacaoResponse[];
-  avaliacoes?: AvaliacaoResponse[];
+  historico: HistoricoResponse[];
+  categorias: Categoria[];
+  pagamentosRecebidos: Pagamento[];
+  negociacoes: NegociacaoResponse[];
+  avaliacoes: AvaliacaoResponse[];
 }

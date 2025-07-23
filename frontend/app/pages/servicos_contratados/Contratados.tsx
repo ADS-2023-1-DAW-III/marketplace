@@ -120,8 +120,11 @@ export default function ServicosContratadosPage(): JSX.Element {
     <div className="bg-gray-50">
       <div className="h-full p-4 md:p-8">
         <SearchFilter
+          title="Serviços Contratados"
+          categoria
+          avaliacao
           onSearch={handleSearch}
-          externalFilters={externalFilters}
+          externalFiltersSelect={externalFilters}
         />
         <ServicosList servicos={servicos} isLoading={isLoading} />
       </div>
