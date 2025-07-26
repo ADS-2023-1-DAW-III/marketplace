@@ -15,7 +15,7 @@ type Props = {
   readonly servico: Servico;
 };
 
-export function ServicoCard({ servico }: Props) {
+export function HistoricoServicoCard({ servico }: Props) {
   return (
     <Card className="w-full max-w-sm rounded-xl shadow-md">
       <CardContent className="flex flex-col gap-4 p-6">

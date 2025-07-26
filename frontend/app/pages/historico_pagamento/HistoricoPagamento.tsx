@@ -5,6 +5,7 @@ import { ServicoEmptyState } from "~/components/ui/ServicoEmptyState";
 import { useApi } from "~/hooks/services/api";
 import type { Servico } from "~/types/Servico";
 import type { PagamentoInterface } from "~/types/Pagamento";
+import SearchFilter from "~/components/ui/SearchFilter";
 
 export interface PagamentoResponseDto {
   id: string;
@@ -76,9 +77,9 @@ export default function HistoricoPagamento() {
   }, [username]);
 
   return (
-    <div className="bg-gray-50 px-4 pt-16 pb-8">
+    <div className="bg-gray-50 px-4 pt-16 pb-8 h-full">
       <div className="max-w-5xl mx-auto mt-10">
-        <h1
+        {/* <h1
           className="text-lg text-center mb-14 w-fit px-50 mx-auto text-white py-1 rounded-full"
           style={{
             backgroundColor: "#307B8E",
@@ -87,8 +88,8 @@ export default function HistoricoPagamento() {
           }}
         >
           Histórico de Pagamentos
-        </h1>
-
+        </h1> */}
+        <SearchFilter title="Histórico de Pagamentos" />
         {/* Caixa de busca */}
 
         <div className="bg-white p-4 sm:p-10 rounded-xl shadow-lg space-y-6 max-w-6xl mx-auto">

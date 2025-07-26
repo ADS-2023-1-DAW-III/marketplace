@@ -8,6 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { useApi } from "~/hooks/services/api";
+import type { Categoria } from "~/types/Categoria";
 
 interface SearchFilters {
   query: string;
@@ -56,6 +58,18 @@ export default function SearchFilter({
     valorMax: "",
     avaliacao: "",
   });
+  const api = useApi();
+  const [categoriaData, setCategoriaData] = useState<Categoria[]>();
+
+  const getCategorias = async () => {
+    try {
+      const response = await api.get("/categorias");
+      setCategoriaData(response.data);
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
 
   useEffect(() => {
     if (externalFilters.length > 0) {
@@ -69,6 +83,7 @@ export default function SearchFilter({
         return newFilters;
       });
     }
+    getCategorias();
   }, [externalFilters]);
 
   const createQueryParams = useCallback(
@@ -180,9 +195,11 @@ export default function SearchFilter({
                 <SelectValue placeholder="Categoria" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="suporte">Suporte Técnico</SelectItem>
-                <SelectItem value="motoristas">Motoristas</SelectItem>
-                <SelectItem value="eventos">Eventos</SelectItem>
+                {categoriaData?.map((el, index) => (
+                  <SelectItem key={index} value={el.nome}>
+                    {el.nome}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
