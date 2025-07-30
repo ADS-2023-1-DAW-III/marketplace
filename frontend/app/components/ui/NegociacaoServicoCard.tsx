@@ -24,7 +24,7 @@ const NegociacaoServicoCard: React.FC<NegociacaoServicoCardProps> = ({
   originalPrice,
 }) => {
   return (
-    <div className="rounded-lg border p-4 shadow-md bg-white w-full max-w-3xl mb-4">
+    <div className="rounded-lg border p-4 shadow-md bg-white w-full">
       <div className="flex items-start space-x-4">
         <div className="flex flex-col items-center text-gray-700 text-sm min-w-[60px]">
           <div className="text-3xl">👤</div>
@@ -45,11 +45,11 @@ const NegociacaoServicoCard: React.FC<NegociacaoServicoCardProps> = ({
           <div className="flex justify-between items-center mt-4">
             <div>
               <span className="text-xl font-bold text-slate-800">
-                R${negociacao.novo_valor.toFixed(2)}
+                R${negociacao.novo_valor}
               </span>
               {originalPrice && (
                 <span className="text-sm text-gray-500 line-through ml-2">
-                  R${originalPrice.toFixed(2)}
+                  R${originalPrice}
                 </span>
               )}
             </div>
