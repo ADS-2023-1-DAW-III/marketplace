@@ -11,9 +11,8 @@ import { Card, CardContent, CardFooter } from "~/components/ui/card"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "~/components/ui/select"
 import { SuccessAlert } from "~/components/ui/alertMessages"
 import { Plus } from "lucide-react"
-import { RequiredLabel } from "~/components/ui/RequiredLabel"
 import { ImageUpload } from "~/components/ui/ImageUpload"
-import { NegotiationSection } from "~/components/ui/NegotiationSection"
+import { Checkbox } from "~/components/ui/checkBox"
 
 const serviceSchema = z.object({
   title: z.string().min(3, "Título deve ter pelo menos 3 caracteres"),
@@ -21,9 +20,6 @@ const serviceSchema = z.object({
   value: z.number().min(0.01, "Valor deve ser maior que zero"),
   category: z.string().min(1, "Selecione uma categoria"),
   allowNegotiation: z.boolean(),
-  negotiationType: z.string().optional(),
-  discountPercentage: z.number().optional(),
-  fixedDiscount: z.number().optional(),
   estimatedTime: z.string().min(1, "Tempo estimado é obrigatório"),
   customTime: z.string().optional(),
   image: z.instanceof(File).optional()
@@ -33,8 +29,6 @@ type ServiceFormData = z.infer<typeof serviceSchema>
 
 export default function CadastrarServico() {
   const [previewImage, setPreviewImage] = useState<string | null>(null)
-  const [isNegotiable, setIsNegotiable] = useState(false)
-  const [negotiationType, setNegotiationType] = useState("")
   const [showCustomTimeInput, setShowCustomTimeInput] = useState(false)
 
   const {
@@ -47,9 +41,6 @@ export default function CadastrarServico() {
     resolver: zodResolver(serviceSchema),
     defaultValues: {
       allowNegotiation: false,
-      negotiationType: "",
-      discountPercentage: undefined,
-      fixedDiscount: undefined,
       estimatedTime: "",
       category: ""
     }
@@ -109,7 +100,7 @@ export default function CadastrarServico() {
 
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <RequiredLabel htmlFor="title" className="text-[#103A57] text-lg">Título:</RequiredLabel>
+                  <Label htmlFor="title" className="text-[#103A57] text-lg">Título:</Label>
                   <Input
                     id="title"
                     placeholder="Digite o título do serviço"
@@ -122,7 +113,7 @@ export default function CadastrarServico() {
                 </div>
 
                 <div className="space-y-2">
-                  <RequiredLabel htmlFor="description" className="text-[#103A57] text-lg">Descrição:</RequiredLabel>
+                  <Label htmlFor="description" className="text-[#103A57] text-lg">Descrição:</Label>
                   <Textarea
                     id="description"
                     placeholder="Descreva detalhadamente o serviço"
@@ -136,7 +127,7 @@ export default function CadastrarServico() {
                 </div>
 
                 <div className="space-y-2">
-                  <RequiredLabel htmlFor="value" className="text-[#103A57] text-lg">Valor R$:</RequiredLabel>
+                  <Label htmlFor="value" className="text-[#103A57] text-lg">Valor R$:</Label>
                   <Input
                     id="value"
                     type="number"
@@ -171,19 +162,18 @@ export default function CadastrarServico() {
               </div>
 
               <div className="space-y-6">
-                <NegotiationSection
-                  isNegotiable={isNegotiable}
-                  negotiationType={negotiationType}
-                  onNegotiationToggle={(checked) => {
-                    setIsNegotiable(!!checked)
-                    setValue("allowNegotiation", !!checked)
-                  }}
-                  onTypeChange={(value) => {
-                    setNegotiationType(value)
-                    setValue("negotiationType", value)
-                  }}
-                  register={register}
-                />
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="allowNegotiation" 
+                    {...register("allowNegotiation")}
+                    onCheckedChange={(checked) => {
+                      setValue("allowNegotiation", !!checked)
+                    }}
+                  />
+                  <Label htmlFor="allowNegotiation" className="text-[#103A57] text-lg">
+                    Permitir negociação
+                  </Label>
+                </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="estimatedTime" className="text-[#103A57] text-lg">Tempo estimado para execução:</Label>
