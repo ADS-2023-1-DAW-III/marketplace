@@ -13,8 +13,27 @@ interface NegociacaoResponse {
   novo_valor: number;
 }
 
+interface NegociacaoCompleta {
+  id: string;
+  houve_negociacao: boolean;
+  aceito: boolean;
+  novo_valor: number;
+  data: string;
+  pessoa: {
+    nome: string;
+    email: string;
+  };
+  servico: {
+    id: string;
+    titulo: string;
+    descricao: string;
+    duracao: number;
+    preco: number;
+  };
+}
+
 export default function NegociacaoServicosPrestador() {
-  const [negociacoes, setNegociacoes] = useState<NegociacaoResponse[]>([]);
+  const [negociacoes, setNegociacoes] = useState<NegociacaoCompleta[]>([]);
   const [loading, setLoading] = useState(true);
   const api = useApi();
 
@@ -35,9 +54,14 @@ export default function NegociacaoServicosPrestador() {
   useEffect(() => {
     async function fetchServices() {
       try {
-        const response = await api.get("/negociacoes");
-        setNegociacoes(response.data || []);
-        console.log(response.data)
+        const { data: listaIds } = await api.get("/negociacoes");
+
+        const detalhesPromises = listaIds.map((n: NegociacaoResponse) =>
+          api.get(`/negociacoes/${n.id}`).then((res) => res.data.negociacao)
+        );
+
+        const negociacoesCompletas = await Promise.all(detalhesPromises);
+        setNegociacoes(negociacoesCompletas);
       } catch (error) {
         console.error("Erro ao buscar negociações:", error);
         ErrorAlert("Erro ao buscar negociações. Tente novamente.");
@@ -45,7 +69,6 @@ export default function NegociacaoServicosPrestador() {
         setLoading(false);
       }
     }
-
     fetchServices();
   }, []);
 
@@ -64,13 +87,13 @@ export default function NegociacaoServicosPrestador() {
                 <NegociacaoServicoCard
                   key={negociacao.id}
                   negociacao={negociacao}
-                  date={"2025-07-30"}
-                  title={`Serviço ID ${negociacao.servicoId}`}
-                  duration={"2 horas"}
-                  description={"Descrição simulada para teste"}
-                  name={`Prestador ${index + 1}`}
-                  email={`prestador${index + 1}@email.com`}
-                  originalPrice={negociacao.novo_valor + 50}
+                  date={new Date(negociacao.data).toLocaleDateString()}
+                  title={negociacao.servico.titulo}
+                  duration={`${negociacao.servico.duracao} minutos`}
+                  description={negociacao.servico.descricao}
+                  name={negociacao.pessoa.nome}
+                  email={negociacao.pessoa.email}
+                  originalPrice={Number(negociacao.servico.preco)}
                 />
               ))}
             </div>

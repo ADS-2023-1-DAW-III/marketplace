@@ -1,9 +1,8 @@
 
 import React from "react";
-import type { NegociacaoResponse } from "~/types/Negociacao";
 
 interface NegociacaoServicoCardProps {
-  negociacao: NegociacaoResponse;
+  negociacao: NegociacaoCompleta;
   date: string;
   title: string;
   duration: string;
