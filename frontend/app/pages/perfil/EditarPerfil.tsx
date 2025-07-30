@@ -12,6 +12,7 @@ import {
 } from "~/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { useNavigate } from "react-router-dom";
 
 import { useApi } from "~/hooks/services/api";
 import { AuthContext } from "~/hooks/context/authContext";
@@ -28,7 +29,6 @@ export function meta(_args: MetaArgs) {
   ];
 }
 
-
 const formSchema = z.object({
   nomeUsuario: z.string().min(1, "Nome de usuário é obrigatório."),
   email: z.string().email("Formato de e-mail inválido."),
@@ -43,7 +43,6 @@ const formSchema = z.object({
   message: "Os e-mails não correspondem.",
   path: ["confirmarEmail"],
 }).refine((data) => {
-  
     if (data.novaSenha && !data.senhaAtual) {
         return false;
     }
@@ -53,11 +52,10 @@ const formSchema = z.object({
     path: ["senhaAtual"],
 });
 
-
 type EditarPerfilForm = z.infer<typeof formSchema>;
 
-
 const EditarPerfil = () => {
+  const navigate = useNavigate();
   const form = useForm<EditarPerfilForm>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -71,46 +69,45 @@ const EditarPerfil = () => {
     },
   });
 
-
   const api = useApi();
   const { username } = useContext(AuthContext); 
   const [isLoading, setIsLoading] = useState(false);
 
-
   const onSubmit = async (data: EditarPerfilForm) => {
-  setIsLoading(true);
-  try {
-    const payload: any = {
-      nome: data.nomeUsuario,
-      email: data.email,
-      contato: data.contato,
-      habilidades: data.habilidades,
-    };
+    setIsLoading(true);
+    try {
+      const payload: any = {
+        nome: data.nomeUsuario,
+        email: data.email,
+        contato: data.contato,
+        habilidades: data.habilidades,
+      };
 
-    if (data.novaSenha) {
-      payload.senhaAtual = data.senhaAtual;
-      payload.novaSenha = data.novaSenha;
-    }
+      if (data.novaSenha) {
+        payload.senhaAtual = data.senhaAtual;
+        payload.novaSenha = data.novaSenha;
+      }
 
-    const response = await api.put(`/pessoas/${username}`, payload); 
+      const response = await api.put(`/pessoas/${username}`, payload); 
 
-    if (response.status === 200 || response.status === 204) {
-      SuccessAlert("Perfil atualizado com sucesso!");
-    } else {
-      ErrorAlert("Erro ao atualizar perfil. Tente novamente.");
+      if (response.status === 200 || response.status === 204) {
+        SuccessAlert("Perfil atualizado com sucesso!");
+        navigate('/perfil');
+      } else {
+        ErrorAlert("Erro ao atualizar perfil. Tente novamente.");
+      }
+    } catch (error: any) {
+      console.error("Erro ao submeter formulário:", error);
+      if (error.response) {
+        const errorMessage = error.response.data.message || "Ocorreu um erro.";
+        ErrorAlert(`Erro: ${errorMessage}`);
+      } else {
+        ErrorAlert(`Erro de conexão: ${error.message}`);
+      }
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error: any) {
-    console.error("Erro ao submeter formulário:", error);
-    if (error.response) {
-      const errorMessage = error.response.data.message || "Ocorreu um erro.";
-      ErrorAlert(`Erro: ${errorMessage}`);
-    } else {
-      ErrorAlert(`Erro de conexão: ${error.message}`);
-    }
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   return (
     <div className="p-4 container mx-auto max-w-4xl">
@@ -220,9 +217,13 @@ const EditarPerfil = () => {
             )}
           />
 
-
           <div className="flex gap-4 justify-end pt-4">
-            <Button type="button" variant="outline" className="bg-red-700 hover:bg-red-800 text-white">
+            <Button 
+              type="button" 
+              variant="outline" 
+              className="bg-red-700 hover:bg-red-800 text-white"
+              onClick={() => navigate('/perfil')}
+            >
               Cancelar
             </Button>
             <Button type="submit" className="bg-[#307B8E] hover:bg-[#265D6B]" disabled={isLoading}>
