@@ -107,7 +107,7 @@ Um template moderno e pronto para produção para construir aplicações React f
 Instale as dependências:
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Desenvolvimento
@@ -115,7 +115,7 @@ npm install
 Inicie o servidor de desenvolvimento com HMR:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Sua aplicação estará disponível em `http://localhost:5173`.
@@ -125,7 +125,7 @@ Sua aplicação estará disponível em `http://localhost:5173`.
 Crie um build para produção:
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 ## Implantação
