@@ -60,6 +60,7 @@ export default function SearchFilter({
   });
   const api = useApi();
   const [categoriaData, setCategoriaData] = useState<Categoria[]>();
+  const [loading, setLoading] = useState<boolean>(true)
 
   const getCategorias = async () => {
     try {
@@ -83,8 +84,12 @@ export default function SearchFilter({
         return newFilters;
       });
     }
-    getCategorias();
   }, [externalFilters]);
+
+  useEffect(() => {
+    getCategorias();
+    setLoading(loading)
+  }, [loading])
 
   const createQueryParams = useCallback(
     (currentFilters: SearchFilters): URLSearchParams => {
