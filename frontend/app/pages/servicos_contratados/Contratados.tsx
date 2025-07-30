@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, type JSX } from "react";
-import { ErrorAlert } from "~/components/ui/alertMessages";
+import { ErrorAlert } from "~/components/ui/AlertMessages";
 import SearchFilter from "~/components/ui/SearchFilter";
 import { ServicosList } from "~/components/ui/ServicosList";
 import { useApi } from "~/hooks/services/api";
@@ -27,7 +27,6 @@ export default function ServicosContratadosPage(): JSX.Element {
 
   const handleSearch = async (queryParams: URLSearchParams) => {
     setIsLoading(true);
-    console.log("Query Params:", queryParams.toString());
     try {
       const response = await api.get("/servicos/contratados", {
         params: queryParams,
@@ -118,14 +117,17 @@ export default function ServicosContratadosPage(): JSX.Element {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="p-4 md:p-8">
+    <div className="bg-gray-50">
+      <div className="h-full p-4 md:p-8">
         <SearchFilter
+          title="Serviços Contratados"
+          categoria
+          avaliacao
           onSearch={handleSearch}
-          externalFilters={externalFilters}
+          externalFiltersSelect={externalFilters}
         />
         <ServicosList servicos={servicos} isLoading={isLoading} />
-      </main>
+      </div>
     </div>
   );
 }

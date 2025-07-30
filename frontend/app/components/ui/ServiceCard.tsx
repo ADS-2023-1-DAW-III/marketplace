@@ -7,6 +7,8 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Link } from "react-router-dom";
+import type { Categoria } from "~/types/Categoria";
+import { getImage } from "~/lib/utils";
 
 type ServiceCardProps = {
   readonly title: string;
@@ -14,6 +16,8 @@ type ServiceCardProps = {
   readonly price: string;
   readonly duration: string;
   readonly isNegotiable: boolean;
+  readonly categoria?: Categoria;
+  readonly image?: string;
 };
 
 export default function ServiceCard({
@@ -22,6 +26,8 @@ export default function ServiceCard({
   price,
   duration,
   isNegotiable,
+  categoria,
+  image,
 }: ServiceCardProps) {
   return (
     <Card className="flex flex-col justify-between h-full">
@@ -39,7 +45,11 @@ export default function ServiceCard({
 
       <CardContent className="flex flex-col items-center gap-3">
         <img
-          src="app/assets/CardImg.png"
+          src={
+            image
+              ? getImage(image.slice(1, image.length))
+              : "app/assets/CardImg.png"
+          }
           alt={title}
           className="rounded-md w-full h-[160px] object-cover"
         />
@@ -48,6 +58,11 @@ export default function ServiceCard({
             {description}
           </p>
         </CardDescription>
+        {categoria?.nome && (
+          <span className="font-poppins font-semibold text-lg text-center text-[#103A57]">
+            {categoria.nome}
+          </span>
+        )}
       </CardContent>
 
       <CardFooter className="flex justify-between items-center mt-auto">

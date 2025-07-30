@@ -1,6 +1,7 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import { AuthContext } from "../context/authContext";
 import { useContext } from "react";
+import { ErrorAlert } from "~/components/ui/AlertMessages";
 
 export function useApi() {
   const { token, setToken } = useContext(AuthContext);
@@ -34,6 +35,8 @@ export function useApi() {
     },
     (error: AxiosError) => {
       if (error.response?.status === 401) {
+        console.error("Unauthorized access - redirecting to login");
+        ErrorAlert("Sessão expirada. Por favor, faça login novamente.");
         setToken(null);
       }
 

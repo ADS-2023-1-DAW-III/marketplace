@@ -4,7 +4,7 @@ import SearchFilter from "~/components/ui/SearchFilter";
 import type { MetaArgs } from "react-router";
 import { useEffect, useState } from "react";
 import { useApi } from "~/hooks/services/api";
-import { ErrorAlert } from "~/components/ui/alertMessages";
+import { ErrorAlert } from "~/components/ui/AlertMessages";
 
 export function meta(_args: MetaArgs) {
   return [
@@ -21,7 +21,7 @@ type Service = {
   titulo: string;
   preco: string;
   duracao: number;
-  id_imagem: string;
+  caminhoImagem: string;
   eh_negociavel: boolean;
   descricao: string;
   categoria: {
@@ -66,14 +66,20 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="bg-[#307B8E] pb-20">
+    <div className="bg-white">
+      <div className="bg-[#307B8E]">
         <Hero />
       </div>
 
-      <main className="container mx-auto px-4 py-8 -mt-10 relative z-10 pb-20">
+      <main className="container mx-auto px-4 py-8 relative z-10 pb-20">
         <div className="mb-12">
-          <SearchFilter onSearch={handleSearch} />
+          <SearchFilter
+            title="Busque aqui!"
+            onSearch={handleSearch}
+            categoria
+            avaliacao
+            valorFiltro
+          />
         </div>
 
         {loading ? (
@@ -90,6 +96,7 @@ export default function Home() {
                 price={service.preco}
                 duration={`${service.duracao}min`}
                 isNegotiable={service.eh_negociavel}
+                image={service.caminhoImagem}
               />
             ))}
           </div>
