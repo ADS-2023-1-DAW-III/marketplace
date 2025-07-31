@@ -2,7 +2,8 @@
 
 import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import { ArrowLeft, Star } from "lucide-react";
+import { ArrowLeft} from "lucide-react";
+import StarRating from "~/components/ui/StarRating";
 
 import { useApi } from "~/hooks/services/api";
 import { Button } from "~/components/ui/button";
@@ -13,32 +14,6 @@ import { Avatar } from "~/components/ui/avatar";
 import { AuthContext } from "~/hooks/context/authContext";
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
-const StarRating = ({ rating }: { rating: number }) => (
-  <div className="flex items-center gap-1">
-    {Array.from({ length: 5 }, (_, index) => (
-      <Star
-        key={index}
-        className={`h-5 w-5 ${index < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
-      />
-    ))}
-  </div>
-);
-
-const adaptarServicoDetalhado = (data: ServicoDetalhadoInterface): Servico => ({
-  id: data.id,
-  status: data.status,
-  duracao: String(data.duracao),
-  titulo: data.titulo,
-  descricao: data.descricao,
-  preco: data.preco,
-  imagem: data.caminhoImagem,
-  nome_prestador: data.pessoa?.nome,
-  contato: data.pessoa?.email,
-  avatar_prestador: "",
-  pessoa: data.pessoa,
-  data: undefined,
-});
-
 export default function ServicoVisaoContratante() {
   const { id: servicoId } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -48,6 +23,7 @@ export default function ServicoVisaoContratante() {
   const [negociacoes, setNegociacoes] = useState<ServicoDetalhadoInterface[]>([]);
   const [loading, setLoading] = useState(true);
   const [servico, setServico] = useState<ServicoDetalhadoInterface | null>(null);
+  const [estrelas, setEstrelas] = useState(0);
 
   useEffect(() => {
     if (!servicoId) {
@@ -95,8 +71,6 @@ export default function ServicoVisaoContratante() {
       </div>
     );
   }
-
-  const servicoAdaptado = adaptarServicoDetalhado(servico);
 
   return (
     <div className="p-4 md:p-8 max-w-4xl mx-auto bg-white rounded-lg shadow-sm">
@@ -176,7 +150,7 @@ export default function ServicoVisaoContratante() {
 
           <div className="mb-6">
             <p className="font-medium mb-2 text-gray-700">Deixe sua avaliação:</p>
-            <StarRating rating={0} />
+            <StarRating rating={estrelas} onChange={setEstrelas} />
             <div className="flex gap-2 mt-2">
               <input
                 type="text"
