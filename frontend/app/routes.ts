@@ -23,4 +23,5 @@ export default [
       "pages/servicos_prestados/ServicosPrestados.tsx"
     ),
   ]),
+  route("/negociacoes", "pages/negociacoes/Negociacoes.tsx"),
 ] satisfies RouteConfig;
