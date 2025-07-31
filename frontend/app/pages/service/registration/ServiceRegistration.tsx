@@ -1,35 +1,53 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { Link } from "react-router-dom"
+import { Link, type MetaArgs } from "react-router-dom"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
 import { Textarea } from "~/components/ui/textArea"
 import { Card, CardContent, CardFooter } from "~/components/ui/card"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "~/components/ui/select"
-import { SuccessAlert } from "~/components/ui/AlertMessages"
+import { SuccessAlert, ErrorAlert } from "~/components/ui/AlertMessages"
 import { Plus } from "lucide-react"
 import { ImageUpload } from "~/components/ui/ImageUpload"
 import { Checkbox } from "~/components/ui/checkBox"
+import { AuthContext } from "~/hooks/context/authContext"
+
+export function meta(_args: MetaArgs) {
+  return [
+    { title: "Cadastrar Serviço" },
+    { name: "description", content: "Cadastre novos serviços no marketplace" }
+  ]
+}
 
 const serviceSchema = z.object({
-  title: z.string().min(3, "Título deve ter pelo menos 3 caracteres"),
-  description: z.string().min(10, "Descrição deve ter pelo menos 10 caracteres"),
-  value: z.number().min(0.01, "Valor deve ser maior que zero"),
-  category: z.string().min(1, "Selecione uma categoria"),
+  title: z.string().min(3),
+  description: z.string().min(10),
+  value: z.number().min(0.01),
+  category: z.string().min(1),
   allowNegotiation: z.boolean(),
-  estimatedTime: z.string().min(1, "Tempo estimado é obrigatório"),
+  estimatedTime: z.string().min(1),
   customTime: z.string().optional(),
   image: z.instanceof(File).optional()
 })
 
 type ServiceFormData = z.infer<typeof serviceSchema>
 
+const categories = [
+  { value: "tech", label: "Tecnologia" },
+  { value: "events", label: "Eventos" },
+  { value: "transport", label: "Transporte" },
+  { value: "home", label: "Serviços Domésticos" },
+  { value: "education", label: "Educação" }
+]
+
 export default function CadastrarServico() {
+  const { token, userId } = useContext(AuthContext)
   const [previewImage, setPreviewImage] = useState<string | null>(null)
   const [showCustomTimeInput, setShowCustomTimeInput] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const {
     register,
@@ -46,11 +64,71 @@ export default function CadastrarServico() {
     }
   })
 
-  const onSubmit = (data: ServiceFormData) => {
-    console.log(data)
-    SuccessAlert("Serviço cadastrado com sucesso!")
-    reset()
-    setPreviewImage(null)
+  const parseDurationToMinutes = (duration: string): number => {
+    if (duration === 'custom') {
+      return 60;
+    }
+
+    const unit = duration.slice(-1);
+    const value = parseInt(duration.slice(0, -1));
+
+    switch (unit) {
+      case 'h': return value * 60;
+      case 'd': return value * 24 * 60;
+      case 'w': return value * 7 * 24 * 60;
+      case 'm': return value * 30 * 24 * 60;
+      default: return value;
+    }
+  }
+
+  const onSubmit = async (data: ServiceFormData) => {
+    setIsSubmitting(true)
+    try {
+      if (!token || !userId) {
+        ErrorAlert("Você precisa estar logado para cadastrar um serviço.")
+        setIsSubmitting(false)
+        return
+      }
+
+      const durationInMinutes = parseDurationToMinutes(
+        data.estimatedTime === 'custom' ? data.customTime || data.estimatedTime : data.estimatedTime
+      )
+
+      const formData = new FormData()
+      formData.append('titulo', data.title)
+      formData.append('descricao', data.description)
+      formData.append('preco', data.value.toString())
+      formData.append('eh_negociavel', data.allowNegotiation.toString())
+      formData.append('duracao', durationInMinutes.toString())
+      formData.append('categorias', JSON.stringify([data.category]))
+      formData.append('id_prestador', userId)
+
+      if (data.image) {
+        formData.append('files', data.image)
+      }
+
+      const response = await fetch('http://localhost:8080/servicos', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Erro ao cadastrar serviço')
+      }
+
+      const responseData = await response.json()
+      SuccessAlert(responseData.message || 'Serviço cadastrado com sucesso!')
+      reset()
+      setPreviewImage(null)
+    } catch (error) {
+      ErrorAlert(error.message || 'Erro ao cadastrar serviço')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,14 +151,6 @@ export default function CadastrarServico() {
       setValue("customTime", undefined)
     }
   }
-
-  const categories = [
-    { value: "tech", label: "Tecnologia" },
-    { value: "events", label: "Eventos" },
-    { value: "transport", label: "Transporte" },
-    { value: "home", label: "Serviços Domésticos" },
-    { value: "education", label: "Educação" }
-  ]
 
   return (
     <div className="min-h-screen bg-white p-6">
@@ -216,14 +286,15 @@ export default function CadastrarServico() {
                   className="border-[#307B8E] text-[#307B8E] hover:bg-[#307B8E]/10"
                   asChild
                 >
-                  <Link to="/">Cancelar</Link>
+                  <Link to="/servicos_prestados">Cancelar</Link>
                 </Button>
                 <Button 
                   type="submit"
                   className="bg-[#307B8E] hover:bg-[#307B8E]/90"
+                  disabled={isSubmitting}
                 >
                   <Plus className="mr-2 h-4 w-4" />
-                  Publicar
+                  {isSubmitting ? "Enviando..." : "Publicar"}
                 </Button>
               </CardFooter>
             </form>
