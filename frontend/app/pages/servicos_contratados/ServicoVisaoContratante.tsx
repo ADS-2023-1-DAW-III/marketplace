@@ -82,12 +82,10 @@ export default function ServicoVisaoContratante() {
   }, [servicoId]);
 
   if (loading) {
-    console.log("⏳ Carregando...");
     return <div className="p-8 text-center">Carregando detalhes...</div>;
   }
 
   if (!servico) {
-    console.warn("🚫 Nenhum serviço selecionado ou encontrado.");
     return (
       <div className="p-8 text-center text-red-600">
         <p>Serviço não encontrado.</p>
