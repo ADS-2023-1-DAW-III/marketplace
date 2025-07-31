@@ -97,7 +97,6 @@ export default function ServicoVisaoContratante() {
   }
 
   const servicoAdaptado = adaptarServicoDetalhado(servico);
-  console.log("🔧 Serviço adaptado para visualização:", servicoAdaptado);
 
   return (
     <div className="p-4 md:p-8 max-w-4xl mx-auto bg-white rounded-lg shadow-sm">
@@ -140,7 +139,6 @@ export default function ServicoVisaoContratante() {
           </div>
         </section>
 
-        {/* Prestador */}
         <section className="mb-8 p-6 border rounded-lg">
           <h3 className="text-xl font-bold mb-4 text-gray-800">Informações do Prestador</h3>
           <div className="flex items-center gap-4">
@@ -161,7 +159,6 @@ export default function ServicoVisaoContratante() {
           </div>
         </section>
 
-        {/* Negociação */}
         <section className="mb-8 p-6 border rounded-lg">
           <h3 className="text-xl font-bold mb-4 text-gray-800">Negociação de Valor</h3>
           <div className="flex gap-2">
@@ -174,7 +171,6 @@ export default function ServicoVisaoContratante() {
           </div>
         </section>
 
-        {/* Feedback */}
         <section className="p-6 border rounded-lg">
           <h3 className="text-xl font-bold mb-4 text-gray-800">Feedback</h3>
 
