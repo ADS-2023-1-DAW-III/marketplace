@@ -90,31 +90,47 @@ export default function Sidebar() {
             Serviços prestados
           </Link>
           <Link
-            to="/contratados"
-            className="flex items-center font-poppins font-medium text-lg py-3 pl-10 hover:bg-white hover:text-[#307B8E] hover:stroke-[#307B8E] transition-colors duration-500 stroke-white"
+              to="/meus_servicos"
+              className="flex items-center font-poppins font-medium text-lg py-3 pl-10 hover:bg-white hover:text-[#307B8E] hover:stroke-[#307B8E] transition-colors duration-500 stroke-white"
           >
             <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="mr-5"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="mr-5"
+            >
+
+            </svg>
+            Meus serviços
+          </Link>
+          <Link
+              to="/contratados"
+              className="flex items-center font-poppins font-medium text-lg py-3 pl-10 hover:bg-white hover:text-[#307B8E] hover:stroke-[#307B8E] transition-colors duration-500 stroke-white"
+          >
+            <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="mr-5"
             >
               <path
-                d="M22 18H6C5.46957 18 4.96086 17.7893 4.58579 17.4142C4.21071 17.0391 4 16.5304 4 16V7C4 6.46957 3.78929 5.96086 3.41421 5.58579C3.03914 5.21071 2.53043 5 2 5"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                  d="M22 18H6C5.46957 18 4.96086 17.7893 4.58579 17.4142C4.21071 17.0391 4 16.5304 4 16V7C4 6.46957 3.78929 5.96086 3.41421 5.58579C3.03914 5.21071 2.53043 5 2 5"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
               />
               <path
-                d="M17 14V4C17 3.46957 16.7893 2.96086 16.4142 2.58579C16.0391 2.21071 15.5304 2 15 2H14C13.4696 2 12.9609 2.21071 12.5858 2.58579C12.2107 2.96086 12 3.46957 12 4V14"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                  d="M17 14V4C17 3.46957 16.7893 2.96086 16.4142 2.58579C16.0391 2.21071 15.5304 2 15 2H14C13.4696 2 12.9609 2.21071 12.5858 2.58579C12.2107 2.96086 12 3.46957 12 4V14"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
               />
               <path
-                d="M20 6H9C8.44772 6 8 6.44772 8 7V13C8 13.5523 8.44772 14 9 14H20C20.5523 14 21 13.5523 21 13V7C21 6.44772 20.5523 6 20 6Z"
+                  d="M20 6H9C8.44772 6 8 6.44772 8 7V13C8 13.5523 8.44772 14 9 14H20C20.5523 14 21 13.5523 21 13V7C21 6.44772 20.5523 6 20 6Z"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
