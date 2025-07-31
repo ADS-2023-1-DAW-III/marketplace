@@ -53,6 +53,7 @@ export default function Home() {
     async function fetchServices() {
       try {
         const response = await api.get("/servicos");
+        console.log(response.data.servicos)
         setServices(response.data.servicos || []);
       } catch (error) {
         console.error("Erro ao buscar serviços:", error);
@@ -90,6 +91,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service) => (
               <ServiceCard
+                id={service.id}
                 key={service.id}
                 title={service.titulo}
                 description={service.descricao}
