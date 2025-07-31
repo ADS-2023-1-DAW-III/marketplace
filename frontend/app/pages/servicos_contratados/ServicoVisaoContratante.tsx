@@ -57,14 +57,11 @@ export default function ServicoVisaoContratante() {
 
     const fetchServicoDetalhado = async () => {
       setLoading(true);
-      console.log("🔄 Iniciando busca de serviços para contratante:", username);
 
       try {
         const response = await api.get<{ negociacoes: ServicoDetalhadoInterface[] }>(
           `/negociacoes/contratante/${username}`
         );
-
-        console.log("📦 Dados recebidos da API:", response.data);
 
         const dados = response.data.negociacoes || [];
         setNegociacoes(dados);
@@ -74,21 +71,7 @@ export default function ServicoVisaoContratante() {
         );
         setServico(responseServico.data);
 
-        console.log("🧾 Todas as negociações:", dados);
-        console.log("🔍 Procurando serviço com ID:", servicoId);
-
-        // const encontrado = dados.find((item) => item.id === servicoId);
-
-        // if (!encontrado) {
-        //   console.warn("❌ Serviço com o ID especificado não encontrado.");
-        //   ErrorAlert("Serviço não encontrado.");
-        // } else {
-        //   console.log("✅ Serviço encontrado:", encontrado);
-        //   setServico(encontrado);
-        // }
-
       } catch (err) {
-        console.error("❌ Erro ao buscar dados do serviço:", err);
         ErrorAlert("Não foi possível carregar os dados do serviço.");
       } finally {
         setLoading(false);
