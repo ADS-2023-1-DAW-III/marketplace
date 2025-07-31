@@ -67,8 +67,8 @@ export class CreateServicoRequestDto {
     isArray: true,
     items: { type: 'string' },
   })
-  @IsArray()
-  @ArrayNotEmpty()
+  // @IsArray()
+  // @ArrayNotEmpty()
   @IsString({ each: true })
   categorias: string[];
 }
