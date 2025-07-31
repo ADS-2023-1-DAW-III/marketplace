@@ -11,6 +11,7 @@ import type { Servico, ServicoDetalhadoInterface } from "~/types/Servico";
 import type { AvaliacaoResponse } from "~/types/Avaliacao";
 import { Avatar } from "~/components/ui/avatar";
 import { AuthContext } from "~/hooks/context/authContext";
+import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 const StarRating = ({ rating }: { rating: number }) => (
   <div className="flex items-center gap-1">
@@ -55,24 +56,39 @@ export default function ServicoVisaoContratante() {
     }
 
     const fetchServicoDetalhado = async () => {
+      setLoading(true);
+      console.log("🔄 Iniciando busca de serviços para contratante:", username);
 
       try {
         const response = await api.get<{ negociacoes: ServicoDetalhadoInterface[] }>(
           `/negociacoes/contratante/${username}`
         );
 
+        console.log("📦 Dados recebidos da API:", response.data);
 
-        setNegociacoes(negociacoes);
+        const dados = response.data.negociacoes || [];
+        setNegociacoes(dados);
 
+        const responseServico = await api.get<ServicoDetalhadoInterface>(
+          `/servicos/${servicoId}`
+        );
+        setServico(responseServico.data);
 
-        const encontrado = negociacoes.find((item) => item.id === servicoId);
+        console.log("🧾 Todas as negociações:", dados);
+        console.log("🔍 Procurando serviço com ID:", servicoId);
 
-        if (!encontrado) {
-          ErrorAlert("Serviço não encontrado.");
-        } else {
-          setServico(encontrado);
-        }
+        // const encontrado = dados.find((item) => item.id === servicoId);
+
+        // if (!encontrado) {
+        //   console.warn("❌ Serviço com o ID especificado não encontrado.");
+        //   ErrorAlert("Serviço não encontrado.");
+        // } else {
+        //   console.log("✅ Serviço encontrado:", encontrado);
+        //   setServico(encontrado);
+        // }
+
       } catch (err) {
+        console.error("❌ Erro ao buscar dados do serviço:", err);
         ErrorAlert("Não foi possível carregar os dados do serviço.");
       } finally {
         setLoading(false);
@@ -80,13 +96,15 @@ export default function ServicoVisaoContratante() {
     };
 
     fetchServicoDetalhado();
-  }, [loading]);
+  }, [servicoId]);
 
   if (loading) {
+    console.log("⏳ Carregando...");
     return <div className="p-8 text-center">Carregando detalhes...</div>;
   }
 
   if (!servico) {
+    console.warn("🚫 Nenhum serviço selecionado ou encontrado.");
     return (
       <div className="p-8 text-center text-red-600">
         <p>Serviço não encontrado.</p>
@@ -98,6 +116,7 @@ export default function ServicoVisaoContratante() {
   }
 
   const servicoAdaptado = adaptarServicoDetalhado(servico);
+  console.log("🔧 Serviço adaptado para visualização:", servicoAdaptado);
 
   return (
     <div className="p-4 md:p-8 max-w-4xl mx-auto bg-white rounded-lg shadow-sm">
@@ -113,7 +132,7 @@ export default function ServicoVisaoContratante() {
           <h2 className="text-2xl font-bold text-center mb-4 text-gray-900">{servico.titulo}</h2>
           <div className="flex justify-center mb-4">
             <img
-              src={servico.caminhoImagem || 'https://www.enroma.com/julio-cesar/'}
+              src={'https://i.pinimg.com/736x/9b/c2/3e/9bc23ea82f1e59b1416ca7756b98068a.jpg'}
               alt={servico.titulo}
               className="rounded-lg max-w-sm w-full object-cover"
             />
@@ -144,8 +163,15 @@ export default function ServicoVisaoContratante() {
         <section className="mb-8 p-6 border rounded-lg">
           <h3 className="text-xl font-bold mb-4 text-gray-800">Informações do Prestador</h3>
           <div className="flex items-center gap-4">
-            <Avatar className="h-16 w-16">
-              {/* <AvatarFallback>{servico.pessoa.nome.charAt(0)}</AvatarFallback> */}
+            <Avatar className="h-16 w-16 rounded-full object-cover">
+              <AvatarImage
+                src="https://i.pinimg.com/736x/3d/3d/d8/3d3dd86dcd9f37c61633b4e9ab128a15.jpg"
+                alt={servico.pessoa.nome}
+                className="object-cover"
+              />
+              <AvatarFallback>
+                {servico.pessoa.nome.charAt(0).toUpperCase()}
+              </AvatarFallback>
             </Avatar>
             <div>
               <p className="font-semibold text-lg text-gray-900">{servico.pessoa.nome}</p>
