@@ -18,9 +18,6 @@ export default function ServicoVisaoContratante() {
   const { id: servicoId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const api = useApi();
-  const { username } = useContext(AuthContext);
-
-  const [negociacoes, setNegociacoes] = useState<ServicoDetalhadoInterface[]>([]);
   const [loading, setLoading] = useState(true);
   const [servico, setServico] = useState<ServicoDetalhadoInterface | null>(null);
   const [estrelas, setEstrelas] = useState(0);
@@ -35,13 +32,6 @@ export default function ServicoVisaoContratante() {
       setLoading(true);
 
       try {
-        const response = await api.get<{ negociacoes: ServicoDetalhadoInterface[] }>(
-          `/negociacoes/contratante/${username}`
-        );
-
-        const dados = response.data.negociacoes || [];
-        setNegociacoes(dados);
-
         const responseServico = await api.get<ServicoDetalhadoInterface>(
           `/servicos/${servicoId}`
         );
