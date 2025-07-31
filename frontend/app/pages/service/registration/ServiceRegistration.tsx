@@ -14,6 +14,7 @@ import { Plus } from "lucide-react"
 import { ImageUpload } from "~/components/ui/ImageUpload"
 import { Checkbox } from "~/components/ui/checkBox"
 import { AuthContext } from "~/hooks/context/authContext"
+import { useApi } from "~/hooks/services/api"
 
 export function meta(_args: MetaArgs) {
   return [
@@ -30,7 +31,7 @@ const serviceSchema = z.object({
   allowNegotiation: z.boolean(),
   estimatedTime: z.string().min(1),
   customTime: z.string().optional(),
-  image: z.instanceof(File).optional()
+  files: z.instanceof(File).optional()
 })
 
 type ServiceFormData = z.infer<typeof serviceSchema>
@@ -44,7 +45,8 @@ const categories = [
 ]
 
 export default function CadastrarServico() {
-  const { token, userId } = useContext(AuthContext)
+  const { token } = useContext(AuthContext);
+  const api = useApi();
   const [previewImage, setPreviewImage] = useState<string | null>(null)
   const [showCustomTimeInput, setShowCustomTimeInput] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -65,9 +67,9 @@ export default function CadastrarServico() {
   })
 
   const parseDurationToMinutes = (duration: string): number => {
-    if (duration === 'custom') {
-      return 60;
-    }
+    // if (duration === 'custom') {
+    //   return 60;
+    // }
 
     const unit = duration.slice(-1);
     const value = parseInt(duration.slice(0, -1));
@@ -84,48 +86,86 @@ export default function CadastrarServico() {
   const onSubmit = async (data: ServiceFormData) => {
     setIsSubmitting(true)
     try {
-      if (!token || !userId) {
+      if (!token) {
         ErrorAlert("Você precisa estar logado para cadastrar um serviço.")
         setIsSubmitting(false)
         return
       }
 
-      const durationInMinutes = parseDurationToMinutes(
-        data.estimatedTime === 'custom' ? data.customTime || data.estimatedTime : data.estimatedTime
-      )
+      // const durationInMinutes = parseDurationToMinutes(
+      //   data.estimatedTime === data.customTime
+      // )
+
+      console.log({
+        id_prestador: token,
+        titulo: data.title,
+        preco: data.value,
+        descricao: data.description,
+        eh_negociavel: data.allowNegotiation,
+        duracao: data.estimatedTime,
+        categorias: JSON.stringify([data.category]),
+      });
 
       const formData = new FormData()
       formData.append('titulo', data.title)
       formData.append('descricao', data.description)
       formData.append('preco', data.value.toString())
       formData.append('eh_negociavel', data.allowNegotiation.toString())
-      formData.append('duracao', durationInMinutes.toString())
+      formData.append('duracao', parseDurationToMinutes(data.estimatedTime).toString())
       formData.append('categorias', JSON.stringify([data.category]))
-      formData.append('id_prestador', userId)
-
-      if (data.image) {
-        formData.append('files', data.image)
+      formData.append('id_prestador', token)
+      
+      if (data.files) {
+        formData.append('image', data.files)
       }
 
-      const response = await fetch('http://localhost:8080/servicos', {
-        method: 'POST',
+      // const response = await fetch('http://localhost:8080/servicos', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Authorization': `Bearer ${token}`
+      //   },
+      //   body: formData
+      // })
+
+
+      // const categorias: string[] = [data.category]
+
+      // const response = await api.post(
+      //   "/servicos",
+      //   {
+      //     id_prestador: token,
+      //     titulo: data.title,
+      //     preco: data.value,
+      //     descricao: data.description,
+      //     eh_negociavel: data.allowNegotiation,
+      //     duracao: data.estimatedTime,
+      //     categorias: categorias,
+      //     files: formData,
+      //   },
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // );
+      const response = await api.post("/servicos", formData, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          "Content-Type": "multipart/form-data",
         },
-        body: formData
-      })
+      });
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || 'Erro ao cadastrar serviço')
-      }
+      // if (!response.ok) {
+      //   const errorData = await response.json()
+      //   throw new Error(errorData.message || 'Erro ao cadastrar serviço')
+      // }
 
-      const responseData = await response.json()
-      SuccessAlert(responseData.message || 'Serviço cadastrado com sucesso!')
+      // const responseData = await response.json()
+      console.log(response);
+      SuccessAlert('Serviço cadastrado com sucesso!')
       reset()
       setPreviewImage(null)
     } catch (error) {
-      ErrorAlert(error.message || 'Erro ao cadastrar serviço')
+      // ErrorAlert(error.message || 'Erro ao cadastrar serviço')
     } finally {
       setIsSubmitting(false)
     }
@@ -135,21 +175,17 @@ export default function CadastrarServico() {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
       setPreviewImage(URL.createObjectURL(file))
-      setValue("image", file)
+      setValue("files", file)
     }
   }
 
   const removeImage = () => {
     setPreviewImage(null)
-    setValue("image", undefined)
+    setValue("files", undefined)
   }
 
   const handleTimeChange = (value: string) => {
     setValue("estimatedTime", value)
-    setShowCustomTimeInput(value === "custom")
-    if (value !== "custom") {
-      setValue("customTime", undefined)
-    }
   }
 
   return (
