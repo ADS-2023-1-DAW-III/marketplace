@@ -3,34 +3,7 @@ import { ErrorAlert } from "~/components/ui/AlertMessages";
 import NegociacaoServicoCard from "~/components/ui/NegociacaoServicoCard";
 import NegociacaoServicoTitle from "~/components/ui/NegociacaoServicoTitle";
 import { useApi } from "~/hooks/services/api";
-
-interface NegociacaoResponse {
-  id: string;
-  pessoaId: string;
-  servicoId: string;
-  houve_negociacao: boolean;
-  aceito: boolean;
-  novo_valor: number;
-}
-
-interface NegociacaoCompleta {
-  id: string;
-  houve_negociacao: boolean;
-  aceito: boolean;
-  novo_valor: number;
-  data: string;
-  pessoa: {
-    nome: string;
-    email: string;
-  };
-  servico: {
-    id: string;
-    titulo: string;
-    descricao: string;
-    duracao: number;
-    preco: number;
-  };
-}
+import type { NegociacaoCompleta, NegociacaoResponse } from "~/types/Negociacao";
 
 export default function NegociacaoServicosPrestador() {
   const [negociacoes, setNegociacoes] = useState<NegociacaoCompleta[]>([]);

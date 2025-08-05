@@ -1,4 +1,4 @@
-interface NegociacaoCompleta {
+export interface NegociacaoCompleta {
   id: string;
   houve_negociacao: boolean;
   aceito: boolean;
@@ -15,4 +15,13 @@ interface NegociacaoCompleta {
     duracao: number;
     preco: number;
   };
+}
+
+export interface NegociacaoResponse {
+  id: string;
+  pessoaId: string;
+  servicoId: string;
+  houve_negociacao: boolean;
+  aceito: boolean;
+  novo_valor: number;
 }
