@@ -38,7 +38,7 @@ export default function NegociacaoServicosPrestador() {
       setNegociacoes(prev => prev.filter(n => n.id !== negotiationId));
       
       // Mostrar feedback positivo
-      // SuccessAlert("Negociação aceita com sucesso!");
+      SuccessAlert("Negociação aceita com sucesso!");
     } catch (error) {
       console.error("Erro ao aceitar negociação:", error);
       ErrorAlert("Erro ao aceitar negociação. Tente novamente.");
@@ -56,7 +56,7 @@ export default function NegociacaoServicosPrestador() {
       setNegociacoes(prev => prev.filter(n => n.id !== negotiationId));
       
       // Mostrar feedback
-      // InfoAlert("Negociação rejeitada.");
+      InfoAlert("Negociação rejeitada.");
     } catch (error) {
       console.error("Erro ao rejeitar negociação:", error);
       ErrorAlert("Erro ao rejeitar negociação. Tente novamente.");
