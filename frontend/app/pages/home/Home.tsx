@@ -53,7 +53,6 @@ export default function Home() {
     async function fetchServices() {
       try {
         const response = await api.get("/servicos");
-        console.log(response.data.servicos)
         setServices(response.data.servicos || []);
       } catch (error) {
         console.error("Erro ao buscar serviços:", error);
