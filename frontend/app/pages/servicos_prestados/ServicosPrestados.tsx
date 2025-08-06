@@ -46,7 +46,7 @@ export default function SericoPrestados() {
       {services.length > 0 ? (
         services.map((service) => (
           <ServiceCard
-            key={service.id}
+            id={service.id}
             title={service.titulo}
             description={service.descricao}
             price={service.preco}
