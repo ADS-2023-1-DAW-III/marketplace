@@ -11,7 +11,8 @@ import { ErrorAlert } from "~/components/ui/AlertMessages";
 import type { Servico, ServicoDetalhadoInterface } from "~/types/Servico";
 import type { AvaliacaoResponse } from "~/types/Avaliacao";
 import { Avatar } from "~/components/ui/avatar";
-import { AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { AuthContext } from "~/hooks/context/authContext";
+import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 export default function ServicoVisaoContratante() {
   const { id: servicoId } = useParams<{ id: string }>();
