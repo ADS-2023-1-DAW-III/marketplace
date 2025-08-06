@@ -1,12 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "~/components/ui/button";
 import SearchFilter from "~/components/ui/SearchFilter";
 import ServiceCard from "~/components/ui/ServiceCard";
 import { ServicoEmptyState } from "~/components/ui/ServicoEmptyState";
 import type { ServicoDetalhadoInterface } from "~/types/Servico";
+import { useApi } from "~/hooks/services/api";
 
 export default function SericoPrestados() {
   const [services, setServices] = useState<ServicoDetalhadoInterface[]>([]);
+  const api = useApi();
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await api.get("/servicos/prestados");
+        setServices(response.data.servicos);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      }
+    };
+    fetchServices();
+  }, []);
 
   const handleAddFirstService = () => {
     console.log("");

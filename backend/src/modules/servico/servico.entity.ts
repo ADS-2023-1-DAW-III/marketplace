@@ -5,6 +5,7 @@ import {
   OneToMany,
   ManyToMany,
   PrimaryGeneratedColumn,
+  JoinTable,
 } from 'typeorm';
 import { Pessoa } from '../pessoa/pessoa.entity';
 import { Historico } from '../historico/historico.entity';
@@ -56,11 +57,28 @@ export class Servico {
   @OneToMany(() => Historico, (historico) => historico.pessoa)
   historico: Historico[];
 
-  @ManyToMany(() => Categoria, (categoria) => categoria.servicos)
+  @ManyToMany(() => Categoria, (categoria) => categoria.servicos, {
+    cascade: true,
+  })
+  @JoinTable({
+    name: 'categoria_servico',
+    joinColumns: [
+      {
+        name: 'servico_id',
+        referencedColumnName: 'id',
+      },
+    ],
+    inverseJoinColumns: [
+      {
+        name: 'categoria_nome',
+        referencedColumnName: 'nome',
+      },
+    ],
+  })
   categorias: Categoria[];
 
-  @OneToMany(() => Pagamento, (pagamento) => pagamento.servico) // <-- ADICIONADO: Relação com Pagamento
-  pagamentosRecebidos: Pagamento[]; // <-- ADICIONADO
+  @OneToMany(() => Pagamento, (pagamento) => pagamento.servico)
+  pagamentosRecebidos: Pagamento[];
 
   @OneToMany(() => Negociacao, (negociacao) => negociacao.servico)
   negociacoes: Negociacao[];
