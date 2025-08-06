@@ -22,10 +22,10 @@ export default [
       "/servicos_prestados",
       "pages/servicos_prestados/ServicosPrestados.tsx"
     ),
+    route(
+      "/servicos_prestados/service-registration", 
+      "pages/service/registration/ServiceRegistration.tsx"
+    ),
   ]),
-  route(
-    "/servicos_prestados/service-registration", 
-    "pages/service/registration/ServiceRegistration.tsx"
-  )
   
 ] satisfies RouteConfig;

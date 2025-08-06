@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, type MetaArgs } from "react-router-dom";
@@ -50,6 +51,7 @@ type Categoria = {
 export default function CadastrarServico() {
   const { token } = useContext(AuthContext);
   const api = useApi();
+  const navigate = useNavigate();
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [showCustomTimeInput, setShowCustomTimeInput] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -144,6 +146,7 @@ export default function CadastrarServico() {
       setPreviewImage(null);
       setSelectedCategories([]);
       setTempSelectValue(undefined);
+      setTimeout(() => navigate("/servicos_prestados"), 1500);
     } catch (error) {
       console.error(error);
       ErrorAlert("Erro ao cadastrar serviço.");

@@ -6,8 +6,6 @@ import { AuthContext } from "~/hooks/context/authContext";
 import { useApi } from "~/hooks/services/api";
 import type { AxiosError } from "axios";
 
-//import ServiceRegistration from "~/pages/service/registration/ServiceRegistration";
-
 export function meta(_args: MetaArgs) {
   return [
     { title: "Marketplace" },
@@ -46,7 +44,7 @@ export default function Index() {
   useEffect(() => {
     if (!token) {
       navigate("/login", { replace: true });
-      } else {
+    } else {
       heathly()
         .then((isHealthy) => {
           if (isHealthy) {
