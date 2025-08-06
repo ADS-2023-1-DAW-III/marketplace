@@ -30,46 +30,47 @@ export default function ServiceCard({
   image,
 }: ServiceCardProps) {
   return (
-    <Card className="flex flex-col justify-between h-full">
-      <CardHeader className="pb-2">
-        <div className="flex justify-between text-xs font-semibold text-muted-foreground">
-          <span className={isNegotiable ? "text-green-700" : "text-red-600"}>
+    <Card className="w-full h-[300px] flex flex-col justify-between rounded-xl border border-gray-200 shadow-sm p-4">
+      {/* Top section */}
+      <div>
+        <div className="flex justify-between text-xs font-medium text-muted-foreground mb-1">
+          <span className={isNegotiable ? "text-green-600" : "text-red-500"}>
             {isNegotiable ? "Negociável" : "Não negociável"}
           </span>
           <span className="text-[#366B2B]">{duration}</span>
         </div>
-        <CardTitle className="text-center text-[#103A57] text-base leading-tight">
+        <CardTitle className="text-center text-[#103A57] text-base mb-2">
           {title}
         </CardTitle>
-      </CardHeader>
-
-      <CardContent className="flex flex-col items-center gap-3">
-        <img
-          src={
-            image
-              ? getImage(image.slice(1, image.length))
-              : "app/assets/CardImg.png"
-          }
-          alt={title}
-          className="rounded-md w-full h-[160px] object-cover"
-        />
-        <CardDescription>
-          <p className="text-sm text-[#103A57] text-center h-[72px] overflow-hidden">
-            {description}
-          </p>
+        <div className="w-full h-[100px] mb-2">
+          <img
+            src={
+              image
+                ? getImage(image.slice(1))
+                : "/app/assets/CardImg.png"
+            }
+            alt={title}
+            className="w-full h-full object-cover rounded-md"
+          />
+        </div>
+        <CardDescription className="text-sm text-[#103A57] text-center max-h-[40px] overflow-hidden leading-snug mb-1">
+          {description}
         </CardDescription>
         {categoria?.nome && (
-          <span className="font-poppins font-semibold text-lg text-center text-[#103A57]">
+          <p className="text-sm font-semibold text-[#103A57] text-center">
             {categoria.nome}
-          </span>
+          </p>
         )}
-      </CardContent>
+      </div>
 
-      <CardFooter className="flex justify-between items-center mt-auto">
-        <span className="text-lg font-bold text-[#103A57]">R$ {price}</span>
+      {/* Footer section */}
+      <CardFooter className="flex justify-between items-center mt-2 p-0">
+        <span className="text-base font-bold text-[#103A57]">
+          R$ {price}
+        </span>
         <Link
           to="/"
-          className="bg-[#366B2B] hover:bg-white hover:text-[#366B2B] hover:border-[#366B2B] transition-colors duration-300 text-white text-sm font-bold px-5 py-2 rounded-lg border-2 border-[#366B2B]"
+          className="bg-[#366B2B] text-white text-sm font-semibold px-4 py-1.5 rounded-lg border border-[#366B2B] hover:bg-white hover:text-[#366B2B] transition-colors duration-300"
         >
           Ver
         </Link>
