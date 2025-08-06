@@ -2,7 +2,7 @@
 
 import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import { ArrowLeft} from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import StarRating from "~/components/ui/StarRating";
 
 import { useApi } from "~/hooks/services/api";
@@ -76,7 +76,11 @@ export default function ServicoVisaoContratante() {
           <h2 className="text-2xl font-bold text-center mb-4 text-gray-900">{servico.titulo}</h2>
           <div className="flex justify-center mb-4">
             <img
-              src={'https://i.pinimg.com/736x/9b/c2/3e/9bc23ea82f1e59b1416ca7756b98068a.jpg'}
+              src={
+                servico.caminhoImagem
+                  ? `/${servico.caminhoImagem}`
+                  : 'https://i.pinimg.com/736x/9b/c2/3e/9bc23ea82f1e59b1416ca7756b98068a.jpg'
+              }
               alt={servico.titulo}
               className="rounded-lg max-w-sm w-full object-cover"
             />
@@ -108,7 +112,7 @@ export default function ServicoVisaoContratante() {
           <div className="flex items-center gap-4">
             <Avatar className="h-16 w-16 rounded-full object-cover">
               <AvatarImage
-                src="https://i.pinimg.com/736x/3d/3d/d8/3d3dd86dcd9f37c61633b4e9ab128a15.jpg"
+                src={servico.pessoa.profileImageUrl ? servico.pessoa.profileImageUrl : 'https://i.pinimg.com/736x/3d/3d/d8/3d3dd86dcd9f37c61633b4e9ab128a15.jpg'}
                 alt={servico.pessoa.nome}
                 className="object-cover"
               />
