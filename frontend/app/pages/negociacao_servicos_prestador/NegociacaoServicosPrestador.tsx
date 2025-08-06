@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ErrorAlert } from "~/components/ui/AlertMessages";
+import { ErrorAlert, SuccessAlert } from "~/components/ui/AlertMessages";
 import NegociacaoServicoCard from "~/components/ui/NegociacaoServicoCard";
 import NegociacaoServicoTitle from "~/components/ui/NegociacaoServicoTitle";
 import { useApi } from "~/hooks/services/api";
@@ -56,7 +56,7 @@ export default function NegociacaoServicosPrestador() {
       setNegociacoes(prev => prev.filter(n => n.id !== negotiationId));
       
       // Mostrar feedback
-      InfoAlert("Negociação rejeitada.");
+      ErrorAlert("Negociação rejeitada.");
     } catch (error) {
       console.error("Erro ao rejeitar negociação:", error);
       ErrorAlert("Erro ao rejeitar negociação. Tente novamente.");
