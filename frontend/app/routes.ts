@@ -23,7 +23,9 @@ export default [
       "pages/servicos_prestados/ServicosPrestados.tsx"
     ),
     route(
-      "/negociacoes/:id", 
-      "pages/servicos_contratados/ServicoVisaoContratante.tsx"),
+      "/negociacoes/:id",
+      "pages/servicos_contratados/ServicoVisaoContratante.tsx"
+    ),
+    route("/detalhes_servico/:id", "pages/servicos_prestados/DetalhesServico.tsx"),
   ]),
 ] satisfies RouteConfig;
