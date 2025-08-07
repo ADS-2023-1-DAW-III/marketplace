@@ -4,12 +4,15 @@ import SearchFilter from "~/components/ui/SearchFilter";
 import ServiceCard from "~/components/ui/ServiceCard";
 import { ServicoEmptyState } from "~/components/ui/ServicoEmptyState";
 import type { ServicoDetalhadoInterface } from "~/types/Servico";
+import { useNavigate } from "react-router-dom";
 
 export default function SericoPrestados() {
+    const navigate = useNavigate();
+  
   const [services, setServices] = useState<ServicoDetalhadoInterface[]>([]);
-
+  
   const handleAddFirstService = () => {
-    console.log("");
+    navigate("/servicos_prestados/service-registration");
   };
 
   return (
@@ -43,7 +46,7 @@ export default function SericoPrestados() {
       {services.length > 0 ? (
         services.map((service) => (
           <ServiceCard
-            key={service.id}
+            id={service.id}
             title={service.titulo}
             description={service.descricao}
             price={service.preco}

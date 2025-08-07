@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import LayoutHome from "./LayoutHome";
-
 import type { MetaArgs } from "react-router";
 import { useNavigate } from "react-router";
 import { AuthContext } from "~/hooks/context/authContext";
@@ -10,13 +9,14 @@ import type { AxiosError } from "axios";
 export function meta(_args: MetaArgs) {
   return [
     { title: "Marketplace" },
-    { name: "Marketplace", content: "Bem vindo a seu markteplace de serviços" },
+    { name: "Marketplace", content: "Bem vindo a seu marketplace de serviços" },
   ];
 }
 
 export default function Index() {
   const { token } = useContext(AuthContext);
   const navigate = useNavigate();
+
   const api = useApi();
   const [loading, setLoading] = useState(true);
 

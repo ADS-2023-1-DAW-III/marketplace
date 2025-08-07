@@ -12,6 +12,7 @@ import { saveServiceImages } from 'src/lib/uploadsFiles/uploadFileServico';
 import { ServicoDetailedResponseDto } from './dto/servicoDetailedResponse.dto';
 import { CategoriaService } from '../categoria/categoria.service';
 import { PessoaService } from '../pessoa/pessoa.service';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class ServicoService {
