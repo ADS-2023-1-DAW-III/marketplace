@@ -69,15 +69,10 @@ export default function NegociacaoServicosPrestador() {
     try {
       setLoading(true);
       setError(null);
-      
-      const { data: listaIds } = await api.get("/negociacoes");
 
-      const detalhesPromises = listaIds.map((n: NegociacaoResponse) =>
-        api.get(`/negociacoes/${n.id}`).then((res) => res.data.negociacao)
-      );
+      const { data: negociacoes } = await api.get("/negociacoes");
 
-      const negociacoesCompletas = await Promise.all(detalhesPromises);
-      setNegociacoes(negociacoesCompletas);
+      setNegociacoes(negociacoes);
     } catch (error) {
       console.error("Erro ao buscar negociações:", error);
       setError("Erro ao buscar negociações. Tente novamente.");
