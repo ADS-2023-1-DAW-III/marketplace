@@ -4,12 +4,14 @@ import { useContext, useEffect, useState } from "react";
 import type { Pessoa } from "~/types/Pessoa";
 import { useApi } from "~/hooks/services/api";
 import { AuthContext } from "~/hooks/context/authContext";
+import { useNavigate } from "react-router";
 
 interface ProfileHeaderProps {
   readonly name?: string;
+  readonly onEditClick: () => void;
 }
 
-function ProfileHeader({ name }: ProfileHeaderProps) {
+function ProfileHeader({ name, onEditClick }: ProfileHeaderProps) {
   return (
     <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 mb-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -24,7 +26,7 @@ function ProfileHeader({ name }: ProfileHeaderProps) {
             {name}
           </h2>
 
-          <button className="inline-flex items-center gap-2 bg-[#307B8E] hover:bg-[#265D6B] text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+          <button onClick={onEditClick} className="inline-flex items-center gap-2 bg-[#307B8E] hover:bg-[#265D6B] text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
             <Edit className="w-4 h-4" />
             Editar Perfil
           </button>
@@ -38,6 +40,7 @@ export default function Profile() {
   const [pessoa, setPessoa] = useState<Pessoa>();
   const api = useApi();
   const { username } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const response = async () => {
@@ -49,13 +52,20 @@ export default function Profile() {
       }
     };
     response();
-  }, [username]);
+  }, [username, api]);
+
+  const handleEditProfileClick = () => { 
+    navigate('/perfil/editar'); 
+  };
 
   return (
     <div className="h-full bg-gray-50">
       <div className="p-4 md:p-8">
         <div className="bg-white rounded p-6 lg:col-span-3 relative">
-          <ProfileHeader name={pessoa?.nome} />
+          <ProfileHeader
+            name={pessoa?.nome}
+            onEditClick={handleEditProfileClick} 
+          />
 
           <AccountInformation email={pessoa?.email} phone={pessoa?.contato} />
 
