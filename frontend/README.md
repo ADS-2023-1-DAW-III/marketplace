@@ -1,28 +1,24 @@
-## 🖥️ Frontend
-
+🖥️ Frontend
 Este diretório contém a implementação do frontend da aplicação.
 
-### ⚛️ Tecnologias
-
-Optamos por utilizar **React puro**. A escolha foi feita visando **agilidade no desenvolvimento** e **facilidade para que toda a equipe evolua de forma conjunta** no projeto.
+⚛️ Tecnologias
+Optamos por utilizar React Router framework. A escolha foi feita visando agilidade no desenvolvimento e facilidade para que toda a equipe evolua de forma conjunta no projeto.
 
 As principais bibliotecas utilizadas inicialmente são:
 
-- [ReactJS](https://react.dev/) – Biblioteca principal para construção da interface.
-- [React Router](https://reactrouter.com/) – Gerenciamento de rotas SPA.
-- [Axios](https://axios-http.com/ptbr/docs/intro) – Requisições HTTP.
-- [Moment](https://momentjs.com/) – Manipulação e formatação de datas.
-- [ShadCN UI](https://ui.shadcn.com/) – Componentes de UI prontos para uso, baseados em Tailwind.
-- [Lucide](https://lucide.dev/) – Ícones em SVG otimizados para React, compatíveis com a biblioteca ShadCN.
+ReactJS – Biblioteca principal para construção da interface.
+React Router – Gerenciamento de rotas SPA.
+Axios – Requisições HTTP.
+Moment – Manipulação e formatação de datas.
+ShadCN UI – Componentes de UI prontos para uso, baseados em Tailwind.
+Lucide – Ícones em SVG otimizados para React, compatíveis com a biblioteca ShadCN.
+Estruturação de pastas - Inicial
 
-### Estruturação de pastas - Inicial
+public/\*
 
-public/
+├── favicon.ico
 
-├── index.html
-├── icon.ico
-
-src/
+app/
 
 ├── assets/ # Imagens, ícones estáticos, fontes, etc.
 
@@ -40,11 +36,11 @@ src/
 
 ├── pages/ # Cada tela tem sua própria pasta
 
-│ ├── Home/
+│ ├── Routes/
 
-│ │ ├── Home.tsx
+│ │ ├── Routes.tsx
 
-│ │ ├── Home.module.css
+│ │ ├── Routes.module.css
 
 │ │ └── HomeService.ts # Serviços (ex: chamadas axios) específicos da tela
 
@@ -80,35 +76,96 @@ src/
 
 ├── App.tsx # Componente raiz
 
-├── index.tsx # Entrada da aplicação
+├── root.tsx # Entrada da aplicação
 
-└── index.css # Estilos globais
+├── root.ts # Inicialização de rotas
 
-# Getting Started with Create React App
+└── app.css # Estilos globais
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+---
 
-## Available Scripts
+# Bem-vindo ao React Router!
 
-In the project directory, you can run:
+Um template moderno e pronto para produção para construir aplicações React full-stack utilizando React Router.
 
-### `npm start`
+[![Abrir no StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Funcionalidades
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- 🚀 Renderização do lado do servidor (Server-side rendering)
+- ⚡️ Substituição de Módulo a Quente (HMR - Hot Module Replacement)
+- 📦 Empacotamento e otimização de recursos
+- 🔄 Carregamento e mutações de dados
+- 🔒 TypeScript como padrão
+- 🎉 TailwindCSS para estilização
+- 📖 [Documentação do React Router](https://reactrouter.com/)
 
-### `npm test`
+## Começando
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Instalação
 
-### `npm run build`
+Instale as dependências:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+pnpm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Desenvolvimento
+
+Inicie o servidor de desenvolvimento com HMR:
+
+```bash
+pnpm run dev
+```
+
+Sua aplicação estará disponível em `http://localhost:5173`.
+
+## Construindo para Produção
+
+Crie um build para produção:
+
+```bash
+pnpm run build
+```
+
+## Implantação
+
+### Implantação com Docker
+
+Para construir e executar utilizando Docker:
+
+```bash
+docker build -t my-app .
+
+# Execute o container
+docker run -p 3000:3000 my-app
+```
+
+A aplicação containerizada pode ser implantada em qualquer plataforma que suporte Docker, incluindo:
+
+- AWS ECS
+- Google Cloud Run
+- Azure Container Apps
+- Digital Ocean App Platform
+- Fly.io
+- Railway
+
+### Implantação DIY (Faça você mesmo)
+
+Se você está familiarizado com a implantação de aplicações Node, o servidor embutido na aplicação já está pronto para produção.
+
+Certifique-se de implantar a saída gerada por `npm run build`:
+
+```
+├── package.json
+├── package-lock.json (ou pnpm-lock.yaml, ou bun.lockb)
+├── build/
+│   ├── client/    # Recursos estáticos
+│   └── server/    # Código do lado do servidor
+```
+
+## Estilização
+
+Este template já vem com [Tailwind CSS](https://tailwindcss.com/) configurado para uma experiência inicial simples. Você pode usar qualquer framework CSS que preferir.
+
+---
