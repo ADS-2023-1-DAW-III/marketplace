@@ -32,7 +32,7 @@ export default function NegociacaoServicosPrestador() {
   const handleAcceptNegotiation = async (negotiationId: string) => {
     try {
       setActionLoading(negotiationId);
-      await api.patch(`/negociacoes/${negotiationId}/aceitar`);
+      await api.put(`/negociacoes/${negotiationId}/aceitar`);
       
       // Atualizar a lista removendo a negociação aceita
       setNegociacoes(prev => prev.filter(n => n.id !== negotiationId));
@@ -50,7 +50,7 @@ export default function NegociacaoServicosPrestador() {
   const handleRejectNegotiation = async (negotiationId: string) => {
     try {
       setActionLoading(negotiationId);
-      await api.patch(`/negociacoes/${negotiationId}/rejeitar`);
+      await api.put(`/negociacoes/${negotiationId}/rejeitar`);
       
       // Atualizar a lista removendo a negociação rejeitada
       setNegociacoes(prev => prev.filter(n => n.id !== negotiationId));
