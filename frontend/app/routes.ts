@@ -26,5 +26,7 @@ export default [
       "/negociacao_servicos_prestador",
       "pages/negociacao_servicos_prestador/NegociacaoServicosPrestador.tsx"
     ),
+      "/negociacoes/:id", 
+      "pages/servicos_contratados/ServicoVisaoContratante.tsx"),
   ]),
 ] satisfies RouteConfig;

@@ -52,8 +52,15 @@ export class NegociacaoService {
     };
   }
 
-  async findAll(): Promise<Negociacao[]> {
-    return this.negociacaoRepository.find();
+  async findAll(userId: string): Promise<Negociacao[]> {
+    return this.negociacaoRepository.find({
+      where: {
+        pessoa: {
+          username: userId,
+        },
+      },
+      relations: ['pessoa', 'servico'],
+    });
   }
 
   async findAllByContractor(

@@ -51,8 +51,8 @@ export class NegociacaoController {
     type: [CreateNegociacaoResponseDto],
   })
   @Get()
-  findAll() {
-    return this.negociacaoService.findAll();
+  findAll(@Req() request: { user: { userId: string } }) {
+    return this.negociacaoService.findAll(request.user.userId);
   }
 
   @ApiResponse({

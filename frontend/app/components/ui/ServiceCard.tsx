@@ -11,6 +11,7 @@ import type { Categoria } from "~/types/Categoria";
 import { getImage } from "~/lib/utils";
 
 type ServiceCardProps = {
+  readonly id: string;
   readonly title: string;
   readonly description: string;
   readonly price: string;
@@ -21,6 +22,7 @@ type ServiceCardProps = {
 };
 
 export default function ServiceCard({
+  id,
   title,
   description,
   price,
@@ -42,7 +44,6 @@ export default function ServiceCard({
           {title}
         </CardTitle>
       </CardHeader>
-
       <CardContent className="flex flex-col items-center gap-3">
         <img
           src={
@@ -68,7 +69,7 @@ export default function ServiceCard({
       <CardFooter className="flex justify-between items-center mt-auto">
         <span className="text-lg font-bold text-[#103A57]">R$ {price}</span>
         <Link
-          to="/"
+          to={`/negociacoes/${id}`}
           className="bg-[#366B2B] hover:bg-white hover:text-[#366B2B] hover:border-[#366B2B] transition-colors duration-300 text-white text-sm font-bold px-5 py-2 rounded-lg border-2 border-[#366B2B]"
         >
           Ver
